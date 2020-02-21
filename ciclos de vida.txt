@@ -1,0 +1,86 @@
+ciclo de vida do babageiro (borges):
+
+Bag bag;
+Boolean planeHoldEmpty;
+
+while(ArrivalLounge.takeRest() != 'END'){
+	planeHoldEmpty = false;
+
+	while(!planeHoldEmpty){
+		bag = ArrivalLounge.tryToCollectBag();
+		if(bag == NULL){			//porao vazio
+			planeHoldEmpty=true;
+		}
+		else if(bag.getDestination() == 'T'){ //mala esta em transito
+			temporaryStorageArea.CarryItToAppropriateStore(bag);
+		}
+		else{					//mala tem como destino final aquele aeroporto
+			baggageCollectionPoint.CarryItToAppropriateStore(bag);
+		}
+		arrivalLounge.noMoreBagsToCollect();		
+
+	}
+
+
+}
+
+
+ciclo de vida do passageiro (minha proposta):
+
+Bag bag;
+
+for (voo 1:5){
+	for (passageiro 1:N){
+		a = whatShouldIDo();
+
+		switch(a){
+			case 1: goHome();   		    //chegou ao destino, não tem mala para recolher, vai para casa
+			case 2: takeABus();		    //vai para o autocarro	
+				enterTheBus();
+				leaveTheBus();
+				prepareNextLeg();
+
+			case 3:  		           //vai buscar a(s) mala(s)
+				for(mala 1:nºmalas){
+					bag = goCollectABag(mala);
+					if (bag == NULL){                  //falta alguma mala
+						reportMissingBags(bag);
+						goHome();
+						break;
+					}
+					else{                              //todas as malas estavam lá, e vai para casa
+					   goHome();
+					}
+
+				}
+
+		}
+
+	}
+
+}
+
+
+
+ciclo de vida do bus driver (minha proposta, not 100% sure tho):
+
+Queue passagersQueue;
+boolean queueHasPeople = false;
+
+while(hasDaysWorkEnded() != 'END'){
+	if(!passangersQueue.isEmpty()){
+		queueHasPeople = true;
+	}
+
+	if(queueHasPeople == true){
+		goToDepartureTerminal();
+		parkTheBusAndLetPassengerOff();
+		goToArrivalTerminal();
+		parkTheBus();
+		queueHasPeople = false;
+
+	}
+
+}
+
+
