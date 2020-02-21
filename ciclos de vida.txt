@@ -1,4 +1,4 @@
-ciclo de vida do babageiro (borges):
+﻿ciclo de vida do babageiro (borges):
 
 Bag bag;
 Boolean planeHoldEmpty;
@@ -31,27 +31,42 @@ Bag bag;
 
 for (voo 1:5){
 	for (passageiro 1:N){
-		a = whatShouldIDo();
+		a = arrivalLounge.whatShouldIDo();
 
 		switch(a){
-			case 1: goHome();   		    //chegou ao destino, não tem mala para recolher, vai para casa
-			case 2: takeABus();		    //vai para o autocarro	
-				enterTheBus();
-				leaveTheBus();
-				prepareNextLeg();
+			case 1: arrivalLounge.goHome();   		    //chegou ao destino, não tem mala para recolher, vai para casa
+			case 2: arrivalLounge.takeABus();		    //vai para o autocarro	
+				arrivalTerminalTransferQuay.enterTheBus();
+				arrivalTerminalTransferQuay.leaveTheBus();
+				departureTerminalTransferQuay.prepareNextLeg();
 
 			case 3:  		           //vai buscar a(s) mala(s)
+				/*
 				for(mala 1:nºmalas){
-					bag = goCollectABag(mala);
+					bag = baggageCollectionPoint.goCollectABag(mala);
 					if (bag == NULL){                  //falta alguma mala
-						reportMissingBags(bag);
-						goHome();
+						baggageReclaimOffice.reportMissingBags(bag);
+						baggageReclaimOffice.goHome();
 						break;
 					}
 					else{                              //todas as malas estavam lá, e vai para casa
-					   goHome();
+					   baggageCollectionPoint.goHome();
 					}
 
+				}
+				*/
+				for(mala 1:nºmalas){
+					bag = baggageCollectionPoint.goCollectABag(mala);
+					if (bag == NULL){                  //falta alguma mala
+						baggageReclaimOffice.reportMissingBags(bag);
+						baggageReclaimOffice.goHome();
+						break;
+					}
+					else{                              //todas as malas estavam lá, e vai para casa
+						if(mala == ultimaMala){
+					   		baggageCollectionPoint.goHome();
+					   	}
+					}
 				}
 
 		}
@@ -78,7 +93,6 @@ while(hasDaysWorkEnded() != 'END'){
 		goToArrivalTerminal();
 		parkTheBus();
 		queueHasPeople = false;
-
 	}
 
 }
