@@ -1,0 +1,43 @@
+
+
+
+
+
+Arrival Lounge:
+	takeRest();
+	tryToCollectBag();
+	noMoreBagsToCollect();
+	whatShouldIDo();
+	
+
+
+Baggage collection point:
+	carryItToAppropriateStore(bag);
+	goCollectABag();
+
+Temporary Storage Area:
+	carryItToAppropriateStore(bag);
+
+Baggage Reclaim Office:
+	reportMissingBags(int numMalasQueFaltam);
+	
+Arrival terminal transfer quay:
+	takeABus();
+	enterTheBus();
+	hasDaysWorkEnded();
+	announcingBusBoarding();
+	parkTheBus();
+
+Departure terminal transfer quay:
+	leaveTheBus();
+	parkTheBusAndLetThePassengerOff();
+	
+Arrival terminal exit:
+	goHome(int voo);
+
+Departure terminal entrance:
+	prepareNextLeg(int voo);
+
+
+		
+		
