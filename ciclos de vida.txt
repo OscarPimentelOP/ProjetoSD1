@@ -2,8 +2,11 @@
 
 Bag bag;
 Boolean planeHoldEmpty;
+Atributos: id (metodo get)
+	   estado( metodo get e set)
+	   
 
-while(ArrivalLounge.takeRest() != 'END'){
+while(ArrivalLounge.takeRest() != 'E'){			//Final do dia
 	planeHoldEmpty = false;
 
 	while(!planeHoldEmpty){
@@ -29,72 +32,54 @@ ciclo de vida do passageiro (minha proposta):
 
 Bag bag;
 
+int a;
+int numeroMalasRecolhidas;
+Atributos : estado(precisa de 2 metodos: set e get)
+	    id do passageiro(metodo get)
+	    numeroMalas(array elemento por voo, metodos get com parametro voo)
+	    estado do destino(final ou em transito), array elemento por voo, metodos get com parametro voo
+
+	 
+
 for (voo 1:5){
-	for (passageiro 1:N){
-		a = arrivalLounge.whatShouldIDo();
+		a = arrivalLounge.whatShouldIDo(voo);
 
 		switch(a){
-			case 1: arrivalLounge.goHome();   		    //chegou ao destino, não tem mala para recolher, vai para casa
-			case 2: arrivalLounge.takeABus();		    //vai para o autocarro	
+			case 1: arrivalTerminalExit.goHome(voo);   		    //chegou ao destino, não tem mala para recolher, vai para casa   PARAMETRO DE ENTRADA NO GOHOME?
+			case 2: arrivalTerminalTransferQuay.takeABus();		    //vai para o autocarro	
 				arrivalTerminalTransferQuay.enterTheBus();
-				arrivalTerminalTransferQuay.leaveTheBus();
-				departureTerminalTransferQuay.prepareNextLeg();
+				departureTerminalTransferQuay.leaveTheBus();
+				departureTerminalEntrance.prepareNextLeg(voo);		//SEMELHANTE AO GOHOME
 
 			case 3:  		           //vai buscar a(s) mala(s)
-				/*
-				for(mala 1:nºmalas){
-					bag = baggageCollectionPoint.goCollectABag(mala);
-					if (bag == NULL){                  //falta alguma mala
-						baggageReclaimOffice.reportMissingBags(bag);
-						baggageReclaimOffice.goHome();
+				numeroMalasRecolhidas = 0;
+				while(numeroMalasRecolhidas != numeroMalas[voo]){
+					if(baggageCollectionPoint.goCollectABag()){
+						numerMalasRecolhidas+=1;
+					}else { baggageReclaimOffice.reportMissingBags(numeroMalas[voo]-numeroMalasRecolhidas);
 						break;
 					}
-					else{                              //todas as malas estavam lá, e vai para casa
-					   baggageCollectionPoint.goHome();
-					}
-
-				}
-				*/
-				for(mala 1:nºmalas){
-					bag = baggageCollectionPoint.goCollectABag(mala);
-					if (bag == NULL){                  //falta alguma mala
-						baggageReclaimOffice.reportMissingBags(bag);
-						baggageReclaimOffice.goHome();
-						break;
-					}
-					else{                              //todas as malas estavam lá, e vai para casa
-						if(mala == ultimaMala){
-					   		baggageCollectionPoint.goHome();
-					   	}
-					}
+				arrivalTerminalExit.goHome(voo); 			//A MESMA COISA
 				}
 
 		}
-
-	}
 
 }
 
 
 
-ciclo de vida do bus driver (minha proposta, not 100% sure tho):
+ciclo de vida do bus driver:
 
 Queue passagersQueue;
-boolean queueHasPeople = false;
+int timeToWait;
+Atributos : 	estado(precisa de 2 metodos: set e get)
 
-while(hasDaysWorkEnded() != 'END'){
-	if(!passangersQueue.isEmpty()){
-		queueHasPeople = true;
-	}
-
-	if(queueHasPeople == true){
-		goToDepartureTerminal();
-		parkTheBusAndLetPassengerOff();
-		goToArrivalTerminal();
-		parkTheBus();
-		queueHasPeople = false;
-	}
-
+while(arrivalTerminalTransferQuay.hasDaysWorkEnded() != 'E'){					//Fim da operação
+	arrivalTerminalTransferQuay.annoucingBusBoarding()						//Se tiver passageiros para levar
+	goToDepartureTerminal();								//Implementar no proprio tipo de dados
+	departureTerminalTransferQuay.parkTheBusAndLetPassengerOff();
+	goToArrivalTerminal();
+	arrivalTerminalTransferQuay.parkTheBus();
 }
 
 
