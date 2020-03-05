@@ -44,6 +44,7 @@ BaggageReclaimOffice:
 		(PORTER)
 		void reportMissingBags(int numMissingBags);
 	Variáveis:
+		//Somatório de todas as bags em falta
 		int totalNumOfMissingBags;
 	
 ArrivalTerminalTransferQuay:
