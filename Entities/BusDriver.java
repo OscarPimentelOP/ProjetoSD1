@@ -1,18 +1,20 @@
+package Entities;
+
 public class BusDriver{
 
     BusDriverState state;
 
 
-    public BusDriver(int s){
+    public BusDriver(BusDriverState s){
         state = s;
     }
 
 
-    public void setState(int s){
+    public void setState(BusDriverState s){
         state = s;        
     }
 
-    public int getState(){
+    public BusDriverState getState(){
         return state;
     }
 

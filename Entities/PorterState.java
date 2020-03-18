@@ -1,3 +1,5 @@
+package Entities;
+
 public enum PorterState{
 	/* blocking state (initial / final state)
 	The porter is waken up by the operation whatShouldIDo of the last of the passengers to

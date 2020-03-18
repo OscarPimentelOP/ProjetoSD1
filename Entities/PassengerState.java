@@ -1,3 +1,5 @@
+package Entities;
+
 public enum PassengerState {
 	// transition state (initial state)
 	AT_THE_DISEMBARKING_ZONE,

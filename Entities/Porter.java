@@ -1,17 +1,19 @@
+package Entities;
+
 public class Porter{
     
     PorterState state;
 
-    public Porter(int s){
+    public Porter(PorterState s){
         state = s;
     }
 
 
-    public void setState(int s){
+    public void setState(PorterState s){
         state = s;        
     }
 
-    public int getState(){
+    public PorterState getState(){
         return state;
     }
 

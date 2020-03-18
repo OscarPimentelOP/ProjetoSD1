@@ -1,3 +1,5 @@
+package Entities;
+
 public enum BusDriverState{
 	/*double blocking state (initial / final state)
 	the driver is waken up the first time by the operation takeABus of the passenger who arrives at

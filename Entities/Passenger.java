@@ -1,12 +1,14 @@
+package Entities;
+
 public class Passenger{
 
 
-    PassangerState state; 
+    PassengerState state; 
     int identifier;  // id from the passenger
     int numBags[];   //number of bags the passenger has per flight
     char tripState[]; //the state of the trip of the passenger (final destination-> F, transit -> T)
 
-    public Passenger(int s, int id, int[] nb, char[] ts){
+    public Passenger(PassengerState s, int id, int[] nb, char[] ts){
         state= s;
         identifier = id;
         numBags = nb;
@@ -14,11 +16,11 @@ public class Passenger{
     }
 
 
-    public void setState(int s){
+    public void setState(PassengerState s){
         state = s;        
     }
 
-    public int getState(){
+    public PassengerState getState(){
         return state;
     }
 
