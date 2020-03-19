@@ -41,7 +41,7 @@ TemporaryStorageArea:
 
 BaggageReclaimOffice:
 	Funções:
-		(PORTER)
+		(PASSENGER)
 		void reportMissingBags(int numMissingBags);
 	Variáveis:
 		//Somatório de todas as bags em falta

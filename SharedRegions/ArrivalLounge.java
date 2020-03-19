@@ -1,13 +1,15 @@
 package SharedRegions;
 
-import AuxTools.*;
+import AuxTools.MemStack;
+import AuxTools.Bag;
+import AuxTools.MemException;
 
 public class ArrivalLounge {
-	//Variavel que avisa o porter que pode ir descansar
-	//Ultimo passageiro do ultimo voo que se acusa no goHome ou no prepareNextLeg
+	//Variable the warns the porter than can go rest
+	//Last passenger of the last flight accuses in goHome function or in prepareNextLeg function
 	boolean endOfOperations;
 	
-	//Contagem do numero de passageiros para o ultimo avisar que é o ultimo
+	//Count of the number of passenger for the last one to warn that it is the last
 	int cntPassengers;
 	
 	//Passenger bags in stack format
@@ -22,14 +24,11 @@ public class ArrivalLounge {
 	
 	///Returns 'E' (End of the day) or 'W' (Work) 
 	public char takeARest() {
-		if(cntPassengers == 6) {
-			if(endOfOperations) {
-				return 'E';
-			}
-			else return 'W';
-			
-			//?
-		} else return 'W';
+		while(cntPassengers != 6);
+		if(endOfOperations) {
+			return 'E';
+		}
+		else return 'W';
 	}
 	
 	
@@ -44,7 +43,7 @@ public class ArrivalLounge {
 	
 	//Nao faço ideia
 	public void noMoreBagsToCollect() {
-		
+		cntPassengers=0;
 	}
 	
 	//PASSENGER FUNCTIONS

@@ -73,7 +73,7 @@ Atributos : 	estado(precisa de 2 metodos: set e get)
 while(arrivalTerminalTransferQuay.hasDaysWorkEnded() != 'E'){					//Fim da operação
 	arrivalTerminalTransferQuay.annoucingBusBoarding()						//Se tiver passageiros para levar
 	goToDepartureTerminal();								//Implementar no proprio tipo de dados
-	departureTerminalTransferQuay.parkTheBusAndLetPassengerOff();
+	departureTerminalTransferQuay.parkTheBusAndLetPassengerOff();
 	goToArrivalTerminal();
 	arrivalTerminalTransferQuay.parkTheBus();
 }

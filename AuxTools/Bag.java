@@ -3,8 +3,9 @@ package AuxTools;
 public class Bag {
 	int id;
 	int passegerId;
+	char destination;
 	
-	public Bag(int id, int passegerId) {
+	public Bag(int id, int passegerId, char destination) {
 		this.id = id;
 		this.passegerId = passegerId;
 	}
@@ -15,5 +16,13 @@ public class Bag {
 	
 	public int passegerId() {
 		return passegerId;
+	}
+	
+	public void setDestination(char destination) {
+		this.destination = destination;
+	}
+	
+	public char getDestination() {
+		return this.destination;
 	}
 }
