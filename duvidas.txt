@@ -2,4 +2,6 @@
 
 2) O interactionDiagram pode ser algo como o slide 1-38 do AboutJavaandProgramming?
 
+3) Em que moldes será feito o repositório de informação?
+
 
