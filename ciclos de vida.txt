@@ -2,8 +2,7 @@
 
 Bag bag;
 Boolean planeHoldEmpty;
-Atributos: id (metodo get)
-	   estado( metodo get e set)
+Atributos: estado( metodo get e set)
 	   
 
 while(ArrivalLounge.takeRest() != 'E'){			//Final do dia
@@ -59,8 +58,8 @@ for (voo 1:5){
 					}else { baggageReclaimOffice.reportMissingBags(numeroMalas[voo]-numeroMalasRecolhidas);
 						break;
 					}
-				arrivalTerminalExit.goHome(voo); 			//A MESMA COISA
 				}
+				arrivalTerminalExit.goHome(voo); 			//A MESMA COISA
 
 		}
 
@@ -69,15 +68,12 @@ for (voo 1:5){
 
 
 ciclo de vida do bus driver:
-
-Queue passagersQueue;
-int timeToWait;
 Atributos : 	estado(precisa de 2 metodos: set e get)
 
 while(arrivalTerminalTransferQuay.hasDaysWorkEnded() != 'E'){					//Fim da operação
 	arrivalTerminalTransferQuay.annoucingBusBoarding()						//Se tiver passageiros para levar
 	goToDepartureTerminal();								//Implementar no proprio tipo de dados
-	departureTerminalTransferQuay.parkTheBusAndLetPassengerOff();
+	departureTerminalTransferQuay.parkTheBusAndLetPassengerOff();
 	goToArrivalTerminal();
 	arrivalTerminalTransferQuay.parkTheBus();
 }
