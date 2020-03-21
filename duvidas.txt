@@ -1,0 +1,5 @@
+1) No whatshouldIdo se não é necessário mais argumentos para sabermos quantas malas tem o passageiro que chegou. (Basicamente, para ele não ir fazer um goCollectAbag quando não tem malas);
+
+2) O interactionDiagram pode ser algo como o slide 1-38 do AboutJavaandProgramming?
+
+
