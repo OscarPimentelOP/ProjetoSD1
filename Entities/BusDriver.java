@@ -45,11 +45,11 @@ public class BusDriver extends Thread{
     
     
     public void goToDepartureTerminal() {
-    	
+    	setBusDriverState(BusDriverState.DRIVING_FORWARD);
     }
     
     public void goToArrivalTerminal() {
-    	
+    	setBusDriverState(BusDriverState.DRIVING_BACKWARD);
     }
 
 }

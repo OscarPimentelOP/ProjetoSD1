@@ -1,14 +1,19 @@
 package SharedRegions;
 
+import Entities.BusDriver;
+import Entities.BusDriverState;
 import Entities.Passenger;
 import Entities.PassengerState;
 
 public class DepartureTerminalTransferQuay {
 	//Variable that will unblock the passengers when the bus driver parks the bus
-	boolean parked = false;
+	private boolean parked = false;
 	
 	//Contagem dos passegeiros que sairam do autocarro
-	int cntPassengersOut;
+	private int cntPassengersOut;
+	
+	//Bus capacity
+	private final int busCapacity = 10;
 	
 	//Passengers functions
 	
@@ -16,16 +21,16 @@ public class DepartureTerminalTransferQuay {
 	//When the bus driver parks unblocks the passengers
 	public void leaveTheBus() {
 		while(!parked) {
-			Passenger m = (Passenger) Thread.currentThread(); 
-			m.setPassengerState(PassengerState.TERMINAL_TRANSFER);
 			//inserir wait()
 		}
+
+		Passenger m = (Passenger) Thread.currentThread(); 
+		m.setPassengerState(PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
 		cntPassengersOut++;
 		//When the last passenger exits the bus
-		//NÃO SEI VER QUANTAS PESSOAS LEVA O AUTOCARRO ://
-		if(cntPassengersOut==6) {
+		if(cntPassengersOut==this.busCapacity) {
 			parked = false;
-			cntPassengersOut = 0;
+			//notify?
 		}
 	}
 
@@ -34,6 +39,13 @@ public class DepartureTerminalTransferQuay {
 	
 	
 	public void parkTheBusAndLetPassOff() {
+		BusDriver b = (BusDriver) Thread.currentThread(); 
+		b.setBusDriverState(BusDriverState.PARKING_AT_THE_DEPARTURE_TERMINAL);
 		parked = true;
+		//notifyAll?
+		while(cntPassengersOut!=this.busCapacity) {
+			//wait;
+		}
+		cntPassengersOut = 0;
 	}
 }
