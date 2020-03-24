@@ -65,7 +65,16 @@ public class ArrivalTerminalTransferQuay {
 	
 	//Returns E (End of the day) or W (work)
 	public char hasDaysWorkEnded() {
-		return 'E';
+		boolean workEnded = false;
+		
+		//if(last passenger of last flight leaves the bus){
+			//return 'E';
+			//workEnded = true;
+		//}
+		//else return 'E';
+		return ' ';
+
+		
 	}
 	
 	

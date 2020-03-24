@@ -60,7 +60,7 @@ ArrivalTerminalTransferQuay:
 		//Returns E (End of the day) or W (work)
 		char void hasDaysWorkEnded();
 		//Vai desbloquear os passageiros que est�o � espera para entrar no autocarro
-		//Se n�o chegou ao fim do dia bloqueia o bus driver at� o timequantum terminar ou a capacidade do autocarro for atingida
+		/	/Se n�o chegou ao fim do dia bloqueia o bus driver at� o timequantum terminar ou a capacidade do autocarro for atingida
 		void announcingBusBoarding();
 		void parkTheBus();
 	Vari�veis:
