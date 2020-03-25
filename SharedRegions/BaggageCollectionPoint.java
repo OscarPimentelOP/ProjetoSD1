@@ -9,8 +9,8 @@ import Entities.PassengerState;
 
 public class BaggageCollectionPoint {
 	
-	//CAM<id,bag>
-	CAM<Integer, Bag> convoyBelt;
+	//CAM<idPassanger, array de bags>
+	CAM<Integer, Bag[]> convoyBelt;
 	//Variable that warns the passenger that can go collect his bag
 	
 	

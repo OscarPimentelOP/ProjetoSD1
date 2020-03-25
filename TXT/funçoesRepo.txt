@@ -1,0 +1,9 @@
+Variáveis:
+Estados abreviados (Array ou enumerado)
+Estados para cada entidade(array)
+
+
+Funções:
+writeFile(print e escrever no ficheiro)
+reportStatus(vai escrever o estado numa string)
+setStates(atribui o estado a uma certa entidade e vai fazer writeFile)
