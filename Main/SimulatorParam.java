@@ -26,7 +26,13 @@ public class SimulatorParam{
 	//Probability of passenger having taking 2 bags in %
 	public static final int PROB_OF_2_BAGS = 50;
 	
-	//Probability of a bag getting lost in %
-	public static final int PROB_A_LOST_BAG = 5;
+	//Probability of 0 bags getting lost in %
+	public static final int PROB_LOSE_0_BAGS = 85;
+	
+	//Probability of 1 bags getting lost in %
+	public static final int PROB_LOSE_1_BAGS = 10;
+	
+	//Probability of 2 bags getting lost in %
+	public static final int PROB_LOSE_2_BAGS = 5;	
 	
 }

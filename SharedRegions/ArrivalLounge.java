@@ -18,12 +18,11 @@ public class ArrivalLounge {
 	private int cntPassengers;
 	
 	//Passenger bags in stack format
-	private MemStack<Bag> sBags;
+	private MemStack<Bag> sBags[];
 	
 	private Repo repo;
 	
-	
-	public ArrivalLounge(MemStack<Bag> sBags, Repo repo){
+	public ArrivalLounge(MemStack<Bag> sBags[], Repo repo){
 		this.sBags = sBags;
 		this.repo = repo;
 	}

@@ -8,13 +8,100 @@ import java.util.Date;
 
 public class AirportVConc {
 
-	public static String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
+	public String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
 	
 	public static void main(String[] args) {
 		
 		Random rand = new Random();
 		
-		MemStack<Bag> sBags = new MemStack<Bag>();
+		//Number of bags per passenger and flight
+		int numBags[][] = new int[SimulatorParam.NUM_PASSANGERS][SimulatorParam.NUM_FLIGHTS];
+		//Trip state per passenger and flight
+		char tripState[] []= new char[SimulatorParam.NUM_PASSANGERS][SimulatorParam.NUM_FLIGHTS];
+		//Number of bags that have been lost per passenger and flight
+		int numBagsLost[][] =  new int[SimulatorParam.NUM_PASSANGERS][SimulatorParam.NUM_FLIGHTS];
+		
+		for(int i=0;i<SimulatorParam.NUM_PASSANGERS;i++) {
+			
+			//Initialize the number of bags per passenger and flight with probabilities
+			for(int b=0;b<numBags.length;b++) {
+				int randint = rand.nextInt(101);
+				if(randint <= SimulatorParam.PROB_OF_0_BAGS) {
+					numBags[i][b] = 0;
+				}
+				else if(randint>SimulatorParam.PROB_OF_2_BAGS) {
+					numBags[i][b] = 2;
+				}
+				else {
+					numBags[i][b] = 1;
+				}
+			}
+			/*
+			Initialize the number of bags that have been lost 
+			per passenger and flight with probabilities
+			*/
+			for(int b=0;b<numBagsLost.length;b++) {
+				int randint = rand.nextInt(101);
+				if(randint <= SimulatorParam.PROB_LOSE_0_BAGS) {
+					numBagsLost[i][b] = 0;
+				}
+				else if(randint>SimulatorParam.PROB_LOSE_2_BAGS) {
+					numBagsLost[i][b] = 2;
+				}
+				else {
+					numBagsLost[i][b] = 1;
+				}
+			}
+		
+			
+			/*
+			Initialize the trip state per passenger and flight
+			(final destination-> F, transit -> T)
+			*/
+			for(int t=0;t<tripState.length;t++) {
+				int randint = rand.nextInt(2);
+				if(randint == 0) {
+					tripState[i][t] = 'T';
+				}
+				else {
+					tripState[i][t] = 'F';
+				}
+			}
+		}
+		
+
+		//Number of bags that are found (numBags - numBagsLost)
+		int numBagsFound[][] = new int[SimulatorParam.NUM_PASSANGERS][SimulatorParam.NUM_FLIGHTS];
+		//Total number of bags in the storage per flight
+		int totalNumOfBags[]= new int[SimulatorParam.NUM_FLIGHTS];
+		//Initialize number of bags that are found
+		for(int i=0;i<SimulatorParam.NUM_PASSANGERS;i++) {
+			for(int b=0;b<numBagsFound.length;b++) {
+				numBagsFound[i][b] = numBags[i][b] - numBagsLost[i][b];
+				if(numBagsFound[i][b]<0) numBagsFound[i][b]=0;
+				totalNumOfBags[b] += numBagsFound[i][b];
+			}
+		}
+		
+		
+		//Array of stacks that represent the storage of bags per flight
+		MemStack<Bag>[] sBags = (MemStack<Bag>[]) new Object[SimulatorParam.NUM_FLIGHTS];
+		for(int b=0;b<SimulatorParam.NUM_FLIGHTS;b++) {
+			//Bags in the storage to pass to the arrival lounge per flight
+			Bag bagsToArrivalLounge[] = new Bag[totalNumOfBags[b]];
+			for(int i=0;i<SimulatorParam.NUM_PASSANGERS;i++) {
+				for(int j=0;j<numBagsFound[i][b];j++) {
+					/*
+					i+j+b : id of the bag
+					i: passenger id
+					*/
+					bagsToArrivalLounge[i+j] = new Bag(i+j+b,i,tripState[i]);
+				}
+			}
+			try {
+				sBags[b] = new MemStack<Bag>(bagsToArrivalLounge);
+			} catch (MemException e) {}
+		}
  		
 		//Initialize SharedRegions
 		Repo repo = new Repo();
@@ -33,38 +120,8 @@ public class AirportVConc {
 		Porter porter = new Porter(PorterState.WAITING_FOR_A_PLANE_TO_LAND, al, tsa, bcp);
 		Passenger passengers[] = new Passenger[SimulatorParam.NUM_PASSANGERS];
 		for(int i=0;i<passengers.length;i++) {
-			
-			//Initialize the number of bags per flight with probabilities
-			int numBags[] = new int[SimulatorParam.NUM_FLIGHTS];
-			for(int b=0;b<numBags.length;b++) {
-				int randint = rand.nextInt(101);
-				if(randint <= SimulatorParam.PROB_OF_0_BAGS) {
-					numBags[b] = 0;
-				}
-				else if(randint>SimulatorParam.PROB_OF_2_BAGS) {
-					numBags[b] = 2;
-				}
-				else {
-					numBags[b] = 1;
-				}
-			}
-			/*
-			Initialize the trip state
-			(final destination-> F, transit -> T)
-			*/
-			char tripState[] = new char[SimulatorParam.NUM_FLIGHTS];
-			for(int t=0;t<tripState.length;t++) {
-				int randint = rand.nextInt(2);
-				if(randint == 0) {
-					tripState[t] = 'T';
-				}
-				else {
-					tripState[t] = 'F';
-				}
-			}
-			
-			passengers[i] = new Passenger(PassengerState.AT_THE_DISEMBARKING_ZONE, i, numBags,
-					tripState, al, ate, attq, dttq, dte, bro, bcp);
+			passengers[i] = new Passenger(PassengerState.AT_THE_DISEMBARKING_ZONE, i, numBags[i],
+					tripState[i], al, ate, attq, dttq, dte, bro, bcp);
 		}
 		
 		
