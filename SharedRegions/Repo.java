@@ -3,15 +3,29 @@ package SharedRegions;
 import genclass.GenericIO;
 import genclass.TextFile;
 import java.util.Date;
+import Entities.PorterState;
+import Entities.PassengerState;
+import Entities.BusDriverState;
+import java.io.PrintWriter;
+import java.io.File;
 
 public class Repo{
 
 
     private String fileName = "log_" + new Date().toString().replace(' ', '_') + ".txt";
+    private File file;
+    private PrintWriter pw;
+    private final String[] porterStates = {"WPTL", "APLH", "ALCB", "ASTR"};
+    private final String[] passengerStates = {"WSD", "ATT", "TRT", "DTT", "EDT", "LCP", "BRO", "EAT"};
+    private final String[] busDriverStates = {"PKAT", "DRFW", "PKDT", "DRBW"};
     private int passengersFinalDest;
     private int passengersTransit;
     private int totalBags;
     private int lostBags;
+
+    private PorterState porterSt;
+    private PassengerState[] passengerSt;
+    private BusDriverState busDriverSt;
 
     private void reportInitialStatus ()
    {
@@ -72,7 +86,6 @@ public class Repo{
           }
     }       
  
- }
 
  private void reportFinalStatus(){
   log.writelnString("Final report");
@@ -83,6 +96,42 @@ public class Repo{
 
 
 }
+
+public synchronized void setPassengerState(int id, PassengerState ps){
+  if(passengerSt[id] != ps){
+    passengerSt[id] = ps;
+    printInfo();
+  }
+}
+
+public synchronized void setPorterState(PorterState ps){
+  if(this.porterSt != ps){
+    this.porterSt = ps;
+    printInfo();
+  }
+}
+
+public synchronized void setBusDriverState(BusDriverState bds){
+  if(this.busDriverSt != bds){
+    this.busDriverSt = bds;
+    printInfo();
+  }
+}
+
+private void printInfo(){
+  String infoToPrint = reportStatus();
+  System.out.println(infoToPrint);
+  pw.write(infoToPrint);
+  pw.flush();
+
+}
+
+
+
+
+
+
+
 
 
     
