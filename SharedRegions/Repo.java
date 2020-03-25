@@ -26,7 +26,7 @@ public class Repo{
     private int passengersTransit;
     private int totalBags;
     private int lostBags;
-
+    private int flightNum;
     private PorterState porterSt;
     private PassengerState[] passengerSt;
     private BusDriverState busDriverSt;
@@ -39,6 +39,7 @@ public class Repo{
       pw = new PrintWriter(file);
 
       passengerCount = 0;
+      flightNum = 1;
 
       //defining initial states for the entities
       porterSt = PorterState.WAITING_FOR_A_PLANE_TO_LAND;
@@ -48,10 +49,7 @@ public class Repo{
       for (int p = 0; i < SimulatorParam.NUM_PASSANGERS; p++){
           passengerSt[p] = PassengerState.AT_THE_ARRIVAL_TRANSFER_TERMINAL;
       }
-
-
-
-
+      
 
     }
 
@@ -153,6 +151,18 @@ private void printInfo(){
   System.out.println(infoToPrint);
   pw.write(infoToPrint);
   pw.flush();
+
+}
+
+public synchronized void setFlightNumber(int flight){
+  flightNum = flight+1; 
+
+  }
+
+
+
+
+public synchronized void setBeginningNumBags(){
 
 }
 
