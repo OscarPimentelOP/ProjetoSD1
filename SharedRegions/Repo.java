@@ -8,11 +8,15 @@ import Entities.PassengerState;
 import Entities.BusDriverState;
 import java.io.PrintWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+
+import Main.AirportVConc;
+import Main.SimulatorParam;
 
 public class Repo{
 
 
-    private String fileName = "log_" + new Date().toString().replace(' ', '_') + ".txt";
+    public static String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
     private File file;
     private PrintWriter pw;
     private final String[] porterStates = {"WPTL", "APLH", "ALCB", "ASTR"};
@@ -26,6 +30,32 @@ public class Repo{
     private PorterState porterSt;
     private PassengerState[] passengerSt;
     private BusDriverState busDriverSt;
+
+    private int passengerCount;
+
+
+    public Repo() throws FileNotFoundException{
+      file = new File(AirportVConc.fileName);
+      pw = new PrintWriter(file);
+
+      passengerCount = 0;
+
+      //defining initial states for the entities
+      porterSt = PorterState.WAITING_FOR_A_PLANE_TO_LAND;
+      busDriverSt = BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL;
+      passengerSt = new PassengerState[SimulatorParam.NUM_PASSANGERS];
+
+      for (int p = 0; i < SimulatorParam.NUM_PASSANGERS; p++){
+          passengerSt[p] = PassengerState.AT_THE_ARRIVAL_TRANSFER_TERMINAL;
+      }
+
+
+
+
+
+    }
+
+
 
     private void reportInitialStatus ()
    {

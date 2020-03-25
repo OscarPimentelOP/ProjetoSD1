@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class AirportVConc {
 
-	public String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
+	public static String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
 	
 	public static void main(String[] args) {
 		
