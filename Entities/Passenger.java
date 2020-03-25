@@ -72,7 +72,7 @@ public class Passenger extends Thread{
     //Passenger life-cycle
     @Override
     public void run() {
-    	for (int flight=1;flight<=5;flight++){
+    	for (int flight=0;flight<5;flight++){
     		char a = al.whatShouldIDo(flight);
 
     		switch(a){

@@ -5,7 +5,13 @@ import Entities.PassengerState;
 
 public class BaggageReclaimOffice {
 	//Sum of all missing bags
-	int totalNumOfMissingBags;
+	private int totalNumOfMissingBags;
+	
+	private Repo repo;
+	
+	public BaggageReclaimOffice(Repo repo) {
+		this.repo = repo;
+	}
 	
 	//PASSENGER FUNCTIONS
 	

@@ -10,9 +10,15 @@ import Entities.PassengerState;
 public class BaggageCollectionPoint {
 	
 	//CAM<idPassanger, array de bags>
-	CAM<Integer, Bag[]> convoyBelt;
+	private CAM<Integer, Bag[]> convoyBelt;
 	//Variable that warns the passenger that can go collect his bag
 	
+	
+	private Repo repo;
+	
+	public BaggageCollectionPoint(Repo repo) {
+		this.repo = repo;
+	}
 	
 	//Porter functions
 	

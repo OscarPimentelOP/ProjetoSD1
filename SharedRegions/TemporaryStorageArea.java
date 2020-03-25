@@ -9,7 +9,13 @@ import Entities.Porter;
 public class TemporaryStorageArea {
 	
 	//Bag Storage in stack format
-	MemStack<Bag> bagStorage;
+	private MemStack<Bag> bagStorage;
+	
+	private Repo repo;
+	
+	public TemporaryStorageArea(Repo repo) {
+		this.repo = repo;
+	}
 	
 	//Porter functions
 	

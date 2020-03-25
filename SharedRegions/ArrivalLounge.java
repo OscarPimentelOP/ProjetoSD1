@@ -7,21 +7,25 @@ import Entities.Passenger;
 import Entities.PassengerState;
 import Entities.Porter;
 import Entities.PorterState;
+import Main.SimulatorParam;
 
 public class ArrivalLounge {
 	//Variable the warns the porter than can go rest
 	//Last passenger of the last flight accuses in goHome function or in prepareNextLeg function
-	boolean endOfOperations;
+	private boolean endOfOperations;
 	
 	//Count of the number of passenger for the last one to warn that it is the last
-	int cntPassengers;
+	private int cntPassengers;
 	
 	//Passenger bags in stack format
-	MemStack<Bag> sBags;
+	private MemStack<Bag> sBags;
+	
+	private Repo repo;
 	
 	
-	public ArrivalLounge(MemStack<Bag> sBags){
+	public ArrivalLounge(MemStack<Bag> sBags, Repo repo){
 		this.sBags = sBags;
+		this.repo = repo;
 	}
 	
 	//PORTER FUNCTIONS
@@ -29,7 +33,7 @@ public class ArrivalLounge {
 	///Returns 'E' (End of the day) or 'W' (Work) 
 	public char takeARest() {
 		Porter p = (Porter) Thread.currentThread(); 
-		while(cntPassengers != 6) {
+		while(cntPassengers != SimulatorParam.NUM_PASSANGERS) {
 			p.setPorterState(PorterState.WAITING_FOR_A_PLANE_TO_LAND);
 			//Introduzir wait()
 		}
@@ -63,24 +67,28 @@ public class ArrivalLounge {
 	public char whatShouldIDo(int flight){
 		Passenger m = (Passenger) Thread.currentThread(); 
 		m.setPassengerState(PassengerState.AT_THE_DISEMBARKING_ZONE);
-		if (flight == 5 && !endOfOperations){
+		if (flight == SimulatorParam.NUM_FLIGHTS && !endOfOperations){
 			endOfOperations = true;
 		}
 		cntPassengers++;
-		int nBags = m.getNumBags(flight);
-		if(nBags != 0) {
-			//Go collect bag
-			return 'B';
+		char tripState = m.getTripState(flight);
+		//Passenger in transit
+		if(tripState == 'T') {
+			//Take a bus
+			return 'T';
 		}
+		//Passenger reached final destination
 		else {
-			//Is the last flight of the passenger?
-			if(flight==5) {
-				//Goes home
-				return 'H';
+			int nBags = m.getNumBags(flight);
+			//Has bags to collect
+			if(nBags != 0) {
+				//Go collect bag
+				return 'B';
 			}
+			//No bags to collect
 			else {
-				//Take a bus
-				return 'T';
+				//Go home
+				return 'H';
 			}
 		}
 	}

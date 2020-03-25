@@ -30,6 +30,12 @@ public class ArrivalTerminalTransferQuay {
 	
 	private MemFIFO<Passenger> waitingForBus;
 	
+	private Repo repo;
+	
+	public ArrivalTerminalTransferQuay(Repo repo) {
+		this.repo = repo;
+	}
+	
 	//Passenger functions
 	
 	public void takeABus() {

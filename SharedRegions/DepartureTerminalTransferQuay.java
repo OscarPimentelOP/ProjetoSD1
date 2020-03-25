@@ -15,6 +15,12 @@ public class DepartureTerminalTransferQuay {
 	//Bus capacity
 	private final int busCapacity = 10;
 	
+	private Repo repo;
+	
+	public DepartureTerminalTransferQuay(Repo repo) {
+		this.repo = repo;
+	}
+	
 	//Passengers functions
 	
 	//The passengers will be blocked
