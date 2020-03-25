@@ -4,9 +4,12 @@ import SharedRegions.*;
 import Entities.*;
 import java.util.Random;
 import AuxTools.*;
+import java.util.Date;
 
 public class AirportVConc {
 
+	public String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
+	
 	public static void main(String[] args) {
 		
 		Random rand = new Random();
@@ -28,8 +31,8 @@ public class AirportVConc {
 		BusDriver busdriver = new BusDriver(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL,
 				attq, dttq);
 		Porter porter = new Porter(PorterState.WAITING_FOR_A_PLANE_TO_LAND, al, tsa, bcp);
-		Passenger passangers[] = new Passenger[SimulatorParam.NUM_PASSANGERS];
-		for(int i=0;i<passangers.length;i++) {
+		Passenger passengers[] = new Passenger[SimulatorParam.NUM_PASSANGERS];
+		for(int i=0;i<passengers.length;i++) {
 			
 			//Initialize the number of bags per flight with probabilities
 			int numBags[] = new int[SimulatorParam.NUM_FLIGHTS];
@@ -60,10 +63,34 @@ public class AirportVConc {
 				}
 			}
 			
-			passangers[i] = new Passenger(PassengerState.AT_THE_DISEMBARKING_ZONE, i, numBags,
+			passengers[i] = new Passenger(PassengerState.AT_THE_DISEMBARKING_ZONE, i, numBags,
 					tripState, al, ate, attq, dttq, dte, bro, bcp);
 		}
 		
+		
+		//Initialize simulation
+		busdriver.start();
+		porter.start();
+		for(Passenger p : passengers) {
+			p.start();
+		}
+		
+		//End simulation
+		try {
+			busdriver.join();
+		}
+		catch(InterruptedException e) {}
+
+		try {
+			porter.join();
+		}
+		catch(InterruptedException e) {}
+		for(Passenger p : passengers) {
+			try {
+				p.join();
+			}
+			catch(InterruptedException e) {}
+		}
 	}
 
 }
