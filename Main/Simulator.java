@@ -4,7 +4,7 @@ import genclass.GenericIO;
 import genclass.TextFile;
 
 import java.util.Date;
-
+    
 public class Simulator{
 
     
