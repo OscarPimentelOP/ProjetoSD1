@@ -13,8 +13,13 @@ public class Repo{
     private File file;
     private PrintWriter pw;
     private final String[] porterStates = {"WPTL", "APLH", "ALCB", "ASTR"};
+<<<<<<< HEAD
     private final String[] passengerStates = {"WSD", "ATT", "TRT", "DTT", "EDT", "LCP", "BRO", "EAT","---"};
     private final String[] busDriverStates = {"PKAT", "DRFW", "PKDT", "DRBW"};
+=======
+    private final String[] passengerStates = {"WSD",  "LCP", "BRO", "DTT", "EAT", "ATT", "TRT", "EDT"};
+    private final String[] busDriverStates = {"PKAT", "DRFW", "DRBW", "PKDT"};
+>>>>>>> 68977903bc1bead6900997781f6cff34876994eb
     
     //State of the porter
     private PorterState porterSt;
@@ -102,10 +107,10 @@ public class Repo{
 
     private void reportInitialStatus ()
    {
-      pw.write("AIRPORT RHAPSODY - Description of the internal state of the problem");
-      pw.write("PLANE PORTER DRIVER");
-      pw.write("FN BN Stat CB SR Stat Q1 Q2 Q3 Q4 Q5 Q6 S1 S2 S3");
-      pw.write(" PASSENGERS");
+      pw.write("              AIRPORT RHAPSODY - Description of the internal state of the problem");
+      pw.write("PLANE     PORTER                         DRIVER");
+      pw.write("FN BN   Stat CB SR        Stat     Q1 Q2 Q3 Q4 Q5 Q6   S1 S2 S3");
+      pw.write("                                                    PASSENGERS");
       pw.write("St1 Si1 NR1 NA1 St2 Si2 NR2 NA2 St3 Si3 NR3 NA3 St4 Si4 NR4 NA4 St5 Si5 NR5 NA5 St6 Si6 NR6 NA6");
       reportStatus ();
    }
