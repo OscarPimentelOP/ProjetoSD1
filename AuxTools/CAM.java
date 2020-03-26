@@ -1,75 +1,99 @@
 package AuxTools;
 
+import java.util.Arrays;
 public class CAM<Key, Value> {
     
-    private Node<Key, Value>[] buckets;
     private static final int cap = 16;
-    private int size = 0;
+    private Node<Key, Value>[] storage = new Node[cap];
+    private int size;
 
-    public CAM(int cap){
-        this.buckets = new Node[cap];
-    }
-
-    public CAM(){
-        this(cap);
-    }    
+   
 
 
     public void store(Key key, Value value){
-        Node<Key, Value> node = new Node<>(key, value, null);
-
-        int b = getHash(key) % buckets.length;
-
-        Node<Key, Value> existing = buckets[b];
-        if(existing == null){
-            buckets[b] = node;
-            size++;
-        }
-        else{
-            //check if key exists already
-            while(existing.next != null){
-                if(existing.key.equals(key)){
-                    existing.value = value;
-                    return;
+        boolean stored = true;
+        
+        for(int i = 0; i< size; i++){
+           
+            
+                if(storage[i].getKey().equals(key)){
+                    storage[i].setValue(value);
+                    stored = false;
                 }
-                existing = existing.next;
-            }
-            if(existing.key.equals(key)){
-                existing.value = value;
-            }    
-            else{
-                existing.next = node;
-                size++;
-            }
         }
-    }
+            //ensure the capacity of the map
+            if(stored){
+                if(size == storage.length){
+                    int newSize = storage.length*2;
+                    storage = Arrays.copyOf(storage, newSize);
+                }
+                storage[size++] = new Node<Key, Value>(key, value);
+            }
+
+        }
+        
+
 
     public Value retreive(Key key){
-        Node<Key, Value> b = buckets[getHash(key) % buckets.length];
-
-        while(b != null){
-            if(key == b.key){
-                return b.value;
+        for(int i=0; i< size; i++){
+            if(storage[i] != null){
+                if(storage[i].getKey().equals(key)){
+                    return storage[i].getValue();
+                }
             }
-            b = b.next;
         }
         return null;
     }
 
+    public void remove(Key key){
+        for(int i = 0; i< size; i++){
+            if(storage[i].getKey().equals(key)){
+                storage[i] = null;
+                size--;
+                for(int k= i; k< size; k++){
+                    storage[k]=storage[k+1];
+                }
+            }           
+    
+        }
 
+    }
 
+    public int size() {
+        return size;
+    }
+
+    public void printElems() {
+        for(int i = 0; i< size; i++){
+            System.out.println(storage[i].getKey());
+        }
+    }
 }
 
 
 class Node<Key, Value> {
-    final Key key;
-    Value value;
-    Node<Key, Value> next;
+    private final Key key;
+    private Value value;
+    
 
-    public Node(Key key, Value value, Node<Key, Value> next){
+    public Node(Key key, Value value){
         this.key = key;
         this.value = value;
-        this.next = next;
+    }
+
+    public Key getKey(){
+        return key;
+    }
+
+    public Value getValue(){
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(Value value) {
+        this.value = value;
     }
 
 }

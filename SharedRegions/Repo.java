@@ -186,7 +186,7 @@ private void printInfo(){
   String infoToPrint = reportStatus();
   System.out.println(infoToPrint);
   pw.write(infoToPrint);
-  pw.flush();
+  pw.flush(); 
 
 }
 
