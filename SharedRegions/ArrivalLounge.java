@@ -85,9 +85,9 @@ public class ArrivalLounge {
 	public synchronized char whatShouldIDo(int flight){
 		this.flight = flight;
 		repo.setFlightNumber(flight);
-		Passenger m = (Passenger) Thread.currentThread(); 
-		m.setPassengerState(PassengerState.AT_THE_DISEMBARKING_ZONE);
-		int id = m.getIdentifier();
+		Passenger p = (Passenger) Thread.currentThread(); 
+		p.setPassengerState(PassengerState.AT_THE_DISEMBARKING_ZONE);
+		int id = p.getIdentifier();
 		repo.setPassengerState(id, PassengerState.AT_THE_DISEMBARKING_ZONE);
 		cntPassengers++;
 		if(cntPassengers == SimulatorParam.NUM_PASSANGERS) {
@@ -96,12 +96,13 @@ public class ArrivalLounge {
 		if (flight == SimulatorParam.NUM_FLIGHTS && cntPassengers == SimulatorParam.NUM_PASSANGERS){
 			endOfOperations = true;
 		}
-		char tripState = m.getTripState(flight);
+		char tripState = p.getTripState(flight);
 		//Passenger in transit
 		if(tripState == 'T') {
 			this.passengersTransit++;
 			repo.setPassengersTransit(this.passengersTransit);
 			repo.setPassengerDestination(id, "TRT");
+			repo.setNumOfBagsAtTheBegining(id, p.getNumBags(flight));
 			//Take a bus
 			return 'T';
 		}
@@ -110,7 +111,8 @@ public class ArrivalLounge {
 			this.passengersFinalDest++;
 			repo.setPassengersFinalDest(this.passengersFinalDest);
 			repo.setPassengerDestination(id, "FDT");
-			int nBags = m.getNumBags(flight);
+			int nBags = p.getNumBags(flight);
+			repo.setNumOfBagsAtTheBegining(id, nBags);
 			//Has bags to collect
 			if(nBags != 0) {
 				//Go collect bag
