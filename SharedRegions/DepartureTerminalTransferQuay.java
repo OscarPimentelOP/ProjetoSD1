@@ -40,10 +40,9 @@ public class DepartureTerminalTransferQuay {
 		int id = p.getIdentifier();
 		repo.setPassengerState(id, PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
 		//When the last passenger exits the bus
-		repo.
+		repo.setPassangersOnTheBus(id, 0);
 			parked = false;
 			notifyAll();
-		}
 	}
 
 
@@ -58,6 +57,5 @@ public class DepartureTerminalTransferQuay {
 		while(cntPassengersOut!=this.busCapacity) {
 			//wait;
 		}
-		cntPassengersOut = 0;
 	}
 }
