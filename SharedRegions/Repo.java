@@ -207,55 +207,68 @@ private void printInfo(){
 
 public synchronized void setFlightNumber(int flight){
   flightNum = flight+1; 
+  printInfo();
 }
 
 public synchronized void setNumOfBagsAtPlaneHold(int numOfBagsAtPlaneHold) {
 	this.numOfBagsAtPlaneHold = numOfBagsAtPlaneHold;
+	printInfo();
 }
 
 
 public synchronized void setNumOfBagsInTheConvoyBelt(int numOfBagsInTheConvoyBelt) {
 	this.numOfBagsInTheConvoyBelt = numOfBagsInTheConvoyBelt;
+	printInfo();
 }
 
 public synchronized void setNumOfBagsInTheTempArea(int numOfBagsInTheTempArea) {
 	this.numOfBagsInTheTempArea = numOfBagsInTheTempArea;
+	printInfo();
 }
 
 public synchronized void setPassengersOnTheQueue(int queueNum, int passengerId) {
 	this.passangersOnTheBus[queueNum] = passengerId;
+	printInfo();
 }
 
 public synchronized void setPassangersOnTheBus(int seatNum, int passengerId){
 	this.passangersOnTheBus[seatNum] = passengerId;
+	printInfo();
 }
 
 public synchronized void setPassengerDestination(int passengerId, String destination){
 	this.passengerDestination[passengerId] = destination;
+	printInfo();
 }
 
 public synchronized void setNumOfBagsAtTheBegining(int passengerId, int numOfBags){
 	this.numOfBagsAtTheBegining[passengerId] = numOfBags;
+	printInfo();
 }
 
 public synchronized void setNumOfBagsCollected(int passengerId, int numOfBagsCollected){
 	this.numOfBagsCollected[passengerId] = numOfBagsCollected;
+	printInfo();
 }
 
 public synchronized void setPassengersFinalDest(int passengersFinalDest){
 	this.passengersFinalDest = passengersFinalDest;
+	printInfo();
 }
 
 public synchronized void setPassengersTransit(int passengersTransit) {
 	this.passengersTransit = passengersTransit;
+	printInfo();
 }
 
 public synchronized void setTotalBags(int totalBags) {
 	this.totalBags = totalBags;
+	printInfo();
 }
 
 public synchronized void setLostBags(int lostBags) {
 	this.lostBags = lostBags;
+	printInfo();
 }
 
 }
