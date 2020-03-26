@@ -2,15 +2,14 @@ package Main;
 
 import SharedRegions.*;
 import Entities.*;
+
+import java.io.FileNotFoundException;
 import java.util.Random;
 import AuxTools.*;
-import java.util.Date;
 
 public class AirportVConc {
-
-	public String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		
 		Random rand = new Random();
 		
@@ -95,7 +94,7 @@ public class AirportVConc {
 					i+j+b : id of the bag
 					i: passenger id
 					*/
-					bagsToArrivalLounge[i+j] = new Bag(i+j+b,i,tripState[i]);
+					bagsToArrivalLounge[i+j] = new Bag(i+j+b,i,tripState[i][0]);
 				}
 			}
 			try {
@@ -132,12 +131,11 @@ public class AirportVConc {
 			p.start();
 		}
 		
-		//End simulation
+		//End of the simulation
 		try {
 			busdriver.join();
 		}
 		catch(InterruptedException e) {}
-
 		try {
 			porter.join();
 		}
@@ -148,6 +146,8 @@ public class AirportVConc {
 			}
 			catch(InterruptedException e) {}
 		}
+		
+		repo.reportFinalStatus();
 	}
 
 }

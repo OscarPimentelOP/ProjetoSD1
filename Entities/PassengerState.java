@@ -31,5 +31,8 @@ public enum PassengerState {
 	
 	/*blocking state with eventual transition (final state)
 	the passenger is waken up by the operations goHome or prepareNextLeg of the last passenger of each flight to exit the arrival terminal or to enter the departure terminal*/
-	ENTERING_THE_DEPARTURE_TERMINAL
+	ENTERING_THE_DEPARTURE_TERMINAL,
+	
+	//The passenger still has no state
+	NO_STATE
 }

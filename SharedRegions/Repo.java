@@ -1,25 +1,19 @@
 package SharedRegions;
-
-import genclass.GenericIO;
 import java.io.File;
-import java.io.IOException;
-import java.util.Date;
 import Entities.PorterState;
 import Entities.PassengerState;
 import Entities.BusDriverState;
 import java.io.PrintWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import Main.SimulatorParam;
 
 public class Repo{
 
 
-    public static String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
     private File file;
     private PrintWriter pw;
     private final String[] porterStates = {"WPTL", "APLH", "ALCB", "ASTR"};
-    private final String[] passengerStates = {"WSD", "ATT", "TRT", "DTT", "EDT", "LCP", "BRO", "EAT"};
+    private final String[] passengerStates = {"WSD", "ATT", "TRT", "DTT", "EDT", "LCP", "BRO", "EAT","---"};
     private final String[] busDriverStates = {"PKAT", "DRFW", "PKDT", "DRBW"};
     
     //State of the porter
@@ -97,12 +91,11 @@ public class Repo{
       porterSt = PorterState.WAITING_FOR_A_PLANE_TO_LAND;
       busDriverSt = BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL;
       passengerSt = new PassengerState[SimulatorParam.NUM_PASSANGERS];
-
       for (int p = 0; p < SimulatorParam.NUM_PASSANGERS; p++){
-          passengerSt[p] = PassengerState.AT_THE_ARRIVAL_TRANSFER_TERMINAL;
+          passengerSt[p] = PassengerState.NO_STATE;
       }
       
-
+      reportInitialStatus();
     }
 
 
@@ -148,17 +141,31 @@ public class Repo{
 	 		   this.busDriverStates[this.busDriverSt.ordinal()]+"   "+Q[0]+"  "+Q[1]+"  "+Q[2]+
 	 		   "  "+Q[3]+"  "+Q[4]+"  "+Q[5]+"   "+S[0]+"  "+S[1]+"  "+S[2]+"\n";
 	    
-	    lineStatus+=
-	    return lineStatus;
+	    for(int p=0;p<SimulatorParam.NUM_PASSANGERS;p++) {
+	    	if(this.passengerSt[p].ordinal() == 9) {
+		    	lineStatus+=this.passengerStates[this.passengerSt[p].ordinal()]+" "+
+		    			"---"+"  +"+
+		    			"-"+"   "+
+		    			"-"+"  ";
+	    	}
+	    	else {
+	    		lineStatus+=this.passengerStates[this.passengerSt[p].ordinal()]+" "+
+		    			this.passengerDestination[p]+"  +"+
+		    			Integer.toString(this.numOfBagsAtTheBegining[p])+"   "+
+		    			Integer.toString(this.numOfBagsCollected[p])+"  ";
+	    	}
+	    }
+	    return lineStatus+"\n";
     }       
  
 
- private void reportFinalStatus(){
+ public void reportFinalStatus(){
 	pw.write("Final report");
 	pw.write("N. of passengers which have this airport as their final destination = " + Integer.toString(this.passengersFinalDest));
 	pw.write("N. of passengers in transit = " + Integer.toString(this.passengersTransit));
 	pw.write("N. of bags that should have been transported in the the planes hold = " + Integer.toString(this.totalBags)); 
 	pw.write("N. of bags that were lost = " + Integer.toString(this.lostBags));
+	pw.close();
 }
 
 public synchronized void setPassengerState(int id, PassengerState ps){
@@ -186,7 +193,7 @@ private void printInfo(){
   String infoToPrint = reportStatus();
   System.out.println(infoToPrint);
   pw.write(infoToPrint);
-  pw.flush(); 
+  pw.flush();
 
 }
 
