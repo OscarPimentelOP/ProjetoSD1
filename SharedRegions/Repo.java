@@ -1,7 +1,8 @@
 package SharedRegions;
 
 import genclass.GenericIO;
-import genclass.TextFile;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import Entities.PorterState;
 import Entities.PassengerState;
@@ -25,7 +26,7 @@ public class Repo{
     private PorterState porterSt;
     
     //States of the passengers
-    private PassengerState[] passengerSt;
+    private PassengerState[] passengerSt = new PassengerState[SimulatorParam.NUM_PASSANGERS];
     
     //States of the bus driver
     private BusDriverState busDriverSt;
@@ -43,19 +44,19 @@ public class Repo{
     private int numOfBagsInTheTempArea;
     
     //Passengers (identified by the id) on the queue waiting for the bus
-    private int[] passengersOnTheQueue;
+    private int[] passengersOnTheQueue = new int[SimulatorParam.NUM_PASSANGERS];
     
     //Passengers (identified by the id) on the bus
-    private int[] passangersOnTheBus;
+    private int[] passangersOnTheBus = new int[SimulatorParam.BUS_CAPACITY];
     
     //Destination of the each passenger 
-    private String[] passengerDestination;
+    private String[] passengerDestination = new String[SimulatorParam.NUM_PASSANGERS];
     
     //Number of bags carried at the start of her journey
-    private int[] numOfBagsAtTheBegining;
+    private int[] numOfBagsAtTheBegining = new int[SimulatorParam.NUM_PASSANGERS];
     
     //Number of bags that the passenger has presently collected
-    private int[] numOfBagsCollected;
+    private int[] numOfBagsCollected = new int[SimulatorParam.NUM_PASSANGERS];
     
     //Number of passengers which have this airport as their final destination
     private int passengersFinalDest;
@@ -108,72 +109,56 @@ public class Repo{
 
     private void reportInitialStatus ()
    {
-      TextFile log = new TextFile ();                      // instanciação de uma variável de tipo ficheiro de texto
-
-      if (!log.openForWriting (".", fileName))
-         { GenericIO.writelnString ("A operação de criação do ficheiro " + fileName + " falhou!");
-           System.exit (1);
-         }
-      log.writelnString("AIRPORT RHAPSODY - Description of the internal state of the problem");
-      log.writelnString("PLANE PORTER DRIVER");
-      log.writelnString("FN BN Stat CB SR Stat Q1 Q2 Q3 Q4 Q5 Q6 S1 S2 S3");
-      log.writelnString(" PASSENGERS");
-      log.writelnString("St1 Si1 NR1 NA1 St2 Si2 NR2 NA2 St3 Si3 NR3 NA3 St4 Si4 NR4 NA4 St5 Si5 NR5 NA5 St6 Si6 NR6 NA6");
-      
-      
-      if (!log.close ())
-         { GenericIO.writelnString ("A operação de fecho do ficheiro " + fileName + " falhou!");
-           System.exit (1);
-         }
+      pw.write("AIRPORT RHAPSODY - Description of the internal state of the problem");
+      pw.write("PLANE PORTER DRIVER");
+      pw.write("FN BN Stat CB SR Stat Q1 Q2 Q3 Q4 Q5 Q6 S1 S2 S3");
+      pw.write(" PASSENGERS");
+      pw.write("St1 Si1 NR1 NA1 St2 Si2 NR2 NA2 St3 Si3 NR3 NA3 St4 Si4 NR4 NA4 St5 Si5 NR5 NA5 St6 Si6 NR6 NA6");
       reportStatus ();
    }
 
 
 
-    private void reportStatus ()
+    private String reportStatus ()
     {
-       TextFile log = new TextFile ();                      // instanciação de uma variável de tipo ficheiro de texto
- 
-       String lineStatus = "";                              // linha a imprimir
- 
-       if (!log.openForAppending (".", fileName))
-          { GenericIO.writelnString ("A operação de criação do ficheiro " + fileName + " falhou!");
-            System.exit (1);
-          }
-       for (int i = 0; i < nBarber; i++)
-         switch (stateBarber[i])
-         { case SLEEPING: lineStatus += " DORMINDO ";
-                          break;
-           case WORKING:  lineStatus += " ACTIVIDA ";
-                          break;
-         }
-       for (int i = 0; i < nCustomer; i++)
-         switch (stateCustomer[i])
-         { case LIVNORML: lineStatus += " VIVVNRML ";
-                          break;
-           case WANTCUTH: lineStatus += " QUERCORT ";
-                          break;
-           case WAITTURN: lineStatus += " ESPERAVZ ";
-                          break;
-           case CUTHAIR:  lineStatus += " CORTACBL ";
-                          break;
-         }
-       log.writelnString (lineStatus);
-       if (!log.close ())
-          { GenericIO.writelnString ("A operação de fecho do ficheiro " + fileName + " falhou!");
-            System.exit (1);
-          }
+    	String[] Q = new String[SimulatorParam.NUM_PASSANGERS];
+    	for(int p=0;p<SimulatorParam.NUM_PASSANGERS;p++) {
+    		if(this.passengersOnTheQueue[p]==0) {
+    			Q[p] = "-";
+    		}
+    		else {
+    			Q[p] = Integer.toString(this.passengersOnTheQueue[p]);
+    		}
+    	}
+    	String[] S = new String[SimulatorParam.NUM_FLIGHTS];
+    	for(int s=0;s<SimulatorParam.BUS_CAPACITY;s++) {
+    		if(this.passangersOnTheBus[s]==0) {
+    			S[s] = "-";
+    		}
+    		else {
+    			S[s] = Integer.toString(this.passangersOnTheBus[s]);
+    		}
+    	}
+	    String lineStatus = "";                              // linha a imprimir
+	    lineStatus += " "+Integer.toString(this.flightNum)+"  "+
+	    		Integer.toString(this.numOfBagsAtPlaneHold)+"  "+
+	    		this.porterStates[this.porterSt.ordinal()]+
+	    		"  "+Integer.toString(this.numOfBagsInTheConvoyBelt)+"  "+
+	    		Integer.toString(this.numOfBagsInTheTempArea)+"   "+
+	 		   this.busDriverStates[this.busDriverSt.ordinal()]+"   "+Q[0]+"  "+Q[1]+"  "+Q[2]+
+	 		   "  "+Q[3]+"  "+Q[4]+"  "+Q[5]+"   "+S[0]+"  "+S[1]+"  "+S[2]+"\n";
+	    
+	    lineStatus+=
+	    return lineStatus;
     }       
  
 
  private void reportFinalStatus(){
-  log.writelnString("Final report");
-  log.writelnString("N. of passengers which have this airport as their final destination = " + Integer.toString(this.passengersFinalDest));
-  log.writelnString("N. of passengers in transit = " + Integer.toString(this.passengersTransit));
-  log.writelnString("N. of bags that should have been transported in the the planes hold = " + Integer.toString(this.totalBags)); 
-  log.writelnString("N. of bags that were lost = " + Integer.toString(this.lostBags));
-
-
+	pw.write("Final report");
+	pw.write("N. of passengers which have this airport as their final destination = " + Integer.toString(this.passengersFinalDest));
+	pw.write("N. of passengers in transit = " + Integer.toString(this.passengersTransit));
+	pw.write("N. of bags that should have been transported in the the planes hold = " + Integer.toString(this.totalBags)); 
+	pw.write("N. of bags that were lost = " + Integer.toString(this.lostBags));
 }
 
 public synchronized void setPassengerState(int id, PassengerState ps){
