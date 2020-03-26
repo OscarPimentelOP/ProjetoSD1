@@ -13,13 +13,8 @@ public class Repo{
     private File file;
     private PrintWriter pw;
     private final String[] porterStates = {"WPTL", "APLH", "ALCB", "ASTR"};
-<<<<<<< HEAD
-    private final String[] passengerStates = {"WSD", "ATT", "TRT", "DTT", "EDT", "LCP", "BRO", "EAT","---"};
-    private final String[] busDriverStates = {"PKAT", "DRFW", "PKDT", "DRBW"};
-=======
-    private final String[] passengerStates = {"WSD",  "LCP", "BRO", "DTT", "EAT", "ATT", "TRT", "EDT"};
-    private final String[] busDriverStates = {"PKAT", "DRFW", "DRBW", "PKDT"};
->>>>>>> 68977903bc1bead6900997781f6cff34876994eb
+    private final String[] passengerStates = {"WSD", "LCP", "BRO", "DTT","EAT", "ATT", "TRT", "EDT", "---"};
+    private final String[] busDriverStates = {"PKAT", "DRFW", "DRBW","PKDT"};
     
     //State of the porter
     private PorterState porterSt;
