@@ -115,7 +115,7 @@ public class AirportVConc {
 		
 		//Initialize Entities
 		BusDriver busdriver = new BusDriver(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL,
-				attq, dttq);
+				attq, dttq, repo);
 		Porter porter = new Porter(PorterState.WAITING_FOR_A_PLANE_TO_LAND, al, tsa, bcp);
 		Passenger passengers[] = new Passenger[SimulatorParam.NUM_PASSANGERS];
 		for(int i=0;i<passengers.length;i++) {

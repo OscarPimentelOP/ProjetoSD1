@@ -13,8 +13,12 @@ public class TemporaryStorageArea {
 	
 	private Repo repo;
 	
+	//
+	private int numOfBagsAtStoreroom;
+	
 	public TemporaryStorageArea(Repo repo) {
 		this.repo = repo;
+		this.numOfBagsAtStoreroom = 0;
 	}
 	
 	//Porter functions
@@ -23,8 +27,11 @@ public class TemporaryStorageArea {
 	public void carryItToAppropriateStore(Bag bag) {
 		Porter p = (Porter) Thread.currentThread();
 		p.setPorterState(PorterState.AT_THE_STOREROOM);
+		repo.setPorterState(PorterState.AT_THE_STOREROOM);
 		try {
 			bagStorage.write(bag);
+			this.numOfBagsAtStoreroom++;
 		} catch(MemException e) {}
+		repo.setNumOfBagsInTheTempArea(numOfBagsAtStoreroom);
 	}
 }

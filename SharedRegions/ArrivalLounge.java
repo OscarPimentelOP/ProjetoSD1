@@ -22,25 +22,37 @@ public class ArrivalLounge {
 	
 	private Repo repo;
 	
+	private int flight;
+	
+	private int passengersFinalDest;
+	
+	private int passengersTransit;
+	
 	public ArrivalLounge(MemStack<Bag> sBags[], Repo repo){
 		this.sBags = sBags;
 		this.repo = repo;
+		this.flight = 0;
+		this.passengersFinalDest = 0;
+		this.passengersTransit = 0;
 	}
 	
 	//PORTER FUNCTIONS
 	
 	///Returns 'E' (End of the day) or 'W' (Work) 
-	public char takeARest() {
+	public synchronized char takeARest() {
 		Porter p = (Porter) Thread.currentThread(); 
 		while(cntPassengers != SimulatorParam.NUM_PASSANGERS) {
-			p.setPorterState(PorterState.WAITING_FOR_A_PLANE_TO_LAND);
-			//Introduzir wait()
+			try {
+				//wait()?
+				p.wait();
+			}catch(InterruptedException e) {}
 		}
 		if(endOfOperations) {
 			return 'E';
 		}
 		else {
 			p.setPorterState(PorterState.AT_THE_PLANES_HOLD);
+			repo.setPorterState(PorterState.AT_THE_PLANES_HOLD);
 			return 'W';
 		}
 	}
@@ -48,36 +60,56 @@ public class ArrivalLounge {
 	
 	//Returns a bag if any 
 	//Returns null if there are no bags in the stack
-	public Bag tryToCollectABag() {
+	public synchronized Bag tryToCollectABag() {
 		try  {
-			return sBags.read();
+			Bag bag = sBags[this.flight].read();
+			//int passegerid = bag.getPassegerId();	
+			return bag;
 		}
-		catch (MemException e) { return null; }
+		catch (MemException e) {
+			return null; 
+		}
 	}
 	
 	
-	public void noMoreBagsToCollect() {
+	public synchronized void noMoreBagsToCollect() {
 		cntPassengers=0;
+		Porter p = (Porter) Thread.currentThread();
+		p.setPorterState(PorterState.WAITING_FOR_A_PLANE_TO_LAND);
+		repo.setPorterState(PorterState.WAITING_FOR_A_PLANE_TO_LAND);
 	}
 	
 	//PASSENGER FUNCTIONS
 	
 	//Returns H if passenger goes home, T if is going to take a bus or B if is going to collect a bag
-	public char whatShouldIDo(int flight){
+	public synchronized char whatShouldIDo(int flight){
+		this.flight = flight;
+		repo.setFlightNumber(flight);
 		Passenger m = (Passenger) Thread.currentThread(); 
 		m.setPassengerState(PassengerState.AT_THE_DISEMBARKING_ZONE);
-		if (flight == SimulatorParam.NUM_FLIGHTS && !endOfOperations){
+		int id = m.getIdentifier();
+		repo.setPassengerState(id, PassengerState.AT_THE_DISEMBARKING_ZONE);
+		cntPassengers++;
+		if(cntPassengers == SimulatorParam.NUM_PASSANGERS) {
+			notifyAll();
+		}
+		if (flight == SimulatorParam.NUM_FLIGHTS && cntPassengers == SimulatorParam.NUM_PASSANGERS){
 			endOfOperations = true;
 		}
-		cntPassengers++;
 		char tripState = m.getTripState(flight);
 		//Passenger in transit
 		if(tripState == 'T') {
+			this.passengersTransit++;
+			repo.setPassengersTransit(this.passengersTransit);
+			repo.setPassengerDestination(id, "TRT");
 			//Take a bus
 			return 'T';
 		}
 		//Passenger reached final destination
 		else {
+			this.passengersFinalDest++;
+			repo.setPassengersFinalDest(this.passengersFinalDest);
+			repo.setPassengerDestination(id, "FDT");
 			int nBags = m.getNumBags(flight);
 			//Has bags to collect
 			if(nBags != 0) {

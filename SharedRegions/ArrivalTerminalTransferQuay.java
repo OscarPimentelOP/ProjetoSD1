@@ -2,6 +2,7 @@ package SharedRegions;
 
 import Entities.Passenger;
 import Entities.PassengerState;
+import Main.SimulatorParam;
 import Entities.BusDriver;
 import Entities.BusDriverState;
 import AuxTools.MemFIFO;
@@ -22,55 +23,63 @@ public class ArrivalTerminalTransferQuay {
 	//Count of the number of passengers that entered in the bus	
 	private int cntPassengersInBus;
 	
-	//TODO
-	private final int timequantum = 10;
-	
-	//TODO
-	private final int busCapacity = 10;
-	
+	//Queue with the passengers waiting for the bus
 	private MemFIFO<Passenger> waitingForBus;
 	
 	private Repo repo;
 	
+	//Bus driver waiting for passengers
+	private boolean busDriveSleep;
+	
 	public ArrivalTerminalTransferQuay(Repo repo) {
 		this.repo = repo;
+		this.busDriveSleep = false;
+		this.cntPassengersInBus = 0;
+		this.cntPassengersInQueue = 0;
+		this.endOfOperations = false;
+		this.announced = false;
 	}
 	
 	//Passenger functions
 	
-	public void takeABus() {
-
+	public synchronized void takeABus() {
 		Passenger m = (Passenger) Thread.currentThread(); 
 		m.setPassengerState(PassengerState.AT_THE_ARRIVAL_TRANSFER_TERMINAL);
-		try{waitingForBus.write(m);}
+		int id = m.getIdentifier();
+		repo.setPassengerState(id, PassengerState.AT_THE_ARRIVAL_TRANSFER_TERMINAL);
+		try{
+			waitingForBus.write(m);
+			cntPassengersInQueue++;
+			repo.setPassengersOnTheQueue(cntPassengersInQueue, id);
+		}
 		catch(MemException e) {}
-		cntPassengersInQueue++;
 	}
 	
 	//The passengers are blocked
 	//When bus diver announces arrival, it unlocks passengers
-	public void enterTheBus() {
+	public synchronized void enterTheBus() {
+		Passenger p = (Passenger) Thread.currentThread(); 
+		int id = p.getIdentifier();
 		while (!announced) {
-			//wait();
+			//wait()?
+			try {p.wait();}
+			catch(InterruptedException e) {}
 		}
-		try{waitingForBus.read();}
+		try{
+			waitingForBus.read();
+			this.cntPassengersInQueue--;
+		}
 		catch(MemException e) {}
 		this.cntPassengersInBus++;
-		this.cntPassengersInQueue--;
-		Passenger m = (Passenger) Thread.currentThread(); 
-		m.setPassengerState(PassengerState.TERMINAL_TRANSFER);
+		repo.setPassangersOnTheBus(this.cntPassengersInBus, id);
+		p.setPassengerState(PassengerState.TERMINAL_TRANSFER);
+		repo.setPassengerState(id, PassengerState.TERMINAL_TRANSFER);
 	}
-	
-	
-	public void setEndOfWork() {
-		
-	}
-	
 	
 	//Bus driver functions
 	
 	//Returns E (End of the day) or W (work)
-	public char hasDaysWorkEnded() {
+	public synchronized char hasDaysWorkEnded() {
 		boolean workEnded = false;
 		
 		//if(last passenger of last flight leaves the bus){
@@ -86,21 +95,28 @@ public class ArrivalTerminalTransferQuay {
 	
 	//Will unlock the passengers that are waiting to enter the bus
 	//If it has not reached the end of the day it blocks the bus driver until the time quantum terminates or the bus capacity is reached
-	public void announcingBusBoarding() {
+	public synchronized void announcingBusBoarding() {
 		announced = true;
-		long elapsedTime = 0;
-		long start = System.nanoTime();
+		notifyAll();
 		//Blocks until reaches 10 passengers or reaches time quantum
-		while(this.cntPassengersInBus != busCapacity || elapsedTime < timequantum) {
-			elapsedTime = System.nanoTime() - start;
+		while(this.cntPassengersInBus != SimulatorParam.BUS_CAPACITY || this.busDriveSleep) {
 			//wait()?
+			try {
+				wait(SimulatorParam.TIMEQUANTUM);
+				this.busDriveSleep = true;
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		announced = false;
+		this.busDriveSleep = false;
+		this.announced = false;
 	}
 	
-	public void parkTheBus() {
+	public synchronized void parkTheBus() {
 		this.cntPassengersInBus = 0;
 		BusDriver b = (BusDriver) Thread.currentThread(); 
 		b.setBusDriverState(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL);
+		repo.setBusDriverState(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL);
 	}
 }

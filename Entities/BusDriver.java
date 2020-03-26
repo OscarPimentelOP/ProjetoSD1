@@ -2,6 +2,7 @@ package Entities;
 
 import SharedRegions.ArrivalTerminalTransferQuay;
 import SharedRegions.DepartureTerminalTransferQuay;
+import SharedRegions.Repo;
 
 public class BusDriver extends Thread{
 
@@ -11,12 +12,15 @@ public class BusDriver extends Thread{
     //Shared regions
     private final ArrivalTerminalTransferQuay attq;
     private final DepartureTerminalTransferQuay dttq;
+    private final Repo repo;
 
 
-    public BusDriver(BusDriverState s, ArrivalTerminalTransferQuay attq, DepartureTerminalTransferQuay dttq){
+    public BusDriver(BusDriverState s, ArrivalTerminalTransferQuay attq, DepartureTerminalTransferQuay dttq,
+    		Repo repo){
         this.state = s;
         this.attq = attq;
         this.dttq = dttq;
+        this.repo = repo;
     }
 
 
@@ -41,15 +45,15 @@ public class BusDriver extends Thread{
     		attq.parkTheBus();
     	}
     }
-    
-    
-    
-    public void goToDepartureTerminal() {
+ 
+    public synchronized void goToDepartureTerminal() {
     	setBusDriverState(BusDriverState.DRIVING_FORWARD);
+    	repo.setBusDriverState(BusDriverState.DRIVING_FORWARD);
     }
     
-    public void goToArrivalTerminal() {
+    public synchronized void goToArrivalTerminal() {
     	setBusDriverState(BusDriverState.DRIVING_BACKWARD);
+    	repo.setBusDriverState(BusDriverState.DRIVING_BACKWARD);
     }
 
 }

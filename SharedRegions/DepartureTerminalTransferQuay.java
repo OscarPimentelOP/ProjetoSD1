@@ -26,17 +26,23 @@ public class DepartureTerminalTransferQuay {
 	//The passengers will be blocked
 	//When the bus driver parks unblocks the passengers
 	public void leaveTheBus() {
+		Passenger p = (Passenger) Thread.currentThread(); 
 		while(!parked) {
-			//inserir wait()
+			//wait()?
+			try {
+				p.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
-		Passenger m = (Passenger) Thread.currentThread(); 
-		m.setPassengerState(PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
-		cntPassengersOut++;
+		p.setPassengerState(PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
+		int id = p.getIdentifier();
+		repo.setPassengerState(id, PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
 		//When the last passenger exits the bus
-		if(cntPassengersOut==this.busCapacity) {
+		repo.
 			parked = false;
-			//notify?
+			notifyAll();
 		}
 	}
 
@@ -48,7 +54,7 @@ public class DepartureTerminalTransferQuay {
 		BusDriver b = (BusDriver) Thread.currentThread(); 
 		b.setBusDriverState(BusDriverState.PARKING_AT_THE_DEPARTURE_TERMINAL);
 		parked = true;
-		//notifyAll?
+		notifyAll();
 		while(cntPassengersOut!=this.busCapacity) {
 			//wait;
 		}

@@ -1,5 +1,8 @@
 package SharedRegions;
 
+import Entities.Passenger;
+import Entities.PassengerState;
+
 public class DepartureTerminalEntrance {
 
 	
@@ -12,6 +15,9 @@ public class DepartureTerminalEntrance {
 	//Passenger functions
 	
 	public void prepareNextLeg(int flight) {
-		
+		Passenger m = (Passenger) Thread.currentThread();
+		m.setPassengerState(PassengerState.ENTERING_THE_DEPARTURE_TERMINAL);
+		int id = m.getIdentifier();
+		repo.setPassengerState(id, PassengerState.ENTERING_THE_DEPARTURE_TERMINAL);
 	}
 }

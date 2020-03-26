@@ -43,7 +43,8 @@ public class Repo{
     //Passengers (identified by the id) on the bus
     private int[] passangersOnTheBus = new int[SimulatorParam.BUS_CAPACITY];
     
-    //Destination of the each passenger 
+    //Destination of the each passenger
+    //TRT (in transit) / FDT (has this airport as her final destination)
     private String[] passengerDestination = new String[SimulatorParam.NUM_PASSANGERS];
     
     //Number of bags carried at the start of her journey
@@ -157,110 +158,111 @@ public class Repo{
 	    }
 	    return lineStatus+"\n";
     }       
- 
-
- public void reportFinalStatus(){
-	pw.write("Final report");
-	pw.write("N. of passengers which have this airport as their final destination = " + Integer.toString(this.passengersFinalDest));
-	pw.write("N. of passengers in transit = " + Integer.toString(this.passengersTransit));
-	pw.write("N. of bags that should have been transported in the the planes hold = " + Integer.toString(this.totalBags)); 
-	pw.write("N. of bags that were lost = " + Integer.toString(this.lostBags));
-	pw.close();
-}
-
-public synchronized void setPassengerState(int id, PassengerState ps){
-  if(passengerSt[id] != ps){
-    passengerSt[id] = ps;
-    printInfo();
-  }
-}
-
-public synchronized void setPorterState(PorterState ps){
-  if(this.porterSt != ps){
-    this.porterSt = ps;
-    printInfo();
-  }
-}
-
-public synchronized void setBusDriverState(BusDriverState bds){
-  if(this.busDriverSt != bds){
-    this.busDriverSt = bds;
-    printInfo();
-  }
-}
-
-private void printInfo(){
-  String infoToPrint = reportStatus();
-  System.out.println(infoToPrint);
-  pw.write(infoToPrint);
-  pw.flush();
-
-}
-
-public synchronized void setFlightNumber(int flight){
-  flightNum = flight+1; 
-  printInfo();
-}
-
-public synchronized void setNumOfBagsAtPlaneHold(int numOfBagsAtPlaneHold) {
-	this.numOfBagsAtPlaneHold = numOfBagsAtPlaneHold;
-	printInfo();
-}
-
-
-public synchronized void setNumOfBagsInTheConvoyBelt(int numOfBagsInTheConvoyBelt) {
-	this.numOfBagsInTheConvoyBelt = numOfBagsInTheConvoyBelt;
-	printInfo();
-}
-
-public synchronized void setNumOfBagsInTheTempArea(int numOfBagsInTheTempArea) {
-	this.numOfBagsInTheTempArea = numOfBagsInTheTempArea;
-	printInfo();
-}
-
-public synchronized void setPassengersOnTheQueue(int queueNum, int passengerId) {
-	this.passangersOnTheBus[queueNum] = passengerId;
-	printInfo();
-}
-
-public synchronized void setPassangersOnTheBus(int seatNum, int passengerId){
-	this.passangersOnTheBus[seatNum] = passengerId;
-	printInfo();
-}
-
-public synchronized void setPassengerDestination(int passengerId, String destination){
-	this.passengerDestination[passengerId] = destination;
-	printInfo();
-}
-
-public synchronized void setNumOfBagsAtTheBegining(int passengerId, int numOfBags){
-	this.numOfBagsAtTheBegining[passengerId] = numOfBags;
-	printInfo();
-}
-
-public synchronized void setNumOfBagsCollected(int passengerId, int numOfBagsCollected){
-	this.numOfBagsCollected[passengerId] = numOfBagsCollected;
-	printInfo();
-}
-
-public synchronized void setPassengersFinalDest(int passengersFinalDest){
-	this.passengersFinalDest = passengersFinalDest;
-	printInfo();
-}
-
-public synchronized void setPassengersTransit(int passengersTransit) {
-	this.passengersTransit = passengersTransit;
-	printInfo();
-}
-
-public synchronized void setTotalBags(int totalBags) {
-	this.totalBags = totalBags;
-	printInfo();
-}
-
-public synchronized void setLostBags(int lostBags) {
-	this.lostBags = lostBags;
-	printInfo();
-}
+	 
+	
+	 public void reportFinalStatus(){
+		pw.write("Final report");
+		pw.write("N. of passengers which have this airport as their final destination = " + Integer.toString(this.passengersFinalDest));
+		pw.write("N. of passengers in transit = " + Integer.toString(this.passengersTransit));
+		pw.write("N. of bags that should have been transported in the the planes hold = " + Integer.toString(this.totalBags)); 
+		pw.write("N. of bags that were lost = " + Integer.toString(this.lostBags));
+		pw.close();
+	}
+	
+	public synchronized void setPassengerState(int id, PassengerState ps){
+	  if(passengerSt[id] != ps){
+	    passengerSt[id] = ps;
+	    printInfo();
+	  }
+	  if(passengerSt[id].ordinal() == 9) {
+		  for (int p=0;p<SimulatorParam.NUM_PASSANGERS;p++) {
+			  this.numOfBagsCollected[p] = 0;
+		  }
+	  }
+	}
+	
+	public synchronized void setPorterState(PorterState ps){
+	  if(this.porterSt != ps){
+	    this.porterSt = ps;
+	    printInfo();
+	  }
+	}
+	
+	public synchronized void setBusDriverState(BusDriverState bds){
+	  if(this.busDriverSt != bds){
+	    this.busDriverSt = bds;
+	    printInfo();
+	  }
+	}
+	
+	private void printInfo(){
+	  String infoToPrint = reportStatus();
+	  System.out.println(infoToPrint);
+	  pw.write(infoToPrint);
+	  pw.flush();
+	
+	}
+	
+	public synchronized void setFlightNumber(int flight){
+	  flightNum = flight+1; 
+	  printInfo();
+	}
+	
+	public synchronized void setNumOfBagsAtPlaneHold(int numOfBagsAtPlaneHold) {
+		this.numOfBagsAtPlaneHold = numOfBagsAtPlaneHold;
+		printInfo();
+	}
+	
+	
+	public synchronized void setNumOfBagsInTheConvoyBelt(int numOfBagsInTheConvoyBelt) {
+		this.numOfBagsInTheConvoyBelt = numOfBagsInTheConvoyBelt;
+		printInfo();
+	}
+	
+	public synchronized void setNumOfBagsInTheTempArea(int numOfBagsInTheTempArea) {
+		this.numOfBagsInTheTempArea = numOfBagsInTheTempArea;
+		printInfo();
+	}
+	
+	public synchronized void setPassengersOnTheQueue(int queueNum, int passengerId) {
+		this.passangersOnTheBus[queueNum] = passengerId;
+		printInfo();
+	}
+	
+	public synchronized void setPassangersOnTheBus(int seatNum, int passengerId){
+		this.passangersOnTheBus[seatNum] = passengerId;
+		printInfo();
+	}
+	
+	public synchronized void setPassengerDestination(int passengerId, String destination){
+		this.passengerDestination[passengerId] = destination;
+		printInfo();
+	}
+	
+	public synchronized void setNumOfBagsAtTheBegining(int passengerId, int numOfBags){
+		this.numOfBagsAtTheBegining[passengerId] = numOfBags;
+		printInfo();
+	}
+	
+	public synchronized void setNumOfBagsCollected(int passengerId){
+		this.numOfBagsCollected[passengerId]++;
+		printInfo();
+	}
+	
+	public synchronized void setPassengersFinalDest(int passengersFinalDest){
+		this.passengersFinalDest = passengersFinalDest;
+	}
+	
+	public synchronized void setPassengersTransit(int passengersTransit) {
+		this.passengersTransit = passengersTransit;
+	}
+	
+	public synchronized void setTotalBags(int totalBags) {
+		this.totalBags = totalBags;
+	}
+	
+	public synchronized void setLostBags(int lostBags) {
+		this.lostBags = lostBags;
+	}
 
 }

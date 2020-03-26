@@ -1,7 +1,3 @@
-1) No whatshouldIdo se não é necessário mais argumentos para sabermos quantas malas tem o passageiro que chegou. (Basicamente, para ele não ir fazer um goCollectAbag quando não tem malas);
+1) Qual é a melhor de mudar o destino da bag porque quando chegamos ao baggagecollection e à temporaryStorageArea já é necessário saber qual é o destino desta e antes destas regiões não temos acesso à bag
 
-2) O interactionDiagram pode ser algo como o slide 1-38 do AboutJavaandProgramming?
-
-3) Em que moldes será feito o repositório de informação?
-
-
+2) Podemos o stackpointer do MemStack que o professor forneceu para aceder ao número de malas no porão do avião para o obter o BN no repositório?
