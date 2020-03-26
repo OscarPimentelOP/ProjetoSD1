@@ -19,8 +19,8 @@ public class Repo{
     private File file;
     private PrintWriter pw;
     private final String[] porterStates = {"WPTL", "APLH", "ALCB", "ASTR"};
-    private final String[] passengerStates = {"WSD", "ATT", "TRT", "DTT", "EDT", "LCP", "BRO", "EAT"};
-    private final String[] busDriverStates = {"PKAT", "DRFW", "PKDT", "DRBW"};
+    private final String[] passengerStates = {"WSD",  "LCP", "BRO", "DTT", "EAT", "ATT", "TRT", "EDT"};
+    private final String[] busDriverStates = {"PKAT", "DRFW", "DRBW", "PKDT"};
     
     //State of the porter
     private PorterState porterSt;
