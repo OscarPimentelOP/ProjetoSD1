@@ -9,8 +9,6 @@ import Entities.BusDriverState;
 import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-
-import Main.AirportVConc;
 import Main.SimulatorParam;
 
 public class Repo{
@@ -22,31 +20,84 @@ public class Repo{
     private final String[] porterStates = {"WPTL", "APLH", "ALCB", "ASTR"};
     private final String[] passengerStates = {"WSD", "ATT", "TRT", "DTT", "EDT", "LCP", "BRO", "EAT"};
     private final String[] busDriverStates = {"PKAT", "DRFW", "PKDT", "DRBW"};
-    private int passengersFinalDest;
-    private int passengersTransit;
-    private int totalBags;
-    private int lostBags;
-    private int flightNum;
+    
+    //State of the porter
     private PorterState porterSt;
+    
+    //States of the passengers
     private PassengerState[] passengerSt;
+    
+    //States of the bus driver
     private BusDriverState busDriverSt;
-
-    private int passengerCount;
+    
+    //Number of the current flight
+    private int flightNum;
+    
+    //Number of bags at presently at the plane's hold
+    private int numOfBagsAtPlaneHold;
+    
+    //Number of bags in the convoy belt
+    private int numOfBagsInTheConvoyBelt;
+    
+    //Number of bags in the temporary storage area
+    private int numOfBagsInTheTempArea;
+    
+    //Passengers (identified by the id) on the queue waiting for the bus
+    private int[] passengersOnTheQueue;
+    
+    //Passengers (identified by the id) on the bus
+    private int[] passangersOnTheBus;
+    
+    //Destination of the each passenger 
+    private String[] passengerDestination;
+    
+    //Number of bags carried at the start of her journey
+    private int[] numOfBagsAtTheBegining;
+    
+    //Number of bags that the passenger has presently collected
+    private int[] numOfBagsCollected;
+    
+    //Number of passengers which have this airport as their final destination
+    private int passengersFinalDest;
+    
+    //Number of passengers in transit
+    private int passengersTransit;
+    
+    //Number of bags that should have been transported in the the planes hold
+    private int totalBags;
+    
+    //Number of bags that were lost 
+    private int lostBags;
 
 
     public Repo() throws FileNotFoundException{
-      file = new File(AirportVConc.fileName);
+      file = new File(SimulatorParam.fileName);
       pw = new PrintWriter(file);
 
-      passengerCount = 0;
       flightNum = 1;
+      numOfBagsAtPlaneHold = 0;
+      numOfBagsInTheConvoyBelt = 0;
+      numOfBagsInTheTempArea = 0;
+      for (int p=0;p<SimulatorParam.NUM_PASSANGERS;p++) {
+    	  passengersOnTheQueue[p] = 0;
+          passengerDestination[p] = "TRT";
+          numOfBagsAtTheBegining[p] = 0;
+          numOfBagsCollected[p] = 0;
+      }
+      for (int p=0;p<SimulatorParam.BUS_CAPACITY;p++) {
+          passangersOnTheBus[p] = 0;
+      }
+      passengersFinalDest = 0;
+      passengersTransit = 0;
+      totalBags = 0;
+      lostBags = 0;
 
       //defining initial states for the entities
       porterSt = PorterState.WAITING_FOR_A_PLANE_TO_LAND;
       busDriverSt = BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL;
       passengerSt = new PassengerState[SimulatorParam.NUM_PASSANGERS];
 
-      for (int p = 0; i < SimulatorParam.NUM_PASSANGERS; p++){
+      for (int p = 0; p < SimulatorParam.NUM_PASSANGERS; p++){
           passengerSt[p] = PassengerState.AT_THE_ARRIVAL_TRANSFER_TERMINAL;
       }
       
@@ -156,23 +207,55 @@ private void printInfo(){
 
 public synchronized void setFlightNumber(int flight){
   flightNum = flight+1; 
+}
 
-  }
-
-
-
-
-public synchronized void setBeginningNumBags(){
-
+public synchronized void setNumOfBagsAtPlaneHold(int numOfBagsAtPlaneHold) {
+	this.numOfBagsAtPlaneHold = numOfBagsAtPlaneHold;
 }
 
 
+public synchronized void setNumOfBagsInTheConvoyBelt(int numOfBagsInTheConvoyBelt) {
+	this.numOfBagsInTheConvoyBelt = numOfBagsInTheConvoyBelt;
+}
 
+public synchronized void setNumOfBagsInTheTempArea(int numOfBagsInTheTempArea) {
+	this.numOfBagsInTheTempArea = numOfBagsInTheTempArea;
+}
 
+public synchronized void setPassengersOnTheQueue(int queueNum, int passengerId) {
+	this.passangersOnTheBus[queueNum] = passengerId;
+}
 
+public synchronized void setPassangersOnTheBus(int seatNum, int passengerId){
+	this.passangersOnTheBus[seatNum] = passengerId;
+}
 
+public synchronized void setPassengerDestination(int passengerId, String destination){
+	this.passengerDestination[passengerId] = destination;
+}
 
+public synchronized void setNumOfBagsAtTheBegining(int passengerId, int numOfBags){
+	this.numOfBagsAtTheBegining[passengerId] = numOfBags;
+}
 
+public synchronized void setNumOfBagsCollected(int passengerId, int numOfBagsCollected){
+	this.numOfBagsCollected[passengerId] = numOfBagsCollected;
+}
 
-    
+public synchronized void setPassengersFinalDest(int passengersFinalDest){
+	this.passengersFinalDest = passengersFinalDest;
+}
+
+public synchronized void setPassengersTransit(int passengersTransit) {
+	this.passengersTransit = passengersTransit;
+}
+
+public synchronized void setTotalBags(int totalBags) {
+	this.totalBags = totalBags;
+}
+
+public synchronized void setLostBags(int lostBags) {
+	this.lostBags = lostBags;
+}
+
 }
