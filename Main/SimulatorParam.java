@@ -1,5 +1,7 @@
 package Main;
 
+import java.util.Date;
+
 public class SimulatorParam{
 	
 	//Number of flights
@@ -33,6 +35,9 @@ public class SimulatorParam{
 	public static final int PROB_LOSE_1_BAGS = 10;
 	
 	//Probability of 2 bags getting lost in %
-	public static final int PROB_LOSE_2_BAGS = 5;	
+	public static final int PROB_LOSE_2_BAGS = 5;
+
+	//Log file
+	public static final String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
 	
 }
