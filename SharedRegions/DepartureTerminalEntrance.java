@@ -46,8 +46,10 @@ public class DepartureTerminalEntrance {
 		m.setPassengerState(PassengerState.NO_STATE);
 		repo.setPassengerState(id, PassengerState.NO_STATE);
 		ArrivalTerminalExit.passengersDied++;
-		if(ArrivalTerminalExit.passengersDied==SimulatorParam.NUM_PASSANGERS)
+		if(ArrivalTerminalExit.passengersDied==SimulatorParam.NUM_PASSANGERS) {
 			ArrivalTerminalExit.cntPassengersEnd = 0;
+			ArrivalTerminalExit.passengersDied = 0;
+		}
 		System.out.println("paaaaadadwadwadwad");
 	}
 }

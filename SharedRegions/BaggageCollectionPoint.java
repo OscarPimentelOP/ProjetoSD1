@@ -82,13 +82,19 @@ public class BaggageCollectionPoint {
 				bag[1] = null;
 				this.convoyBelt.store(id, bag);
 			}
+			repo.setNumOfBagsCollected(id);
+			System.out.println("tenhooooooooo malaaaaaaaaaaaaaaaaaaaa");
+			return true;
 		}
-		repo.setNumOfBagsCollected(id);
-		return true;
+		else {
+			System.out.println("mala????????????????????????????");
+			return false;
+		}
 	}
 	
 	public synchronized void setMoreBags(boolean moreBags) {
 		this.moreBags = moreBags;
+		notifyAll();
 	}
 	
 }

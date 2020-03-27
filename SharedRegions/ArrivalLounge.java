@@ -86,6 +86,7 @@ public class ArrivalLounge {
 	public synchronized void noMoreBagsToCollect() {
 		cntPassengers=0;
 		bcp.setMoreBags(false);
+		System.out.println("pppppppppppppppppppppppppppppppppppp");
 		Porter p = (Porter) Thread.currentThread();
 		p.setPorterState(PorterState.WAITING_FOR_A_PLANE_TO_LAND);
 		repo.setPorterState(PorterState.WAITING_FOR_A_PLANE_TO_LAND);
