@@ -111,7 +111,7 @@ public class AirportVConc {
 		BaggageCollectionPoint bcp = new BaggageCollectionPoint(repo);
 		BaggageReclaimOffice bro = new BaggageReclaimOffice(repo);
 		TemporaryStorageArea tsa = new TemporaryStorageArea(repo);
-		ArrivalLounge al = new ArrivalLounge(sBags,tripState,bcp,repo);
+		ArrivalLounge al = new ArrivalLounge(sBags,totalNumOfBags,tripState,bcp,repo);
 		ArrivalTerminalTransferQuay attq = new ArrivalTerminalTransferQuay(repo);
 		DepartureTerminalTransferQuay dttq = new DepartureTerminalTransferQuay(repo);
 		DepartureTerminalEntrance dte = new DepartureTerminalEntrance(al, attq, repo);

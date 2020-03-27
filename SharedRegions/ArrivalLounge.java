@@ -32,7 +32,9 @@ public class ArrivalLounge {
 	
 	private char[][] passengersTripState;
 	
-	public ArrivalLounge(MemStack<Bag> sBags[], char[][] tripState, BaggageCollectionPoint bcp ,Repo repo){
+	private int[] numOfBagsPerFlight;
+	
+	public ArrivalLounge(MemStack<Bag> sBags[], int[] numOfBagsPerFlight, char[][] tripState, BaggageCollectionPoint bcp ,Repo repo){
 		this.sBags = sBags;
 		this.repo = repo;
 		this.flight = 0;
@@ -42,6 +44,7 @@ public class ArrivalLounge {
 		this.bcp = bcp;
 		this.endOfOperations = false;
 		this.cntPassengers = 0;
+		this.numOfBagsPerFlight = numOfBagsPerFlight;
 	}
 	
 	//PORTER FUNCTIONS
@@ -82,6 +85,7 @@ public class ArrivalLounge {
 	
 	public synchronized void noMoreBagsToCollect() {
 		cntPassengers=0;
+		bcp.setMoreBags(false);
 		Porter p = (Porter) Thread.currentThread();
 		p.setPorterState(PorterState.WAITING_FOR_A_PLANE_TO_LAND);
 		repo.setPorterState(PorterState.WAITING_FOR_A_PLANE_TO_LAND);
@@ -93,6 +97,7 @@ public class ArrivalLounge {
 	public synchronized char whatShouldIDo(int flight){
 		this.flight = flight;
 		repo.setFlightNumber(flight);
+		repo.setNumOfBagsAtPlaneHold(this.numOfBagsPerFlight[flight]);
 		Passenger p = (Passenger) Thread.currentThread(); 
 		p.setPassengerState(PassengerState.AT_THE_DISEMBARKING_ZONE);
 		int id = p.getIdentifier();

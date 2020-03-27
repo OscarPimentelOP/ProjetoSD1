@@ -177,7 +177,8 @@ public class Repo{
 	public synchronized void setPassengerState(int id, PassengerState ps){
 	  if(passengerSt[id] != ps){
 	    passengerSt[id] = ps;
-	    printInfo();
+	    if(ps.ordinal() != 8)
+	    	printInfo();
 	  }
 	  if(passengerSt[id].ordinal() == 8) {
 		  for (int p=0;p<SimulatorParam.NUM_PASSANGERS;p++) {
@@ -209,14 +210,13 @@ public class Repo{
 	}
 	
 	public synchronized void setFlightNumber(int flight){
-	  flightNum = flight+1;
+		if(flightNum!=flight+1)
+			flightNum = flight+1;
 	}
 	
 	public synchronized void setNumOfBagsAtPlaneHold(int numOfBagsAtPlaneHold) {
-		if(this.numOfBagsAtPlaneHold != numOfBagsAtPlaneHold) {
+		if(this.numOfBagsAtPlaneHold != numOfBagsAtPlaneHold)
 			this.numOfBagsAtPlaneHold = numOfBagsAtPlaneHold;
-			printInfo();
-		}
 	}
 	
 	
@@ -242,8 +242,7 @@ public class Repo{
 	
 	public synchronized void setPassangersOnTheBus(int seatNum, int passengerId){
 		this.passangersOnTheBus[seatNum] = passengerId;
-		if(passengerId != -1)
-			printInfo();
+		printInfo();
 	}
 	
 	public synchronized void setPassengerDestination(int passengerId, String destination){

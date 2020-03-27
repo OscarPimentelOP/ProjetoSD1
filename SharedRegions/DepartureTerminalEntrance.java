@@ -27,9 +27,13 @@ public class DepartureTerminalEntrance {
 		int id = m.getIdentifier();
 		repo.setPassengerState(id, PassengerState.ENTERING_THE_DEPARTURE_TERMINAL);
 		ArrivalTerminalExit.cntPassengersEnd++;
+		System.out.println("yaaaaaaaaaaa"+Integer.toString(ArrivalTerminalExit.cntPassengersEnd));
 		if(ArrivalTerminalExit.cntPassengersEnd == SimulatorParam.NUM_PASSANGERS) {
-			al.setEndOfWork();
-			attq.setEndOfWord();
+			notifyAll();
+			if(flight+1 == SimulatorParam.NUM_FLIGHTS) {
+				al.setEndOfWork();
+				attq.setEndOfWord();
+			}
 		}
 		while(ArrivalTerminalExit.cntPassengersEnd != SimulatorParam.NUM_PASSANGERS) {
 			try {
@@ -39,5 +43,11 @@ public class DepartureTerminalEntrance {
 				e.printStackTrace();
 			}
 		}
+		m.setPassengerState(PassengerState.NO_STATE);
+		repo.setPassengerState(id, PassengerState.NO_STATE);
+		ArrivalTerminalExit.passengersDied++;
+		if(ArrivalTerminalExit.passengersDied==SimulatorParam.NUM_PASSANGERS)
+			ArrivalTerminalExit.cntPassengersEnd = 0;
+		System.out.println("paaaaadadwadwadwad");
 	}
 }

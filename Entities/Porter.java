@@ -102,8 +102,8 @@ public class Porter extends Thread{
     			else{
     				bcp.carryItToAppropriateStore(bag);   //bag has as its final destination that airport
     			}
-    			al.noMoreBagsToCollect();		
     		}
+    		al.noMoreBagsToCollect();
     	}
     }
     

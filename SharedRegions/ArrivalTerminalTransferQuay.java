@@ -70,14 +70,14 @@ public class ArrivalTerminalTransferQuay {
 	public synchronized void enterTheBus() {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		int id = p.getIdentifier();
-		while (!announced) {
+		while (!announced && ArrivalTerminalTransferQuay.cntPassengersInBus==SimulatorParam.BUS_CAPACITY) {
 			try {wait();}
 			catch(InterruptedException e) {}
 		}
-		this.cntPassengersInQueue--;
-		repo.setPassengersOnTheQueue(this.cntPassengersInQueue, -1);
 		try{
 			ArrivalTerminalTransferQuay.inTheBus.write(p);
+			this.cntPassengersInQueue--;
+			repo.setPassengersOnTheQueue(this.cntPassengersInQueue, -1);
 			repo.setPassangersOnTheBus(ArrivalTerminalTransferQuay.cntPassengersInBus, id);
 			ArrivalTerminalTransferQuay.cntPassengersInBus++;
 		}

@@ -158,17 +158,19 @@ public class Passenger extends Thread{
 
     		switch(a){
     			case 'H': ate.goHome(flight);        //Reached final destiny, has no bag to collect, goes home
-    			
+    					  break;
     			
     			case 'T': attq.takeABus();          //Take a bus and prepares the next leg
     				attq.enterTheBus();
     				dttq.leaveTheBus();
     				dte.prepareNextLeg(flight);
+    				break;
     				
     				
     			case 'B':                           //Has bags to collect
     				int numOfCollectedBags = 0;
     				while(numOfCollectedBags != numBags[flight]){
+    					System.out.println("caraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai"+Integer.toString(identifier));
     					
     					if(bcp.goCollectABag()){            //Collect a bag
     						numOfCollectedBags+=1;
@@ -178,19 +180,8 @@ public class Passenger extends Thread{
     					}
     				}
     				ate.goHome(flight);                    //Goes Home
+    				break;
     		}
     	}
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
