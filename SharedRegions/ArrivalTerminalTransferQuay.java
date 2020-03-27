@@ -21,10 +21,10 @@ public class ArrivalTerminalTransferQuay {
 	private int cntPassengersInQueue;
 	
 	//Count of the number of passengers that entered in the bus	
-	private int cntPassengersInBus;
+	protected static int cntPassengersInBus;
 	
 	//Queue with the passengers waiting for the bus
-	private MemFIFO<Passenger> waitingForBus;
+	protected static MemFIFO<Passenger> waitingForBus;
 	
 	private Repo repo;
 	
@@ -34,7 +34,7 @@ public class ArrivalTerminalTransferQuay {
 	public ArrivalTerminalTransferQuay(Repo repo) {
 		this.repo = repo;
 		this.busDriveSleep = false;
-		this.cntPassengersInBus = 0;
+		ArrivalTerminalTransferQuay.cntPassengersInBus = 0;
 		this.cntPassengersInQueue = 0;
 		this.endOfOperations = false;
 		this.announced = false;
@@ -61,8 +61,7 @@ public class ArrivalTerminalTransferQuay {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		int id = p.getIdentifier();
 		while (!announced) {
-			//wait()?
-			try {p.wait();}
+			try {wait();}
 			catch(InterruptedException e) {}
 		}
 		try{
@@ -70,8 +69,8 @@ public class ArrivalTerminalTransferQuay {
 			this.cntPassengersInQueue--;
 		}
 		catch(MemException e) {}
-		this.cntPassengersInBus++;
-		repo.setPassangersOnTheBus(this.cntPassengersInBus, id);
+		ArrivalTerminalTransferQuay.cntPassengersInBus++;
+		repo.setPassangersOnTheBus(ArrivalTerminalTransferQuay.cntPassengersInBus, id);
 		p.setPassengerState(PassengerState.TERMINAL_TRANSFER);
 		repo.setPassengerState(id, PassengerState.TERMINAL_TRANSFER);
 	}
@@ -80,16 +79,10 @@ public class ArrivalTerminalTransferQuay {
 	
 	//Returns E (End of the day) or W (work)
 	public synchronized char hasDaysWorkEnded() {
-		boolean workEnded = false;
-		
-		//if(last passenger of last flight leaves the bus){
-			//return 'E';
-			//workEnded = true;
-		//}
-		//else return 'E';
-		return ' ';
-
-		
+		if(this.endOfOperations){
+			return 'E';
+		}
+		else return 'W';
 	}
 	
 	
@@ -99,8 +92,7 @@ public class ArrivalTerminalTransferQuay {
 		announced = true;
 		notifyAll();
 		//Blocks until reaches 10 passengers or reaches time quantum
-		while(this.cntPassengersInBus != SimulatorParam.BUS_CAPACITY || this.busDriveSleep) {
-			//wait()?
+		while(ArrivalTerminalTransferQuay.cntPassengersInBus != SimulatorParam.BUS_CAPACITY || this.busDriveSleep) {
 			try {
 				wait(SimulatorParam.TIMEQUANTUM);
 				this.busDriveSleep = true;
@@ -114,9 +106,13 @@ public class ArrivalTerminalTransferQuay {
 	}
 	
 	public synchronized void parkTheBus() {
-		this.cntPassengersInBus = 0;
+		//this.cntPassengersInBus = 0;
 		BusDriver b = (BusDriver) Thread.currentThread(); 
 		b.setBusDriverState(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL);
 		repo.setBusDriverState(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL);
+	}
+	
+	public synchronized void setEndOfWord() {
+		this.endOfOperations = true;
 	}
 }
