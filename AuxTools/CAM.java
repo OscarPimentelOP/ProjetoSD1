@@ -1,10 +1,30 @@
 package AuxTools;
 
+
 import java.util.Arrays;
+
+/**
+     * This file is an implementation of a Map from scratch.
+     * It is named as CAM - content addressable memory, or associative memory.
+     * 
+     * It is meant to emulate the place where bags are placed to be collected by the porter
+*/
+
 public class CAM<Key, Value> {
     
+    /**
+     * CAM's capacity (may be changed)   
+    */
     private static final int cap = 16;
+
+    /**
+     * The storage, composed by nodes    
+    */
     private Node<Key, Value>[] storage = new Node[cap];
+
+    /**
+     * size   
+    */
     private int size;
 
    
@@ -21,8 +41,7 @@ public class CAM<Key, Value> {
                     stored = false;
                 }
         }
-            //ensure the capacity of the map
-            if(stored){
+            if(stored){             //ensure the capacity of the map, by readjusting the size
                 if(size == storage.length){
                     int newSize = storage.length*2;
                     storage = Arrays.copyOf(storage, newSize);

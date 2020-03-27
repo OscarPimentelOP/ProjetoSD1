@@ -10,6 +10,9 @@ public class testCAM{
         map.store("lmao", 1);
         map.store("lmao", 6);
         map.printElems();
+
+        System.out.println(map.retreive("yolo"));
+        System.out.println(map.retreive("lmao"));
         
         System.out.print("numElems:" + map.size());
         map.remove("lmao");
