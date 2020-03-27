@@ -20,7 +20,7 @@ public class Repo{
     private PorterState porterSt;
     
     //States of the passengers
-    private PassengerState[] passengerSt = new PassengerState[SimulatorParam.NUM_PASSANGERS];
+    private PassengerState[] passengerSt;
     
     //States of the bus driver
     private BusDriverState busDriverSt;
@@ -38,20 +38,20 @@ public class Repo{
     private int numOfBagsInTheTempArea;
     
     //Passengers (identified by the id) on the queue waiting for the bus
-    private int[] passengersOnTheQueue = new int[SimulatorParam.NUM_PASSANGERS];
+    private int[] passengersOnTheQueue;
     
     //Passengers (identified by the id) on the bus
-    private int[] passangersOnTheBus = new int[SimulatorParam.BUS_CAPACITY];
+    private int[] passangersOnTheBus;
     
     //Destination of the each passenger
     //TRT (in transit) / FDT (has this airport as her final destination)
-    private String[] passengerDestination = new String[SimulatorParam.NUM_PASSANGERS];
+    private String[] passengerDestination;
     
     //Number of bags carried at the start of her journey
-    private int[] numOfBagsAtTheBegining = new int[SimulatorParam.NUM_PASSANGERS];
+    private int[] numOfBagsAtTheBegining;
     
     //Number of bags that the passenger has presently collected
-    private int[] numOfBagsCollected = new int[SimulatorParam.NUM_PASSANGERS];
+    private int[] numOfBagsCollected;
     
     //Number of passengers which have this airport as their final destination
     private int passengersFinalDest;
@@ -74,14 +74,20 @@ public class Repo{
       numOfBagsAtPlaneHold = 0;
       numOfBagsInTheConvoyBelt = 0;
       numOfBagsInTheTempArea = 0;
+      passengerSt = new PassengerState[SimulatorParam.NUM_PASSANGERS];
+      passengersOnTheQueue = new int[SimulatorParam.NUM_PASSANGERS];
+      passangersOnTheBus = new int[SimulatorParam.BUS_CAPACITY];
+      passengerDestination = new String[SimulatorParam.NUM_PASSANGERS];
+      numOfBagsAtTheBegining = new int[SimulatorParam.NUM_PASSANGERS];
+      numOfBagsCollected = new int[SimulatorParam.NUM_PASSANGERS];
       for (int p=0;p<SimulatorParam.NUM_PASSANGERS;p++) {
-    	  passengersOnTheQueue[p] = 0;
+    	  passengersOnTheQueue[p] = -1;
           passengerDestination[p] = "TRT";
           numOfBagsAtTheBegining[p] = 0;
           numOfBagsCollected[p] = 0;
       }
       for (int p=0;p<SimulatorParam.BUS_CAPACITY;p++) {
-          passangersOnTheBus[p] = 0;
+          passangersOnTheBus[p] = -1;
       }
       passengersFinalDest = 0;
       passengersTransit = 0;
@@ -116,7 +122,7 @@ public class Repo{
     {
     	String[] Q = new String[SimulatorParam.NUM_PASSANGERS];
     	for(int p=0;p<SimulatorParam.NUM_PASSANGERS;p++) {
-    		if(this.passengersOnTheQueue[p]==0) {
+    		if(this.passengersOnTheQueue[p]<0) {
     			Q[p] = "-";
     		}
     		else {
@@ -125,7 +131,7 @@ public class Repo{
     	}
     	String[] S = new String[SimulatorParam.NUM_FLIGHTS];
     	for(int s=0;s<SimulatorParam.BUS_CAPACITY;s++) {
-    		if(this.passangersOnTheBus[s]==0) {
+    		if(this.passangersOnTheBus[s]<0) {
     			S[s] = "-";
     		}
     		else {
@@ -207,29 +213,37 @@ public class Repo{
 	}
 	
 	public synchronized void setNumOfBagsAtPlaneHold(int numOfBagsAtPlaneHold) {
-		this.numOfBagsAtPlaneHold = numOfBagsAtPlaneHold;
-		printInfo();
+		if(this.numOfBagsAtPlaneHold != numOfBagsAtPlaneHold) {
+			this.numOfBagsAtPlaneHold = numOfBagsAtPlaneHold;
+			printInfo();
+		}
 	}
 	
 	
 	public synchronized void setNumOfBagsInTheConvoyBelt(int numOfBagsInTheConvoyBelt) {
-		this.numOfBagsInTheConvoyBelt = numOfBagsInTheConvoyBelt;
-		printInfo();
+		if(this.numOfBagsInTheConvoyBelt  != numOfBagsInTheConvoyBelt) {
+			this.numOfBagsInTheConvoyBelt = numOfBagsInTheConvoyBelt;
+			printInfo();
+		}
 	}
 	
 	public synchronized void setNumOfBagsInTheTempArea(int numOfBagsInTheTempArea) {
-		this.numOfBagsInTheTempArea = numOfBagsInTheTempArea;
-		printInfo();
+		if(this.numOfBagsInTheTempArea != numOfBagsInTheTempArea) {
+			this.numOfBagsInTheTempArea = numOfBagsInTheTempArea;
+			printInfo();
+		}
 	}
 	
 	public synchronized void setPassengersOnTheQueue(int queueNum, int passengerId) {
-		this.passangersOnTheBus[queueNum] = passengerId;
-		printInfo();
+		this.passengersOnTheQueue[queueNum] = passengerId;
+		if(passengerId != -1)
+			printInfo();
 	}
 	
 	public synchronized void setPassangersOnTheBus(int seatNum, int passengerId){
 		this.passangersOnTheBus[seatNum] = passengerId;
-		printInfo();
+		if(passengerId != -1)
+			printInfo();
 	}
 	
 	public synchronized void setPassengerDestination(int passengerId, String destination){
@@ -240,7 +254,7 @@ public class Repo{
 		this.numOfBagsAtTheBegining[passengerId] = numOfBags;
 	}
 	
-	public synchronized void setNumOfBagsCollected(int passengerId){
+	public synchronized void setNumOfBagsCollected(int passengerId){	
 		this.numOfBagsCollected[passengerId]++;
 		printInfo();
 	}

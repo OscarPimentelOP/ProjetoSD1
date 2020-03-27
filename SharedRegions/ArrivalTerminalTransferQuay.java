@@ -24,7 +24,10 @@ public class ArrivalTerminalTransferQuay {
 	protected static int cntPassengersInBus;
 	
 	 //Queue with the passengers waiting for the bus
-	protected static MemFIFO<Passenger> waitingForBus;
+	private MemFIFO<Passenger> waitingForBus;
+	
+	 //Queue with the passengers in the bus
+	protected static MemFIFO<Passenger> inTheBus;
 	
 	private Repo repo;
 	
@@ -33,13 +36,17 @@ public class ArrivalTerminalTransferQuay {
 	
 	public ArrivalTerminalTransferQuay(Repo repo) {
 		this.repo = repo;
-		this.busDriveSleep = false;
+		this.busDriveSleep = true;
 		ArrivalTerminalTransferQuay.cntPassengersInBus = 0;
 		this.cntPassengersInQueue = 0;
 		this.endOfOperations = false;
 		this.announced = false;
 		try {
 			waitingForBus = new MemFIFO<Passenger>(new Passenger [SimulatorParam.NUM_PASSANGERS]);
+		}catch(MemException e) {}
+
+		try {
+			inTheBus = new MemFIFO<Passenger>(new Passenger [SimulatorParam.BUS_CAPACITY]);
 		}catch(MemException e) {}
 	}
 	
@@ -51,9 +58,9 @@ public class ArrivalTerminalTransferQuay {
 		int id = m.getIdentifier();
 		repo.setPassengerState(id, PassengerState.AT_THE_ARRIVAL_TRANSFER_TERMINAL);
 		try{
-			ArrivalTerminalTransferQuay.waitingForBus.write(m);
-			cntPassengersInQueue++;
+			this.waitingForBus.write(m);
 			repo.setPassengersOnTheQueue(cntPassengersInQueue, id);
+			cntPassengersInQueue++;
 		}
 		catch(MemException e) {}
 	}
@@ -67,13 +74,14 @@ public class ArrivalTerminalTransferQuay {
 			try {wait();}
 			catch(InterruptedException e) {}
 		}
+		this.cntPassengersInQueue--;
+		repo.setPassengersOnTheQueue(this.cntPassengersInQueue, -1);
 		try{
-			ArrivalTerminalTransferQuay.waitingForBus.read();
-			this.cntPassengersInQueue--;
+			ArrivalTerminalTransferQuay.inTheBus.write(p);
+			repo.setPassangersOnTheBus(ArrivalTerminalTransferQuay.cntPassengersInBus, id);
+			ArrivalTerminalTransferQuay.cntPassengersInBus++;
 		}
 		catch(MemException e) {}
-		repo.setPassangersOnTheBus(ArrivalTerminalTransferQuay.cntPassengersInBus, id);
-		ArrivalTerminalTransferQuay.cntPassengersInBus++;
 		if(ArrivalTerminalTransferQuay.cntPassengersInBus==SimulatorParam.BUS_CAPACITY) {
 			notifyAll();
 		}
@@ -99,16 +107,16 @@ public class ArrivalTerminalTransferQuay {
 		announced = true;
 		notifyAll();
 		//Blocks until reaches 10 passengers or reaches time quantum
-		while(ArrivalTerminalTransferQuay.cntPassengersInBus != SimulatorParam.BUS_CAPACITY || this.busDriveSleep) {
+		while(ArrivalTerminalTransferQuay.cntPassengersInBus != SimulatorParam.BUS_CAPACITY && this.busDriveSleep) {
 			try {
 				wait(SimulatorParam.TIMEQUANTUM);
-				this.busDriveSleep = true;
+				this.busDriveSleep = false;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		this.busDriveSleep = false;
+		this.busDriveSleep = true;
 		this.announced = false;
 	}
 	

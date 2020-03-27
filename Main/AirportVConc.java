@@ -90,16 +90,19 @@ public class AirportVConc {
 		for(int b=0;b<SimulatorParam.NUM_FLIGHTS;b++) {
 			//Bags in the storage to pass to the arrival lounge per flight
 			Bag bagsToArrivalLounge[] = new Bag[totalNumOfBags[b]];
-			for(int i=0;i<SimulatorParam.NUM_PASSANGERS;i++) {
-				for(int j=0;j<numBagsFound[i][b];j++) {
-					bagsToArrivalLounge[bagPosInArray] = new Bag(bagId,i,tripState[i][0]);
-					bagId++;
-					bagPosInArray++;
-				}
-			}
 			try {
 				sBags[b] = new MemStack<Bag>(bagsToArrivalLounge);
-			} catch (MemException e) {}
+				for(int i=0;i<SimulatorParam.NUM_PASSANGERS;i++) {
+					for(int j=0;j<numBagsFound[i][b];j++) {
+						sBags[b].write(new Bag(bagId,i,tripState[i][0]));
+						bagId++;
+						bagPosInArray++;
+					}
+				}
+				} catch (MemException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			bagPosInArray = 0;
 		}
  		
@@ -149,6 +152,6 @@ public class AirportVConc {
 		}
 		
 		repo.reportFinalStatus();
+	
 	}
-
 }

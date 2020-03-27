@@ -4,6 +4,7 @@ import AuxTools.MemStack;
 import AuxTools.Bag;
 import AuxTools.MemException;
 import Entities.PorterState;
+import Main.SimulatorParam;
 import Entities.Porter;
 
 public class TemporaryStorageArea {
@@ -19,6 +20,13 @@ public class TemporaryStorageArea {
 	public TemporaryStorageArea(Repo repo) {
 		this.repo = repo;
 		this.numOfBagsAtStoreroom = 0;
+		Bag[] bags = new Bag[SimulatorParam.NUM_PASSANGERS*SimulatorParam.MAX_NUM_OF_BAGS];
+		try {
+			bagStorage = new MemStack<Bag>(bags);
+		} catch (MemException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	//Porter functions

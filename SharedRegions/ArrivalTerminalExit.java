@@ -29,9 +29,11 @@ public class ArrivalTerminalExit {
 		int id = m.getIdentifier();
 		repo.setPassengerState(id, PassengerState.EXITING_THE_ARRIVAL_TERMINAL);
 		cntPassengersEnd++;
-		if(ArrivalTerminalExit.cntPassengersEnd == SimulatorParam.NUM_PASSANGERS) {
-			al.setEndOfWork();
-			attq.setEndOfWord();
+		if(flight == SimulatorParam.NUM_FLIGHTS) {
+			if(ArrivalTerminalExit.cntPassengersEnd == SimulatorParam.NUM_PASSANGERS) {
+				al.setEndOfWork();
+				attq.setEndOfWord();
+			}
 		}
 		while(cntPassengersEnd != SimulatorParam.NUM_PASSANGERS) {
 			try {

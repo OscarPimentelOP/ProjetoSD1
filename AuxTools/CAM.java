@@ -3,6 +3,8 @@ package AuxTools;
 
 import java.util.Arrays;
 
+import Main.SimulatorParam;
+
 /**
      * This file is an implementation of a Map from scratch.
      * It is named as CAM - content addressable memory, or associative memory.
@@ -15,7 +17,7 @@ public class CAM<Key, Value> {
     /**
      * CAM's capacity (may be changed)   
     */
-    private static final int cap = 16;
+    private static final int cap = SimulatorParam.NUM_PASSANGERS*SimulatorParam.MAX_NUM_OF_BAGS;
 
     /**
      * The storage, composed by nodes    

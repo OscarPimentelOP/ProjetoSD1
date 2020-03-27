@@ -49,7 +49,7 @@ public class ArrivalLounge {
 	///Returns 'E' (End of the day) or 'W' (Work) 
 	public synchronized char takeARest() {
 		Porter p = (Porter) Thread.currentThread();
-		while(cntPassengers != SimulatorParam.NUM_PASSANGERS || !this.endOfOperations) {
+		while(cntPassengers != SimulatorParam.NUM_PASSANGERS && !this.endOfOperations) {
 			try {
 				wait();
 			}catch(InterruptedException e) {}

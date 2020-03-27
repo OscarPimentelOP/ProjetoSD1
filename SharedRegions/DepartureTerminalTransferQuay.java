@@ -35,13 +35,10 @@ public class DepartureTerminalTransferQuay {
 				e.printStackTrace();
 			}
 		}
-		p.setPassengerState(PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
-		int id = p.getIdentifier();
-		repo.setPassengerState(id, PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
 		while(this.cntPassengersOut < ArrivalTerminalTransferQuay.cntPassengersInBus) {
 			try {
-				ArrivalTerminalTransferQuay.waitingForBus.read();
-				repo.setPassangersOnTheBus(this.cntPassengersOut, 0);
+				ArrivalTerminalTransferQuay.inTheBus.read();
+				repo.setPassangersOnTheBus(this.cntPassengersOut, -1);
 				this.cntPassengersOut++;
 			} catch (MemException e) {
 				// TODO Auto-generated catch block
@@ -54,6 +51,9 @@ public class DepartureTerminalTransferQuay {
 			notifyAll();
 			ArrivalTerminalTransferQuay.cntPassengersInBus = 0;
 		}
+		p.setPassengerState(PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
+		int id = p.getIdentifier();
+		repo.setPassengerState(id, PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
 	}
 
 
@@ -63,6 +63,7 @@ public class DepartureTerminalTransferQuay {
 	public synchronized void parkTheBusAndLetPassOff() {
 		BusDriver b = (BusDriver) Thread.currentThread(); 
 		b.setBusDriverState(BusDriverState.PARKING_AT_THE_DEPARTURE_TERMINAL);
+		repo.setBusDriverState(BusDriverState.PARKING_AT_THE_DEPARTURE_TERMINAL);
 		parked = true;
 		notifyAll();
 		while(cntPassengersOut < ArrivalTerminalTransferQuay.cntPassengersInBus) {
@@ -73,5 +74,6 @@ public class DepartureTerminalTransferQuay {
 				e.printStackTrace();
 			}
 		}
+		cntPassengersOut = 0;
 	}
 }
