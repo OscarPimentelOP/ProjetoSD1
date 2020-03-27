@@ -11,7 +11,6 @@ public class BaggageCollectionPoint {
 	
 	//CAM<idPassanger, array of bags>
 	private CAM<Integer, Bag[]> convoyBelt;
-	//Variable that warns the passenger that can go collect his bag
 	
 	//
 	private int numOfBagsInConveyBelt;
@@ -61,7 +60,7 @@ public class BaggageCollectionPoint {
 		while(this.convoyBelt.retreive(id) == null) {
 			//wait();
 			try {
-				p.wait();
+				wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

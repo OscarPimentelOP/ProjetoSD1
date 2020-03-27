@@ -28,26 +28,33 @@ public class ArrivalLounge {
 	
 	private int passengersTransit;
 	
-	public ArrivalLounge(MemStack<Bag> sBags[], Repo repo){
+	private BaggageCollectionPoint bcp;
+	
+	private char[][] passengersTripState;
+	
+	public ArrivalLounge(MemStack<Bag> sBags[], char[][] tripState, BaggageCollectionPoint bcp ,Repo repo){
 		this.sBags = sBags;
 		this.repo = repo;
 		this.flight = 0;
 		this.passengersFinalDest = 0;
 		this.passengersTransit = 0;
+		this.passengersTripState = tripState;
+		this.bcp = bcp;
+		this.endOfOperations = false;
+		this.cntPassengers = 0;
 	}
 	
 	//PORTER FUNCTIONS
 	
 	///Returns 'E' (End of the day) or 'W' (Work) 
 	public synchronized char takeARest() {
-		Porter p = (Porter) Thread.currentThread(); 
-		while(cntPassengers != SimulatorParam.NUM_PASSANGERS) {
+		Porter p = (Porter) Thread.currentThread();
+		while(cntPassengers != SimulatorParam.NUM_PASSANGERS || !this.endOfOperations) {
 			try {
-				//wait()?
-				p.wait();
+				wait();
 			}catch(InterruptedException e) {}
 		}
-		if(endOfOperations) {
+		if(this.endOfOperations) {
 			return 'E';
 		}
 		else {
@@ -63,7 +70,8 @@ public class ArrivalLounge {
 	public synchronized Bag tryToCollectABag() {
 		try  {
 			Bag bag = sBags[this.flight].read();
-			//int passegerid = bag.getPassegerId();	
+			int passengerId = bag.getPassegerId();
+			bag.setDestination(passengersTripState[passengerId][flight]);
 			return bag;
 		}
 		catch (MemException e) {
@@ -93,9 +101,6 @@ public class ArrivalLounge {
 		if(cntPassengers == SimulatorParam.NUM_PASSANGERS) {
 			notifyAll();
 		}
-		if (flight == SimulatorParam.NUM_FLIGHTS && cntPassengers == SimulatorParam.NUM_PASSANGERS){
-			endOfOperations = true;
-		}
 		char tripState = p.getTripState(flight);
 		//Passenger in transit
 		if(tripState == 'T') {
@@ -124,5 +129,9 @@ public class ArrivalLounge {
 				return 'H';
 			}
 		}
+	}
+	
+	public synchronized void setEndOfWork() {
+		this.endOfOperations = true;
 	}
 }

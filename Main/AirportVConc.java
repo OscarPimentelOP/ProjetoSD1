@@ -23,7 +23,7 @@ public class AirportVConc {
 		for(int i=0;i<SimulatorParam.NUM_PASSANGERS;i++) {
 			
 			//Initialize the number of bags per passenger and flight with probabilities
-			for(int b=0;b<numBags.length;b++) {
+			for(int b=0;b<SimulatorParam.NUM_FLIGHTS;b++) {
 				int randint = rand.nextInt(101);
 				if(randint <= SimulatorParam.PROB_OF_0_BAGS) {
 					numBags[i][b] = 0;
@@ -39,7 +39,7 @@ public class AirportVConc {
 			Initialize the number of bags that have been lost 
 			per passenger and flight with probabilities
 			*/
-			for(int b=0;b<numBagsLost.length;b++) {
+			for(int b=0;b<SimulatorParam.NUM_FLIGHTS;b++) {
 				int randint = rand.nextInt(101);
 				if(randint <= SimulatorParam.PROB_LOSE_0_BAGS) {
 					numBagsLost[i][b] = 0;
@@ -57,7 +57,7 @@ public class AirportVConc {
 			Initialize the trip state per passenger and flight
 			(final destination-> F, transit -> T)
 			*/
-			for(int t=0;t<tripState.length;t++) {
+			for(int t=0;t<SimulatorParam.NUM_FLIGHTS;t++) {
 				int randint = rand.nextInt(2);
 				if(randint == 0) {
 					tripState[i][t] = 'T';
@@ -75,7 +75,7 @@ public class AirportVConc {
 		int totalNumOfBags[]= new int[SimulatorParam.NUM_FLIGHTS];
 		//Initialize number of bags that are found
 		for(int i=0;i<SimulatorParam.NUM_PASSANGERS;i++) {
-			for(int b=0;b<numBagsFound.length;b++) {
+			for(int b=0;b<SimulatorParam.NUM_FLIGHTS;b++) {
 				numBagsFound[i][b] = numBags[i][b] - numBagsLost[i][b];
 				if(numBagsFound[i][b]<0) numBagsFound[i][b]=0;
 				totalNumOfBags[b] += numBagsFound[i][b];
@@ -104,14 +104,14 @@ public class AirportVConc {
  		
 		//Initialize SharedRegions
 		Repo repo = new Repo();
-		ArrivalLounge al = new ArrivalLounge(sBags,repo);
-		ArrivalTerminalExit ate = new ArrivalTerminalExit(repo);
-		ArrivalTerminalTransferQuay attq = new ArrivalTerminalTransferQuay(repo);
 		BaggageCollectionPoint bcp = new BaggageCollectionPoint(repo);
 		BaggageReclaimOffice bro = new BaggageReclaimOffice(repo);
-		DepartureTerminalEntrance dte = new DepartureTerminalEntrance(repo);
-		DepartureTerminalTransferQuay dttq = new DepartureTerminalTransferQuay(repo);
 		TemporaryStorageArea tsa = new TemporaryStorageArea(repo);
+		ArrivalLounge al = new ArrivalLounge(sBags,tripState,bcp,repo);
+		ArrivalTerminalTransferQuay attq = new ArrivalTerminalTransferQuay(repo);
+		DepartureTerminalTransferQuay dttq = new DepartureTerminalTransferQuay(repo);
+		DepartureTerminalEntrance dte = new DepartureTerminalEntrance(al, attq, repo);
+		ArrivalTerminalExit ate = new ArrivalTerminalExit(al, attq, repo);
 		
 		//Initialize Entities
 		BusDriver busdriver = new BusDriver(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL,

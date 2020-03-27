@@ -29,8 +29,16 @@ public class CAM<Key, Value> {
 
    
 
-
+    /**
+     * Stores a value and a associated key
+     * @param key -> the key 
+     * @param value -> value 
+    */
     public void store(Key key, Value value){
+
+        /**
+         * if the object is stored   
+        */
         boolean stored = true;
         
         for(int i = 0; i< size; i++){
