@@ -24,7 +24,7 @@ public class TemporaryStorageArea {
 	//Porter functions
 	
 	//Add bag to storage
-	public void carryItToAppropriateStore(Bag bag) {
+	public synchronized void carryItToAppropriateStore(Bag bag) {
 		Porter p = (Porter) Thread.currentThread();
 		p.setPorterState(PorterState.AT_THE_STOREROOM);
 		repo.setPorterState(PorterState.AT_THE_STOREROOM);

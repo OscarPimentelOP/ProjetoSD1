@@ -21,7 +21,7 @@ public class DepartureTerminalEntrance {
 	
 	//Passenger functions
 	
-	public void prepareNextLeg(int flight) {
+	public synchronized  void prepareNextLeg(int flight) {
 		Passenger m = (Passenger) Thread.currentThread();
 		m.setPassengerState(PassengerState.ENTERING_THE_DEPARTURE_TERMINAL);
 		int id = m.getIdentifier();

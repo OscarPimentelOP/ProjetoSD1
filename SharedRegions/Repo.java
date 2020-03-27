@@ -103,12 +103,11 @@ public class Repo{
 
     private void reportInitialStatus ()
    {
-      pw.write("              AIRPORT RHAPSODY - Description of the internal state of the problem");
-      pw.write("PLANE     PORTER                         DRIVER");
-      pw.write("FN BN   Stat CB SR        Stat     Q1 Q2 Q3 Q4 Q5 Q6   S1 S2 S3");
-      pw.write("                                                    PASSENGERS");
-      pw.write("St1 Si1 NR1 NA1 St2 Si2 NR2 NA2 St3 Si3 NR3 NA3 St4 Si4 NR4 NA4 St5 Si5 NR5 NA5 St6 Si6 NR6 NA6");
-      reportStatus ();
+      pw.write("               AIRPORT RHAPSODY - Description of the internal state of the problem\n\n");
+      pw.write("PLANE    PORTER                  DRIVER\n");
+      pw.write("FN BN  Stat CB SR   Stat  Q1 Q2 Q3 Q4 Q5 Q6  S1 S2 S3\n");
+      pw.write("                                                         PASSENGERS\n");
+      pw.write("St1 Si1 NR1 NA1 St2 Si2 NR2 NA2 St3 Si3 NR3 NA3 St4 Si4 NR4 NA4 St5 Si5 NR5 NA5 St6 Si6 NR6 NA6\n");
    }
 
 
@@ -143,15 +142,15 @@ public class Repo{
 	 		   "  "+Q[3]+"  "+Q[4]+"  "+Q[5]+"   "+S[0]+"  "+S[1]+"  "+S[2]+"\n";
 	    
 	    for(int p=0;p<SimulatorParam.NUM_PASSANGERS;p++) {
-	    	if(this.passengerSt[p].ordinal() == 9) {
+	    	if(this.passengerSt[p].ordinal() == 8) {
 		    	lineStatus+=this.passengerStates[this.passengerSt[p].ordinal()]+" "+
-		    			"---"+"  +"+
+		    			"---"+"  "+
 		    			"-"+"   "+
 		    			"-"+"  ";
 	    	}
 	    	else {
 	    		lineStatus+=this.passengerStates[this.passengerSt[p].ordinal()]+" "+
-		    			this.passengerDestination[p]+"  +"+
+		    			this.passengerDestination[p]+"  "+
 		    			Integer.toString(this.numOfBagsAtTheBegining[p])+"   "+
 		    			Integer.toString(this.numOfBagsCollected[p])+"  ";
 	    	}
@@ -162,10 +161,10 @@ public class Repo{
 	
 	 public void reportFinalStatus(){
 		pw.write("Final report");
-		pw.write("N. of passengers which have this airport as their final destination = " + Integer.toString(this.passengersFinalDest));
-		pw.write("N. of passengers in transit = " + Integer.toString(this.passengersTransit));
-		pw.write("N. of bags that should have been transported in the the planes hold = " + Integer.toString(this.totalBags)); 
-		pw.write("N. of bags that were lost = " + Integer.toString(this.lostBags));
+		pw.write("N. of passengers which have this airport as their final destination = " + Integer.toString(this.passengersFinalDest)+"\n");
+		pw.write("N. of passengers in transit = " + Integer.toString(this.passengersTransit)+"\n");
+		pw.write("N. of bags that should have been transported in the the planes hold = " + Integer.toString(this.totalBags)+"\n"); 
+		pw.write("N. of bags that were lost = " + Integer.toString(this.lostBags)+"\n");
 		pw.close();
 	}
 	
@@ -174,7 +173,7 @@ public class Repo{
 	    passengerSt[id] = ps;
 	    printInfo();
 	  }
-	  if(passengerSt[id].ordinal() == 9) {
+	  if(passengerSt[id].ordinal() == 8) {
 		  for (int p=0;p<SimulatorParam.NUM_PASSANGERS;p++) {
 			  this.numOfBagsCollected[p] = 0;
 		  }
@@ -204,8 +203,7 @@ public class Repo{
 	}
 	
 	public synchronized void setFlightNumber(int flight){
-	  flightNum = flight+1; 
-	  printInfo();
+	  flightNum = flight+1;
 	}
 	
 	public synchronized void setNumOfBagsAtPlaneHold(int numOfBagsAtPlaneHold) {
@@ -236,12 +234,10 @@ public class Repo{
 	
 	public synchronized void setPassengerDestination(int passengerId, String destination){
 		this.passengerDestination[passengerId] = destination;
-		printInfo();
 	}
 	
 	public synchronized void setNumOfBagsAtTheBegining(int passengerId, int numOfBags){
 		this.numOfBagsAtTheBegining[passengerId] = numOfBags;
-		printInfo();
 	}
 	
 	public synchronized void setNumOfBagsCollected(int passengerId){

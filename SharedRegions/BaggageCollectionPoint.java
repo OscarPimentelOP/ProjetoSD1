@@ -20,6 +20,7 @@ public class BaggageCollectionPoint {
 	public BaggageCollectionPoint(Repo repo) {
 		this.repo = repo;
 		this.numOfBagsInConveyBelt = 0;
+		this.convoyBelt = new CAM<Integer, Bag[]>();
 	}
 	
 	//Porter functions
@@ -58,7 +59,6 @@ public class BaggageCollectionPoint {
 		int id = p.getIdentifier();
 		repo.setPassengerState(id, PassengerState.AT_THE_LUGGAGE_COLLECTION_POINT);
 		while(this.convoyBelt.retreive(id) == null) {
-			//wait();
 			try {
 				wait();
 			} catch (InterruptedException e) {

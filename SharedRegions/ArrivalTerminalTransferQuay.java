@@ -23,7 +23,7 @@ public class ArrivalTerminalTransferQuay {
 	//Count of the number of passengers that entered in the bus	
 	protected static int cntPassengersInBus;
 	
-	//Queue with the passengers waiting for the bus
+	 //Queue with the passengers waiting for the bus
 	protected static MemFIFO<Passenger> waitingForBus;
 	
 	private Repo repo;
@@ -38,6 +38,9 @@ public class ArrivalTerminalTransferQuay {
 		this.cntPassengersInQueue = 0;
 		this.endOfOperations = false;
 		this.announced = false;
+		try {
+			waitingForBus = new MemFIFO<Passenger>(new Passenger [SimulatorParam.NUM_PASSANGERS]);
+		}catch(MemException e) {}
 	}
 	
 	//Passenger functions
@@ -48,7 +51,7 @@ public class ArrivalTerminalTransferQuay {
 		int id = m.getIdentifier();
 		repo.setPassengerState(id, PassengerState.AT_THE_ARRIVAL_TRANSFER_TERMINAL);
 		try{
-			waitingForBus.write(m);
+			ArrivalTerminalTransferQuay.waitingForBus.write(m);
 			cntPassengersInQueue++;
 			repo.setPassengersOnTheQueue(cntPassengersInQueue, id);
 		}
@@ -65,14 +68,18 @@ public class ArrivalTerminalTransferQuay {
 			catch(InterruptedException e) {}
 		}
 		try{
-			waitingForBus.read();
+			ArrivalTerminalTransferQuay.waitingForBus.read();
 			this.cntPassengersInQueue--;
 		}
 		catch(MemException e) {}
-		ArrivalTerminalTransferQuay.cntPassengersInBus++;
 		repo.setPassangersOnTheBus(ArrivalTerminalTransferQuay.cntPassengersInBus, id);
+		ArrivalTerminalTransferQuay.cntPassengersInBus++;
+		if(ArrivalTerminalTransferQuay.cntPassengersInBus==SimulatorParam.BUS_CAPACITY) {
+			notifyAll();
+		}
 		p.setPassengerState(PassengerState.TERMINAL_TRANSFER);
 		repo.setPassengerState(id, PassengerState.TERMINAL_TRANSFER);
+		
 	}
 	
 	//Bus driver functions

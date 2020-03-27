@@ -38,6 +38,6 @@ public class SimulatorParam{
 	public static final int PROB_LOSE_2_BAGS = 5;
 
 	//Log file
-	public static final String fileName = "log" + new Date().toString().replace(' ', '_') + ".txt";
+	public static final String fileName = "log" + new Date().toString().replace(' ', '_').replace(':', '_') + ".txt";
 	
 }

@@ -84,22 +84,23 @@ public class AirportVConc {
 		
 		
 		//Array of stacks that represent the storage of bags per flight
-		MemStack<Bag>[] sBags = (MemStack<Bag>[]) new Object[SimulatorParam.NUM_FLIGHTS];
+		MemStack[] sBags = new MemStack[SimulatorParam.NUM_FLIGHTS];
+		int bagId=0;
+		int bagPosInArray = 0;
 		for(int b=0;b<SimulatorParam.NUM_FLIGHTS;b++) {
 			//Bags in the storage to pass to the arrival lounge per flight
 			Bag bagsToArrivalLounge[] = new Bag[totalNumOfBags[b]];
 			for(int i=0;i<SimulatorParam.NUM_PASSANGERS;i++) {
 				for(int j=0;j<numBagsFound[i][b];j++) {
-					/*
-					i+j+b : id of the bag
-					i: passenger id
-					*/
-					bagsToArrivalLounge[i+j] = new Bag(i+j+b,i,tripState[i][0]);
+					bagsToArrivalLounge[bagPosInArray] = new Bag(bagId,i,tripState[i][0]);
+					bagId++;
+					bagPosInArray++;
 				}
 			}
 			try {
 				sBags[b] = new MemStack<Bag>(bagsToArrivalLounge);
 			} catch (MemException e) {}
+			bagPosInArray = 0;
 		}
  		
 		//Initialize SharedRegions

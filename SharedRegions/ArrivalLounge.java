@@ -96,7 +96,6 @@ public class ArrivalLounge {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		p.setPassengerState(PassengerState.AT_THE_DISEMBARKING_ZONE);
 		int id = p.getIdentifier();
-		repo.setPassengerState(id, PassengerState.AT_THE_DISEMBARKING_ZONE);
 		cntPassengers++;
 		if(cntPassengers == SimulatorParam.NUM_PASSANGERS) {
 			notifyAll();
@@ -108,6 +107,7 @@ public class ArrivalLounge {
 			repo.setPassengersTransit(this.passengersTransit);
 			repo.setPassengerDestination(id, "TRT");
 			repo.setNumOfBagsAtTheBegining(id, p.getNumBags(flight));
+			repo.setPassengerState(id, PassengerState.AT_THE_DISEMBARKING_ZONE);
 			//Take a bus
 			return 'T';
 		}
@@ -118,6 +118,7 @@ public class ArrivalLounge {
 			repo.setPassengerDestination(id, "FDT");
 			int nBags = p.getNumBags(flight);
 			repo.setNumOfBagsAtTheBegining(id, nBags);
+			repo.setPassengerState(id, PassengerState.AT_THE_DISEMBARKING_ZONE);
 			//Has bags to collect
 			if(nBags != 0) {
 				//Go collect bag

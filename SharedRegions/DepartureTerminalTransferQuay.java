@@ -25,10 +25,9 @@ public class DepartureTerminalTransferQuay {
 	
 	//The passengers will be blocked
 	//When the bus driver parks unblocks the passengers
-	public void leaveTheBus() {
+	public synchronized void leaveTheBus() {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		while(!parked) {
-			//wait()?
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -61,7 +60,7 @@ public class DepartureTerminalTransferQuay {
 	//Bus driver functions
 	
 	
-	public void parkTheBusAndLetPassOff() {
+	public synchronized void parkTheBusAndLetPassOff() {
 		BusDriver b = (BusDriver) Thread.currentThread(); 
 		b.setBusDriverState(BusDriverState.PARKING_AT_THE_DEPARTURE_TERMINAL);
 		parked = true;
