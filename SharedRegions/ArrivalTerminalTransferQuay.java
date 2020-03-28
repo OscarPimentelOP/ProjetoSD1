@@ -60,10 +60,8 @@ public class ArrivalTerminalTransferQuay {
 		try{
 			this.waitingForBus.write(m);
 			repo.setPassengersOnTheQueue(cntPassengersInQueue, id);
-			System.out.println("taking the buuuuuuuuuuuus");
 			cntPassengersInQueue++;
 			if(!announced) {
-				System.out.println("NOOOOOOOOTIFY");
 				notifyAll();
 			}
 		}
@@ -80,7 +78,6 @@ public class ArrivalTerminalTransferQuay {
 			catch(InterruptedException e) {}
 		}
 		try{
-			System.out.println("enteeeeeeeeeering the bus");
 			this.waitingForBus.read();
 			this.cntPassengersInQueue--;
 			ArrivalTerminalTransferQuay.inTheBus.write(p);
@@ -104,7 +101,6 @@ public class ArrivalTerminalTransferQuay {
 	//Returns E (End of the day) or W (work)
 	public synchronized char hasDaysWorkEnded() {
 		while(!this.endOfOperations && cntPassengersInQueue==0) {
-			System.out.println("SLEEEEEEEEEEEPING");
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -136,7 +132,6 @@ public class ArrivalTerminalTransferQuay {
 		}
 		while(ArrivalTerminalTransferQuay.cntPassengersInBus<1) {
 			try {
-				System.out.println("WAAAAAAAAAITING");
 				wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

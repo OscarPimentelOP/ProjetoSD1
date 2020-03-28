@@ -29,7 +29,6 @@ public class DepartureTerminalTransferQuay {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		while(!parked) {
 			try {
-				System.out.println("LEAAAAAAAAAAAAAAAVING");
 				wait();
 			} catch (InterruptedException e) {
 				System.out.println(e);
@@ -37,7 +36,6 @@ public class DepartureTerminalTransferQuay {
 		}
 		try {
 			Passenger m = ArrivalTerminalTransferQuay.inTheBus.read();
-			System.out.println("REAAAAAD"+Integer.toString(m.getIdentifier()));
 			repo.setPassangersOnTheBus(this.cntPassengersOut, -1);
 			this.cntPassengersOut++;
 			ArrivalTerminalTransferQuay.cntPassengersInBus-=1;
@@ -52,7 +50,6 @@ public class DepartureTerminalTransferQuay {
 		p.setPassengerState(PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
 		int id = p.getIdentifier();
 		repo.setPassengerState(id, PassengerState.AT_THE_DEPARTURE_TRANSFER_TERMINAL);
-		System.out.println("FINAAAAAAAAAAL VIAAAAAAAAGEM"+Integer.toString(id));
 	}
 
 
@@ -64,7 +61,6 @@ public class DepartureTerminalTransferQuay {
 		b.setBusDriverState(BusDriverState.PARKING_AT_THE_DEPARTURE_TERMINAL);
 		repo.setBusDriverState(BusDriverState.PARKING_AT_THE_DEPARTURE_TERMINAL);
 		parked = true;
-		System.out.println("PAAAAAAAAAAAAARKED");
 		notifyAll();
 		while(ArrivalTerminalTransferQuay.cntPassengersInBus != 0) {
 			try {

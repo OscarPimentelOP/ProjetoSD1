@@ -73,6 +73,7 @@ public class ArrivalLounge {
 	public synchronized Bag tryToCollectABag() {
 		try  {
 			Bag bag = sBags[this.flight].read();
+			repo.decNumOfBagsAtPlaneHold();
 			int passengerId = bag.getPassegerId();
 			bag.setDestination(passengersTripState[passengerId][flight]);
 			return bag;
@@ -95,9 +96,13 @@ public class ArrivalLounge {
 	
 	//Returns H if passenger goes home, T if is going to take a bus or B if is going to collect a bag
 	public synchronized char whatShouldIDo(int flight){
-		this.flight = flight;
-		repo.setFlightNumber(flight);
-		repo.setNumOfBagsAtPlaneHold(this.numOfBagsPerFlight[flight]);
+		//Initialize a new flight
+		if(cntPassengers == 0) {
+			bcp.setMoreBags(true);
+			this.flight = flight;
+			repo.setFlightNumber(flight);
+			repo.setNumOfBagsAtPlaneHold(flight, this.numOfBagsPerFlight[flight]);
+		}
 		Passenger p = (Passenger) Thread.currentThread(); 
 		p.setPassengerState(PassengerState.AT_THE_DISEMBARKING_ZONE);
 		int id = p.getIdentifier();

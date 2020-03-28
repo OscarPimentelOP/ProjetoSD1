@@ -17,21 +17,21 @@ public class BaggageCollectionPoint {
 	
 	private Repo repo;
 	
-	private boolean moreBags;
+	private boolean moreBagsAtPlaneHold;
 	
 	public BaggageCollectionPoint(Repo repo) {
 		this.repo = repo;
 		this.numOfBagsInConveyBelt = 0;
 		this.convoyBelt = new CAM<Integer, Bag[]>();
-		this.moreBags = true;
+		this.moreBagsAtPlaneHold = true;
 	}
 	
 	//Porter functions
 	
 	//Unlocks the passenger 'x' that the id appears in the bag
 	public synchronized void carryItToAppropriateStore(Bag bag) {
-		if(!this.moreBags) {
-			this.moreBags = true;
+		if(!this.moreBagsAtPlaneHold) {
+			this.moreBagsAtPlaneHold = true;
 		}
 		Porter p = (Porter) Thread.currentThread();
 		p.setPorterState(PorterState.AT_THE_LUGGAGE_BELT_CONVEYOR);
@@ -64,7 +64,7 @@ public class BaggageCollectionPoint {
 		p.setPassengerState(PassengerState.AT_THE_LUGGAGE_COLLECTION_POINT);
 		int id = p.getIdentifier();
 		repo.setPassengerState(id, PassengerState.AT_THE_LUGGAGE_COLLECTION_POINT);
-		while(this.convoyBelt.retreive(id) == null && this.moreBags) {
+		while(this.convoyBelt.retreive(id) == null && this.moreBagsAtPlaneHold) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -78,17 +78,22 @@ public class BaggageCollectionPoint {
 				this.convoyBelt.remove(id);
 			}
 			else {
+				this.convoyBelt.remove(id);
 				bag[1] = null;
 				this.convoyBelt.store(id, bag);
 			}
+			this.numOfBagsInConveyBelt--;
+			repo.setNumOfBagsInTheConvoyBelt(this.numOfBagsInConveyBelt);
 			repo.setNumOfBagsCollected(id);
 			return true;
 		}
-		else return false;
+		else {
+			return false;
+		}
 	}
 	
 	public synchronized void setMoreBags(boolean moreBags) {
-		this.moreBags = moreBags;
+		this.moreBagsAtPlaneHold = moreBags;
 		notifyAll();
 	}
 	

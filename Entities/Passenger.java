@@ -155,8 +155,9 @@ public class Passenger extends Thread{
     @Override
     public void run() {
     	for (int flight=0;flight<SimulatorParam.NUM_FLIGHTS;flight++){
+    		//Sleep introduced so all passengers have time to leave the previous flight
     		try {
-				sleep(5);
+				sleep(50);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

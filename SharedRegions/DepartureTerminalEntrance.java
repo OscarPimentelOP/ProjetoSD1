@@ -29,16 +29,12 @@ public class DepartureTerminalEntrance {
 	//Passenger functions
 	
 	public synchronized  void prepareNextLeg(int flight){
-		System.out.println("LEEEEEEEEEEG");
 		Passenger m = (Passenger) Thread.currentThread();
-		System.out.println("AQQQQQQQQQQQQUI");
 		m.setPassengerState(PassengerState.ENTERING_THE_DEPARTURE_TERMINAL);
 		int id = m.getIdentifier();
 		repo.setPassengerState(id, PassengerState.ENTERING_THE_DEPARTURE_TERMINAL);
 		ArrivalTerminalExit.cntPassengersEnd++;
-		System.out.println("yoooooooooooo"+Integer.toString(ArrivalTerminalExit.cntPassengersEnd));
 		if(ArrivalTerminalExit.cntPassengersEnd == SimulatorParam.NUM_PASSANGERS) {
-			System.out.println("abcdefghij2");
 			this.timeToWakeUp = true;
 			notifyAll();
 			ate.wakeUpAll();
@@ -47,22 +43,27 @@ public class DepartureTerminalEntrance {
 				attq.setEndOfWord();
 			}
 		}
-		System.out.println("truefalseeeeeeeeeee2");
 		while(!this.timeToWakeUp) {
 			try {
-				System.out.println("qqqqqqqqqq2");
 				wait();
 			} catch (InterruptedException e) {
 				
 			}
 		}
-		m.setPassengerState(PassengerState.NO_STATE);
-		repo.setPassengerState(id, PassengerState.NO_STATE);
 		ArrivalTerminalExit.cntPassengersEnd -= 1;
 		if(ArrivalTerminalExit.cntPassengersEnd == 0) {
 			this.timeToWakeUp = false;
+			ate.setTimeToWakeUpToFalse();
 		}
-		System.out.println("paaaaadadwadwadwad"+Integer.toString(id));
+		//Waiting for porter and bus driver to fall asleep before changing the passenger state to NO_STATE
+		try {
+			wait(50);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		m.setPassengerState(PassengerState.NO_STATE);
+		repo.setPassengerState(id, PassengerState.NO_STATE);
 	}
 	
 	public synchronized void setArrivalExit(ArrivalTerminalExit ate) {
@@ -72,5 +73,9 @@ public class DepartureTerminalEntrance {
 	public synchronized void wakeUpAll() {
 		this.timeToWakeUp = true;
 		notifyAll();
+	}
+	
+	public synchronized void setTimeToWakeUpToFalse() {
+		this.timeToWakeUp = false;
 	}
 }

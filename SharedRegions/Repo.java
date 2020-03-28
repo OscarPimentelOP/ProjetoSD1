@@ -214,11 +214,16 @@ public class Repo{
 			flightNum = flight+1;
 	}
 	
-	public synchronized void setNumOfBagsAtPlaneHold(int numOfBagsAtPlaneHold) {
-		if(this.numOfBagsAtPlaneHold != numOfBagsAtPlaneHold)
+	public synchronized void setNumOfBagsAtPlaneHold(int flight, int numOfBagsAtPlaneHold) {
+		if(this.numOfBagsAtPlaneHold == 0) {
 			this.numOfBagsAtPlaneHold = numOfBagsAtPlaneHold;
+			this.setTotalBags(numOfBagsAtPlaneHold);
+		}
 	}
 	
+	public synchronized void decNumOfBagsAtPlaneHold() {
+		this.numOfBagsAtPlaneHold--;
+	}
 	
 	public synchronized void setNumOfBagsInTheConvoyBelt(int numOfBagsInTheConvoyBelt) {
 		if(this.numOfBagsInTheConvoyBelt  != numOfBagsInTheConvoyBelt) {
@@ -267,7 +272,7 @@ public class Repo{
 	}
 	
 	public synchronized void setTotalBags(int totalBags) {
-		this.totalBags = totalBags;
+		this.totalBags += totalBags;
 	}
 	
 	public synchronized void setLostBags(int lostBags) {
