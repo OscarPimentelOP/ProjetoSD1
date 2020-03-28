@@ -86,7 +86,6 @@ public class AirportVConc {
 		//Array of stacks that represent the storage of bags per flight
 		MemStack[] sBags = new MemStack[SimulatorParam.NUM_FLIGHTS];
 		int bagId=0;
-		int bagPosInArray = 0;
 		for(int b=0;b<SimulatorParam.NUM_FLIGHTS;b++) {
 			//Bags in the storage to pass to the arrival lounge per flight
 			Bag bagsToArrivalLounge[] = new Bag[totalNumOfBags[b]];
@@ -96,14 +95,12 @@ public class AirportVConc {
 					for(int j=0;j<numBagsFound[i][b];j++) {
 						sBags[b].write(new Bag(bagId,i,tripState[i][0]));
 						bagId++;
-						bagPosInArray++;
 					}
 				}
 				} catch (MemException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			bagPosInArray = 0;
 		}
  		
 		//Initialize SharedRegions
@@ -116,6 +113,8 @@ public class AirportVConc {
 		DepartureTerminalTransferQuay dttq = new DepartureTerminalTransferQuay(repo);
 		DepartureTerminalEntrance dte = new DepartureTerminalEntrance(al, attq, repo);
 		ArrivalTerminalExit ate = new ArrivalTerminalExit(al, attq, repo);
+		dte.setArrivalExit(ate);
+		ate.setDepartureEntrance(dte);
 		
 		//Initialize Entities
 		BusDriver busdriver = new BusDriver(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL,

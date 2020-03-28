@@ -60,9 +60,14 @@ public class ArrivalTerminalTransferQuay {
 		try{
 			this.waitingForBus.write(m);
 			repo.setPassengersOnTheQueue(cntPassengersInQueue, id);
+			System.out.println("taking the buuuuuuuuuuuus");
 			cntPassengersInQueue++;
+			if(!announced) {
+				System.out.println("NOOOOOOOOTIFY");
+				notifyAll();
+			}
 		}
-		catch(MemException e) {}
+		catch(MemException e) {System.out.println(e);}
 	}
 	
 	//The passengers are blocked
@@ -70,19 +75,23 @@ public class ArrivalTerminalTransferQuay {
 	public synchronized void enterTheBus() {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		int id = p.getIdentifier();
-		while (!announced && ArrivalTerminalTransferQuay.cntPassengersInBus==SimulatorParam.BUS_CAPACITY) {
+		while (!announced || ArrivalTerminalTransferQuay.cntPassengersInBus==SimulatorParam.BUS_CAPACITY) {
 			try {wait();}
 			catch(InterruptedException e) {}
 		}
 		try{
-			ArrivalTerminalTransferQuay.inTheBus.write(p);
+			System.out.println("enteeeeeeeeeering the bus");
+			this.waitingForBus.read();
 			this.cntPassengersInQueue--;
+			ArrivalTerminalTransferQuay.inTheBus.write(p);
 			repo.setPassengersOnTheQueue(this.cntPassengersInQueue, -1);
 			repo.setPassangersOnTheBus(ArrivalTerminalTransferQuay.cntPassengersInBus, id);
 			ArrivalTerminalTransferQuay.cntPassengersInBus++;
 		}
 		catch(MemException e) {}
-		if(ArrivalTerminalTransferQuay.cntPassengersInBus==SimulatorParam.BUS_CAPACITY) {
+		if(!this.busDriveSleep)
+			notifyAll();
+		else if(ArrivalTerminalTransferQuay.cntPassengersInBus==SimulatorParam.BUS_CAPACITY) {
 			notifyAll();
 		}
 		p.setPassengerState(PassengerState.TERMINAL_TRANSFER);
@@ -94,6 +103,15 @@ public class ArrivalTerminalTransferQuay {
 	
 	//Returns E (End of the day) or W (work)
 	public synchronized char hasDaysWorkEnded() {
+		while(!this.endOfOperations && cntPassengersInQueue==0) {
+			System.out.println("SLEEEEEEEEEEEPING");
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		if(this.endOfOperations){
 			return 'E';
 		}
@@ -107,10 +125,19 @@ public class ArrivalTerminalTransferQuay {
 		announced = true;
 		notifyAll();
 		//Blocks until reaches 10 passengers or reaches time quantum
-		while(ArrivalTerminalTransferQuay.cntPassengersInBus != SimulatorParam.BUS_CAPACITY && this.busDriveSleep) {
+		while(this.busDriveSleep) {
 			try {
 				wait(SimulatorParam.TIMEQUANTUM);
 				this.busDriveSleep = false;
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		while(ArrivalTerminalTransferQuay.cntPassengersInBus<1) {
+			try {
+				System.out.println("WAAAAAAAAAITING");
+				wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -129,5 +156,6 @@ public class ArrivalTerminalTransferQuay {
 	
 	public synchronized void setEndOfWord() {
 		this.endOfOperations = true;
+		notifyAll();
 	}
 }

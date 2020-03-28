@@ -66,7 +66,6 @@ public class BaggageCollectionPoint {
 		repo.setPassengerState(id, PassengerState.AT_THE_LUGGAGE_COLLECTION_POINT);
 		while(this.convoyBelt.retreive(id) == null && this.moreBags) {
 			try {
-				System.out.println("laalalalalalaalalall");
 				wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -83,13 +82,9 @@ public class BaggageCollectionPoint {
 				this.convoyBelt.store(id, bag);
 			}
 			repo.setNumOfBagsCollected(id);
-			System.out.println("tenhooooooooo malaaaaaaaaaaaaaaaaaaaa");
 			return true;
 		}
-		else {
-			System.out.println("mala????????????????????????????");
-			return false;
-		}
+		else return false;
 	}
 	
 	public synchronized void setMoreBags(boolean moreBags) {

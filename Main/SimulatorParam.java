@@ -5,7 +5,7 @@ import java.util.Date;
 public class SimulatorParam{
 	
 	//Number of flights
-	public static final int NUM_FLIGHTS = 5;
+	public static final int NUM_FLIGHTS = 1;
 	
 	//Number of passengers
 	public static final int NUM_PASSANGERS = 6;

@@ -1,5 +1,6 @@
 package Entities;
 
+import Main.SimulatorParam;
 import SharedRegions.ArrivalLounge;
 import SharedRegions.ArrivalTerminalExit;
 import SharedRegions.ArrivalTerminalTransferQuay;
@@ -153,7 +154,13 @@ public class Passenger extends Thread{
     */
     @Override
     public void run() {
-    	for (int flight=0;flight<5;flight++){
+    	for (int flight=0;flight<SimulatorParam.NUM_FLIGHTS;flight++){
+    		try {
+				sleep(5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     		char a = al.whatShouldIDo(flight);
 
     		switch(a){
@@ -169,9 +176,7 @@ public class Passenger extends Thread{
     				
     			case 'B':                           //Has bags to collect
     				int numOfCollectedBags = 0;
-    				while(numOfCollectedBags != numBags[flight]){
-    					System.out.println("caraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai"+Integer.toString(identifier));
-    					
+    				while(numOfCollectedBags != numBags[flight]){	
     					if(bcp.goCollectABag()){            //Collect a bag
     						numOfCollectedBags+=1;
     					

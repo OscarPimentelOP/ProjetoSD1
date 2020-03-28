@@ -129,7 +129,7 @@ public class Repo{
     			Q[p] = Integer.toString(this.passengersOnTheQueue[p]);
     		}
     	}
-    	String[] S = new String[SimulatorParam.NUM_FLIGHTS];
+    	String[] S = new String[SimulatorParam.BUS_CAPACITY];
     	for(int s=0;s<SimulatorParam.BUS_CAPACITY;s++) {
     		if(this.passangersOnTheBus[s]<0) {
     			S[s] = "-";

@@ -12,16 +12,18 @@ public class ArrivalTerminalExit {
 	
 	private ArrivalTerminalTransferQuay attq;
 	
+	private DepartureTerminalEntrance dte;
+	
 	protected static int cntPassengersEnd;
 	
-	protected static int passengersDied;
+	private boolean timeToWakeUp;
 	
 	public ArrivalTerminalExit(ArrivalLounge al,ArrivalTerminalTransferQuay attq,Repo repo) {
 		this.repo = repo;
 		this.al = al;
 		this.attq = attq;
-		ArrivalTerminalExit.passengersDied = 0;
-		
+		this.timeToWakeUp = false;
+		ArrivalTerminalExit.cntPassengersEnd = 0;
 	}
 	
 	//Passenger functions
@@ -34,14 +36,19 @@ public class ArrivalTerminalExit {
 		ArrivalTerminalExit.cntPassengersEnd++;
 		System.out.println("yaaaaaaaaaaa"+Integer.toString(ArrivalTerminalExit.cntPassengersEnd));
 		if(ArrivalTerminalExit.cntPassengersEnd == SimulatorParam.NUM_PASSANGERS) {
+			System.out.println("abcdefghij");
+			this.timeToWakeUp = true;
 			notifyAll();
+			dte.wakeUpAll();
 			if(flight+1 == SimulatorParam.NUM_FLIGHTS) {
 				al.setEndOfWork();
 				attq.setEndOfWord();
 			}
 		}
-		while(ArrivalTerminalExit.cntPassengersEnd != SimulatorParam.NUM_PASSANGERS) {
+		System.out.println("truefalseeeeeeeeeee1");
+		while(!this.timeToWakeUp) {
 			try {
+				System.out.println("qqqqqqqqq1");
 				wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -50,11 +57,19 @@ public class ArrivalTerminalExit {
 		}
 		m.setPassengerState(PassengerState.NO_STATE);
 		repo.setPassengerState(id, PassengerState.NO_STATE);
-		ArrivalTerminalExit.passengersDied++;
-		if(ArrivalTerminalExit.passengersDied==SimulatorParam.NUM_PASSANGERS) {
-			ArrivalTerminalExit.cntPassengersEnd = 0;
-			ArrivalTerminalExit.passengersDied = 0;
+		ArrivalTerminalExit.cntPassengersEnd -= 1;
+		if(ArrivalTerminalExit.cntPassengersEnd == 0) {
+			this.timeToWakeUp = false;
 		}
-		System.out.println("paaaaadadwadwadwad");
+		System.out.println("paaaaadadwadwadwad"+Integer.toString(id));
+	}
+	
+	public synchronized void setDepartureEntrance(DepartureTerminalEntrance dte) {
+		this.dte = dte;
+	}
+	
+	public synchronized void wakeUpAll() {
+		this.timeToWakeUp = true;
+		notifyAll();
 	}
 }
