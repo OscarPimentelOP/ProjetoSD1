@@ -4,7 +4,6 @@ import Entities.BusDriver;
 import Entities.BusDriverState;
 import Entities.Passenger;
 import Entities.PassengerState;
-import AuxTools.MemException;
 
 public class DepartureTerminalTransferQuay {
 	//Variable that will unblock the passengers when the bus driver parks the bus
@@ -14,6 +13,8 @@ public class DepartureTerminalTransferQuay {
 	private int cntPassengersOut;
 	
 	private Repo repo;
+	
+	private ArrivalTerminalTransferQuay attq;
 	
 	public DepartureTerminalTransferQuay(Repo repo) {
 		this.repo = repo;
@@ -27,23 +28,19 @@ public class DepartureTerminalTransferQuay {
 	//When the bus driver parks unblocks the passengers
 	public synchronized void leaveTheBus() {
 		Passenger p = (Passenger) Thread.currentThread(); 
-		while(!parked) {
+		while(!this.getParked()) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
 				System.out.println(e);
 			}
 		}
-		try {
-			Passenger m = ArrivalTerminalTransferQuay.inTheBus.read();
-			repo.setPassangersOnTheBus(this.cntPassengersOut, -1);
-			this.cntPassengersOut++;
-			ArrivalTerminalTransferQuay.cntPassengersInBus-=1;
-		} catch (MemException e) {
-			System.out.println(e);
-		}
+		attq.readFromBus();
+		repo.setPassangersOnTheBus(this.getCntPassengersOut(), -1);
+		this.incCntPassengersOut();
+		attq.decCntPassengersInBus();
 		//When the last passenger exits the bus
-		if(ArrivalTerminalTransferQuay.cntPassengersInBus == 0) {
+		if(attq.getCntPassengersInBus() == 0) {
 			parked = false;
 			notifyAll();
 		}
@@ -62,7 +59,7 @@ public class DepartureTerminalTransferQuay {
 		repo.setBusDriverState(BusDriverState.PARKING_AT_THE_DEPARTURE_TERMINAL);
 		parked = true;
 		notifyAll();
-		while(ArrivalTerminalTransferQuay.cntPassengersInBus != 0) {
+		while(attq.getCntPassengersInBus() != 0) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -70,6 +67,26 @@ public class DepartureTerminalTransferQuay {
 				e.printStackTrace();
 			}
 		}
-		cntPassengersOut = 0;
+		this.setCntPassengersOut();
+	}
+	
+	public synchronized void incCntPassengersOut() {
+		this.cntPassengersOut++;
+	}
+	
+	public synchronized void setCntPassengersOut() {
+		this.cntPassengersOut=0;
+	}
+	
+	public synchronized int getCntPassengersOut() {
+		return this.cntPassengersOut;
+	}
+	
+	public synchronized void setArrivalTerminalTransferQuay(ArrivalTerminalTransferQuay attq) {
+		this.attq = attq;
+	}
+	
+	public synchronized boolean getParked() {
+		return this.parked;
 	}
 }

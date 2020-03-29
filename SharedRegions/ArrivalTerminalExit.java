@@ -35,13 +35,8 @@ public class ArrivalTerminalExit {
 		repo.setPassengerState(id, PassengerState.EXITING_THE_ARRIVAL_TERMINAL);
 		incCntPassengersEnd();
 		if(getCntPassengersEnd() == SimulatorParam.NUM_PASSANGERS) {
-			this.timeToWakeUp = true;
-			notifyAll();
 			dte.wakeUpAll();
-			if(flight+1 == SimulatorParam.NUM_FLIGHTS) {
-				al.setEndOfWork();
-				attq.setEndOfWord();
-			}
+			this.wakeUpAll();
 		}
 		while(!this.timeToWakeUp) {
 			try {
@@ -55,14 +50,18 @@ public class ArrivalTerminalExit {
 		if(getCntPassengersEnd() == 0) {
 			this.timeToWakeUp = false;
 			dte.setTimeToWakeUpToFalse();
+			if(flight+1 == SimulatorParam.NUM_FLIGHTS) {
+				al.setEndOfWork();
+				attq.setEndOfWord();
+			}
 		}
 		//Waiting for porter and bus driver to fall asleep before changing the passenger state to NO_STATE
-		/*try {
+		try {
 			wait(10);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		m.setPassengerState(PassengerState.NO_STATE);
 		repo.setPassengerState(id, PassengerState.NO_STATE);
 	}
@@ -73,6 +72,7 @@ public class ArrivalTerminalExit {
 	
 	public synchronized void wakeUpAll() {
 		this.timeToWakeUp = true;
+		System.out.println("bbbbbbbbbbb");
 		notifyAll();
 	}
 	

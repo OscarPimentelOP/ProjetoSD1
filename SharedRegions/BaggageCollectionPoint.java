@@ -39,7 +39,7 @@ public class BaggageCollectionPoint {
 		int passengerId = bag.getPassegerId();
 		Bag[] sBags = new Bag[2];
 		Bag[] retrieveTest = new Bag[2];
-		retrieveTest = this.convoyBelt.retreive(passengerId);
+		retrieveTest = this.getRetrieved(passengerId);
 		this.incNumOfBagsInConveyBelt();;
 		//Add to CAM
 		if(retrieveTest == null) {
@@ -107,6 +107,18 @@ public class BaggageCollectionPoint {
 	
 	public synchronized int getNumOfBagsInConveyBelt() {
 		return numOfBagsInConveyBelt;
+	}
+	
+	public synchronized Bag[] getRetrieved(int id) {
+		return this.convoyBelt.retreive(id);
+	}
+	
+	public synchronized void storeBag(int id, Bag[] sBags) {
+		this.convoyBelt.store(id, sBags);
+	}
+	
+	public synchronized void removeBag(int id) {
+		this.convoyBelt.remove(id);
 	}
 	
 }

@@ -115,6 +115,7 @@ public class AirportVConc {
 		ArrivalTerminalExit ate = new ArrivalTerminalExit(al, attq, repo);
 		dte.setArrivalExit(ate);
 		ate.setDepartureEntrance(dte);
+		dttq.setArrivalTerminalTransferQuay(attq);
 		
 		//Initialize Entities
 		BusDriver busdriver = new BusDriver(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL,
