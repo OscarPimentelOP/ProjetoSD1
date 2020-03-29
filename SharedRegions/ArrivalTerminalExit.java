@@ -130,7 +130,7 @@ public class ArrivalTerminalExit {
     public synchronized void wakeUpAll() {
         this.timeToWakeUp = true;
         try {
-            wait(5);
+            wait(10);
         } catch (InterruptedException e) {
             System.out.println(e);
         }
