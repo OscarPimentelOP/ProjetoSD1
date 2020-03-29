@@ -52,6 +52,7 @@ public class BaggageCollectionPoint {
 	/**
      * The porter unlocks the passenger 'x' that the id appears in the bag
 	 * @param bag the bag to be carried by the porter
+	 * @throws SharedException if the bag the porter tries to carry is null
 	*/
 	public synchronized void carryItToAppropriateStore(Bag bag) throws SharedException{
 

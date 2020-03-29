@@ -17,7 +17,7 @@ public class AirportVConc {
 
 	/**
 		 * AirportVConc main's thread
-		 @throws FileNotFoundException when the file isn't found
+		 * @throws FileNotFoundException when the file isn't found
 	*/
 	public static void main(String[] args) throws FileNotFoundException {
 		

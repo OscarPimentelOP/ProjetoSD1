@@ -98,7 +98,12 @@ public class Porter extends Thread{
     			}
     			
     			else if(bag.getDestination() == 'T'){     //the bag is on transit
-    				tsa.carryItToAppropriateStore(bag);
+                    try{
+                        tsa.carryItToAppropriateStore(bag);
+                    } catch(SharedException e){
+                        
+                    }
+                    
     			}
     			else{
                     try{

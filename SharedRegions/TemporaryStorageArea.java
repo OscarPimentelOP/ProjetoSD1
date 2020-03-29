@@ -1,6 +1,7 @@
 package SharedRegions;
 
 import AuxTools.MemStack;
+import AuxTools.SharedException;
 import AuxTools.Bag;
 import AuxTools.MemException;
 import Entities.PorterState;
@@ -51,8 +52,18 @@ public class TemporaryStorageArea {
 	/**
      * The porter adds a bag to the storage.
      * @param bag -> the bag to be stored
+	 * @throws SharedException if the bag the porter tries to carry is null
     */
-	public synchronized void carryItToAppropriateStore(Bag bag) {
+	public synchronized void carryItToAppropriateStore(Bag bag) throws SharedException {
+		try
+		{ if (bag == null)                         /* check for proper parameter range */
+			 throw new SharedException ("The porter could not carry the: " + bag + " bag because it didn't exist.");
+		}
+		catch (SharedException e)
+		{ System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
+		   System.out.println ("carryItToAppropriateStore()" + e.getMessage ());
+		   System.exit (1);
+		}
 		Porter p = (Porter) Thread.currentThread();
 		p.setPorterState(PorterState.AT_THE_STOREROOM);
 		repo.setPorterState(PorterState.AT_THE_STOREROOM);

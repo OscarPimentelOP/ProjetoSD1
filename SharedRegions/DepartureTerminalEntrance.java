@@ -1,5 +1,6 @@
 package SharedRegions;
 
+import AuxTools.SharedException;
 import Entities.Passenger;
 import Entities.PassengerState;
 import Main.SimulatorParam;
@@ -56,8 +57,19 @@ public class DepartureTerminalEntrance {
 	 * This changes the state to entering departure terminal.
 	 * He waits until every other passenger arrives at the end.
 	 * @param flight -> the flight number
+	 * @throws SharedException if the flight number is higher than the number of flights parameter defined in the parameters file.
 	*/
-	public synchronized void prepareNextLeg(int flight){
+	public synchronized void prepareNextLeg(int flight) throws SharedException{
+		try
+		{ if (flight+1 > SimulatorParam.NUM_FLIGHTS)                         /* check for proper parameter range */
+			 throw new SharedException ("Flight cannot exceed the defined parameter for number of flights: " + flight + ".");
+		}
+		catch (SharedException e)
+		{ System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
+		   System.out.println ("Error on whatShouldIDo()" + e.getMessage ());
+		   System.exit (1);
+		}
+
 		Passenger m = (Passenger) Thread.currentThread();
 		m.setPassengerState(PassengerState.ENTERING_THE_DEPARTURE_TERMINAL);
 		int id = m.getIdentifier();

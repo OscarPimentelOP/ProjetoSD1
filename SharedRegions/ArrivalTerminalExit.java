@@ -60,6 +60,7 @@ public class ArrivalTerminalExit {
 	/**
      * The passenger exits the arrival terminal and goes home.
 	 * @param flight -> the flight number
+	 * @throws SharedException if the flight number is higher than the number of flights parameter defined in the parameters file.
 	*/
 	public synchronized void goHome(int flight) throws SharedException {
 		try
@@ -68,7 +69,7 @@ public class ArrivalTerminalExit {
 		}
 		catch (SharedException e)
 		{ System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
-		   System.out.println ("Error on whatShouldIDo()" + e.getMessage ());
+		   System.out.println ("Error on goHome()" + e.getMessage ());
 		   System.exit (1);
 		}
 
