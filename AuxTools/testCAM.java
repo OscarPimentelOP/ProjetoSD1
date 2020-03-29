@@ -5,10 +5,10 @@
 
 package AuxTools;
 
-public class testCAM{
+public class testCAM {
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         CAM<String, Integer> map = new CAM<String, Integer>();
         map.store("kek", 1);
         map.store("value", 2);
@@ -18,11 +18,11 @@ public class testCAM{
 
         System.out.println(map.retreive("yolo"));
         System.out.println(map.retreive("lmao"));
-        
+
         System.out.print("numElems:" + map.size());
         map.remove("lmao");
         System.out.print("newNumElems:" + map.size());
-          
+
 
     }
 
