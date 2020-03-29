@@ -1,5 +1,6 @@
 package SharedRegions;
 
+import AuxTools.SharedException;
 import Entities.Passenger;
 import Entities.PassengerState;
 import Main.SimulatorParam;
@@ -60,7 +61,17 @@ public class ArrivalTerminalExit {
      * The passenger exits the arrival terminal and goes home.
 	 * @param flight -> the flight number
 	*/
-	public synchronized void goHome(int flight) {
+	public synchronized void goHome(int flight) throws SharedException {
+		try
+		{ if (flight+1 > SimulatorParam.NUM_FLIGHTS)                         /* check for proper parameter range */
+			 throw new SharedException ("Flight cannot exceed the defined parameter for number of flights: " + flight + ".");
+		}
+		catch (SharedException e)
+		{ System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
+		   System.out.println ("Error on whatShouldIDo()" + e.getMessage ());
+		   System.exit (1);
+		}
+
 		Passenger m = (Passenger) Thread.currentThread();
 		m.setPassengerState(PassengerState.EXITING_THE_ARRIVAL_TERMINAL);
 		int id = m.getIdentifier();
@@ -107,7 +118,7 @@ public class ArrivalTerminalExit {
 	}
 	
 	/**
-     * ???
+     * Wakes up all the passengers of the terminal
 	*/
 	public synchronized void wakeUpAll() {
 		this.timeToWakeUp = true;
@@ -121,20 +132,29 @@ public class ArrivalTerminalExit {
 	}
 	
 	/**
-     * ???
+     * Marks the end of the flight, so then all the passengers are blocked for the next flight
 	*/
 	public synchronized void setTimeToWakeUpToFalse() {
 		this.timeToWakeUp = false;
 	}
 	
+	/**
+     * returns the number of passengers in both terminals
+	*/
 	public synchronized int getCntPassengersEnd() {
 		return this.cntPassengersEnd;
 	}
 	
+	/**
+     * increments the number of passengers in both terminals: a passenger arrived the terminal
+	*/
 	public synchronized void incCntPassengersEnd() {
 		this.cntPassengersEnd = this.cntPassengersEnd + 1;
 	}
 	
+	/**
+     * decrements the number of passengers in both terminals: a passenger has left the terminal
+	*/
 	public synchronized void decCntPassengersEnd() {
 		this.cntPassengersEnd = this.cntPassengersEnd - 1;
 	}

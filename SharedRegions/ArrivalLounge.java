@@ -1,6 +1,7 @@
 package SharedRegions;
 
 import AuxTools.MemStack;
+import AuxTools.SharedException;
 import AuxTools.Bag;
 import AuxTools.MemException;
 import Entities.Passenger;
@@ -156,8 +157,27 @@ public class ArrivalLounge {
 	 * @return 'T' if the passenger is going to take a bus (means he is in transit)
 	 * @return 'B' if the passenger is going to collect a bag
 	*/
-	public synchronized char whatShouldIDo(int flight){
+	public synchronized char whatShouldIDo(int flight) throws SharedException{
+		try
+      { if (flight+1 > SimulatorParam.NUM_FLIGHTS)                         /* check for proper parameter range */
+           throw new SharedException ("Flight cannot exceed the defined parameter for number of flights: " + flight + ".");
+      }
+      catch (SharedException e)
+      { System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
+         System.out.println ("Error on whatShouldIDo()" + e.getMessage ());
+         System.exit (1);
+      }
 		//Initialize a new flight
+		try
+		{ if (cntPassengers < 0 || cntPassengers > SimulatorParam.NUM_PASSANGERS)                         /* check for proper parameter range */
+			 throw new SharedException ("Passenger count has exceeded the limits defined on the parameters file: " + cntPassengers + ".");
+		}
+		catch (SharedException e)
+		{ System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
+		   System.out.println ("Error on whatShouldIDo()" + e.getMessage ());
+		   System.exit (1);
+		}
+
 		if(cntPassengers == 0) {
 			bcp.setMoreBags(true);
 			this.flight = flight;

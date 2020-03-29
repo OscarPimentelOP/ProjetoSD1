@@ -103,7 +103,7 @@ public class DepartureTerminalEntrance {
 	}
 	
 	/**
-     * ???
+     * Wakes up all the passengers of the terminal
 	*/
 	public synchronized void wakeUpAll() {
 		this.timeToWakeUp = true;
@@ -117,7 +117,7 @@ public class DepartureTerminalEntrance {
 	}
 	
 	/**
-     * ???
+     * Marks the end of the flight, so then all the passengers are blocked for the next flight
 	*/
 	public synchronized void setTimeToWakeUpToFalse() {
 		this.timeToWakeUp = false;

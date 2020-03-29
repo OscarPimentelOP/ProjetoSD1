@@ -1,5 +1,6 @@
 package Entities;
 
+import AuxTools.SharedException;
 import Main.SimulatorParam;
 import SharedRegions.ArrivalLounge;
 import SharedRegions.ArrivalTerminalExit;
@@ -162,32 +163,39 @@ public class Passenger extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    		char a = al.whatShouldIDo(flight);
+            
+            try{
+                char a = al.whatShouldIDo(flight);
 
-    		switch(a){
-    			case 'H': ate.goHome(flight);        //Reached final destiny, has no bag to collect, goes home
-    					  break;
-    			
-    			case 'T': attq.takeABus();          //Take a bus and prepares the next leg
-    				attq.enterTheBus();
-    				dttq.leaveTheBus();
-    				dte.prepareNextLeg(flight);
-    				break;
-    				
-    				
-    			case 'B':                           //Has bags to collect
-    				int numOfCollectedBags = 0;
-    				while(numOfCollectedBags != numBags[flight]){	
-    					if(bcp.goCollectABag()){            //Collect a bag
-    						numOfCollectedBags+=1;
-    					
-    					}else { bro.reportMissingBags(numBags[flight]-numOfCollectedBags);    //or reports missing bags
-    						break;
-    					}
-    				}
-    				ate.goHome(flight);                    //Goes Home
-    				break;
-    		}
+                switch(a){
+                    case 'H': ate.goHome(flight);        //Reached final destiny, has no bag to collect, goes home
+                              break;
+                    
+                    case 'T': attq.takeABus();          //Take a bus and prepares the next leg
+                        attq.enterTheBus();
+                        dttq.leaveTheBus();
+                        dte.prepareNextLeg(flight);
+                        break;
+                        
+                        
+                    case 'B':                           //Has bags to collect
+                        int numOfCollectedBags = 0;
+                        while(numOfCollectedBags != numBags[flight]){	
+                            if(bcp.goCollectABag()){            //Collect a bag
+                                numOfCollectedBags+=1;
+                            
+                            }else { bro.reportMissingBags(numBags[flight]-numOfCollectedBags);    //or reports missing bags
+                                break;
+                            }
+                        }
+                        ate.goHome(flight);                    //Goes Home
+                        break;
+                }
+
+            }catch(SharedException e){
+        
+            }
+            
     	}
     }
 }

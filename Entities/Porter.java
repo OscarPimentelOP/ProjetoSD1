@@ -1,6 +1,7 @@
 package Entities;
 
 import AuxTools.Bag;
+import AuxTools.SharedException;
 import SharedRegions.ArrivalLounge;
 import SharedRegions.TemporaryStorageArea;
 import SharedRegions.BaggageCollectionPoint;
@@ -100,7 +101,13 @@ public class Porter extends Thread{
     				tsa.carryItToAppropriateStore(bag);
     			}
     			else{
-    				bcp.carryItToAppropriateStore(bag);   //bag has as its final destination that airport
+                    try{
+                        bcp.carryItToAppropriateStore(bag);   //bag has as its final destination that airport      
+                    } catch(SharedException e){
+                        
+                    }
+                    
+                    
     			}
     		}
     		al.noMoreBagsToCollect();

@@ -1,6 +1,7 @@
 package SharedRegions;
 
 import AuxTools.CAM;
+import AuxTools.SharedException;
 import AuxTools.Bag;
 import Entities.Porter;
 import Entities.PorterState;
@@ -52,13 +53,25 @@ public class BaggageCollectionPoint {
      * The porter unlocks the passenger 'x' that the id appears in the bag
 	 * @param bag the bag to be carried by the porter
 	*/
-	public synchronized void carryItToAppropriateStore(Bag bag) {
+	public synchronized void carryItToAppropriateStore(Bag bag) throws SharedException{
+
+		try
+		{ if (bag == null)                         /* check for proper parameter range */
+			 throw new SharedException ("The porter could not carry the: " + bag + " bag because it didn't exist.");
+		}
+		catch (SharedException e)
+		{ System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
+		   System.out.println ("carryItToAppropriateStore()" + e.getMessage ());
+		   System.exit (1);
+		}
+
 		if(!this.moreBagsAtPlaneHold) {
 			this.moreBagsAtPlaneHold = true;
 		}
 		Porter p = (Porter) Thread.currentThread();
 		p.setPorterState(PorterState.AT_THE_LUGGAGE_BELT_CONVEYOR);
 		repo.setPorterState(PorterState.AT_THE_LUGGAGE_BELT_CONVEYOR);
+
 		int passengerId = bag.getPassegerId();
 		Bag[] sBags = new Bag[2];
 		Bag[] retrieveTest = new Bag[2];
