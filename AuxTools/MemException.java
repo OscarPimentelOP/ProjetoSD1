@@ -1,3 +1,7 @@
+/**
+ * @author prof.Rui Borges
+ */
+
 package AuxTools;
 
 /**

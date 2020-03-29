@@ -1,3 +1,8 @@
+/**
+ * @author Óscar Pimentel, nºmec 80247
+ * @author Rafael Maio, nºmec 84909
+ */
+
 package SharedRegions;
 import java.io.File;
 import Entities.PorterState;
