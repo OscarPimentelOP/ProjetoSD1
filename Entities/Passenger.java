@@ -157,7 +157,7 @@ public class Passenger extends Thread{
     	for (int flight=0;flight<SimulatorParam.NUM_FLIGHTS;flight++){
     		//Sleep introduced so all passengers have time to leave the previous flight
     		try {
-				sleep(50);
+				sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
