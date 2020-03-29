@@ -156,6 +156,7 @@ public class ArrivalLounge {
 	 * @param flight -> the flight number
 	 * @return 'T' if the passenger is going to take a bus (means he is in transit)
 	 * @return 'B' if the passenger is going to collect a bag
+	 * @throws SharedException if flight exceeds the parameter, or if the passengers count is negative or exceeds the total
 	*/
 	public synchronized char whatShouldIDo(int flight) throws SharedException{
 		try

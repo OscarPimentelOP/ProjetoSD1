@@ -110,8 +110,7 @@ public class BaggageCollectionPoint {
 			try {
 				wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e);
 			}
 		}
 		if(this.convoyBelt.retreive(id) != null) {

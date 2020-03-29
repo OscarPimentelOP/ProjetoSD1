@@ -119,8 +119,8 @@ public class AirportVConc {
 					}
 				}
 				} catch (MemException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+					System.out.println("The stack bounds were violated");
+					System.out.println ("Error in AirportVConc()");
 			}
 		}
  		

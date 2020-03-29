@@ -6,6 +6,7 @@ import Main.SimulatorParam;
 import Entities.BusDriver;
 import Entities.BusDriverState;
 import AuxTools.MemFIFO;
+import AuxTools.SharedException;
 import AuxTools.MemException;
 
 /**
@@ -96,12 +97,24 @@ public class ArrivalTerminalTransferQuay {
 		try{
 			this.waitingForBus.write(m);
 			repo.setPassengersOnTheQueue(cntPassengersInQueue, id);
+			try
+				{ if (cntPassengersInQueue > SimulatorParam.NUM_PASSANGERS)                         /* check for proper parameter range */
+					throw new SharedException ("The number of passengers in queue cannot be higher than the defined on the parameter file " + cntPassengersInQueue + ".");
+				}
+				catch (SharedException e)
+				{ System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
+				System.out.println ("Error in takeABus()" + e.getMessage ());
+				System.exit (1);
+				}
 			cntPassengersInQueue++;
 			if(!announced) {
 				notifyAll();
 			}
 		}
-		catch(MemException e) {System.out.println(e);}
+		catch(MemException e) {
+			System.out.println("The queue bounds were violated");
+			System.out.println ("Error in takeABus()");
+		}
 	}
 	
 	
@@ -109,8 +122,9 @@ public class ArrivalTerminalTransferQuay {
 	 * The passengers are blocked until the bus driver announces the bus.
 	 * A passenger enters the bus, moving from the waiting queue to the bus.
 	 * They can't get in if the bus is full and keep waiting.
+	 * @throws SharedException if the number of passengers in queue is negative or if it is higher than the queue's capacity
     */
-	public synchronized void enterTheBus() {
+	public synchronized void enterTheBus() throws SharedException {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		int id = p.getIdentifier();
 		while (!announced || this.getCntPassengersInBus()==SimulatorParam.BUS_CAPACITY) {
@@ -120,12 +134,35 @@ public class ArrivalTerminalTransferQuay {
 		try{
 			this.waitingForBus.read();
 			this.cntPassengersInQueue--;
+			try
+				{ if (cntPassengersInQueue < 0)                         /* check for proper parameter range */
+					throw new SharedException ("The number of passengers in queue cannot be negative " + cntPassengersInQueue + ".");
+				}
+				catch (SharedException e)
+				{ 
+				System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
+				System.out.println ("Error in carryItToAppropriateStore()" + e.getMessage ());
+				System.exit (1);
+				}
 			this.inTheBus.write(p);
 			repo.setPassengersOnTheQueue(this.cntPassengersInQueue, -1);
 			repo.setPassangersOnTheBus(this.getCntPassengersInBus(), id);
+			try
+			{ if (cntPassengersInBus > SimulatorParam.BUS_CAPACITY)                         /* check for proper parameter range */
+				throw new SharedException ("The number of passengers in bus cannot be higher than the bus capacity defined at the parameters file. " + cntPassengersInQueue + ".");
+			}
+			catch (SharedException e)
+			{ 
+			System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
+			System.out.println ("Error while incrementing the number of passengers in the bus" + e.getMessage ());
+			System.exit (1);
+			}
 			this.incCntPassengersInBus();
 		}
-		catch(MemException e) {}
+		catch(MemException e) {
+			System.out.println("The queue bounds were violated");
+			System.out.println ("Error in enterTheBus()" + e.getMessage ());
+		}
 		if(!this.busDriveSleep)
 			notifyAll();
 		else if(this.getCntPassengersInBus()==SimulatorParam.BUS_CAPACITY) {
@@ -149,8 +186,7 @@ public class ArrivalTerminalTransferQuay {
 			try {
 				wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e);
 			}
 		}
 		if(this.endOfOperations){
@@ -174,16 +210,14 @@ public class ArrivalTerminalTransferQuay {
 				wait(SimulatorParam.TIMEQUANTUM);
 				this.busDriveSleep = false;
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e);
 			}
 		}
 		while(this.getCntPassengersInBus()<1) {
 			try {
 				wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e);
 			}
 		}
 		this.busDriveSleep = true;
@@ -235,8 +269,7 @@ public class ArrivalTerminalTransferQuay {
 		try {
 			this.inTheBus.read();
 		} catch (MemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 }

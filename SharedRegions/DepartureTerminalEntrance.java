@@ -66,7 +66,7 @@ public class DepartureTerminalEntrance {
 		}
 		catch (SharedException e)
 		{ System.out.println ("Thread " + ((Thread) Thread.currentThread ()).getName () + "terminated.");
-		   System.out.println ("Error on whatShouldIDo()" + e.getMessage ());
+		   System.out.println ("Error on prepareNextLeg()" + e.getMessage ());
 		   System.exit (1);
 		}
 
@@ -99,8 +99,8 @@ public class DepartureTerminalEntrance {
 		try {
 			wait(10);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			System.out.print(e);
 		}
 		m.setPassengerState(PassengerState.NO_STATE);
 		repo.setPassengerState(id, PassengerState.NO_STATE);
@@ -122,8 +122,7 @@ public class DepartureTerminalEntrance {
 		try {
 			wait(5);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		notifyAll();
 	}

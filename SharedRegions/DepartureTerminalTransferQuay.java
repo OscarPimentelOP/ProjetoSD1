@@ -93,8 +93,7 @@ public class DepartureTerminalTransferQuay {
 			try {
 				wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e);
 			}
 		}
 		this.setCntPassengersOut();

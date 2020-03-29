@@ -86,8 +86,7 @@ public class ArrivalTerminalExit {
 			try {
 				wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e);
 			}
 		}
 		decCntPassengersEnd();
@@ -103,8 +102,7 @@ public class ArrivalTerminalExit {
 		try {
 			wait(10);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		m.setPassengerState(PassengerState.NO_STATE);
 		repo.setPassengerState(id, PassengerState.NO_STATE);
@@ -126,8 +124,7 @@ public class ArrivalTerminalExit {
 		try {
 			wait(5); 
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		notifyAll();
 	}

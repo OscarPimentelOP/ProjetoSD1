@@ -42,8 +42,7 @@ public class TemporaryStorageArea {
 		try {
 			bagStorage = new MemStack<Bag>(bags);
 		} catch (MemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 	
