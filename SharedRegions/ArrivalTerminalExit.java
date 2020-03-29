@@ -4,20 +4,49 @@ import Entities.Passenger;
 import Entities.PassengerState;
 import Main.SimulatorParam;
 
+/**
+     * This class implements the Arrival Terminal exit shared region.
+*/
+
 public class ArrivalTerminalExit {
 	
+	/**
+     * The repository, to store the program status
+	*/
 	private Repo repo;
 	
+	/**
+     * Arrival lounge shared region
+	*/
 	private ArrivalLounge al;
 	
+	/**
+     * Arrival terminal transfer quay shared region
+	*/
 	private ArrivalTerminalTransferQuay attq;
 	
+	/**
+     * Departure terminal entrance shared region
+	*/
 	private DepartureTerminalEntrance dte;
 	
+	/**
+     * passengers count at the end (???)
+	*/
 	private int cntPassengersEnd;
 	
+	/**
+     *  (???)
+	*/
 	private boolean timeToWakeUp;
 	
+
+	/**
+     * Arrival Terminal Exit's instanciation
+     * @param al -> arrival lounge 
+     * @param attq -> arrival terminal transfer quay
+     * @param repo -> repository of information
+    */
 	public ArrivalTerminalExit(ArrivalLounge al,ArrivalTerminalTransferQuay attq,Repo repo) {
 		this.repo = repo;
 		this.al = al;
@@ -27,7 +56,10 @@ public class ArrivalTerminalExit {
 	}
 	
 	//Passenger functions
-	
+	/**
+     * The passenger exits the arrival terminal and goes home.
+	 * @param flight -> the flight number
+	*/
 	public synchronized void goHome(int flight) {
 		Passenger m = (Passenger) Thread.currentThread();
 		m.setPassengerState(PassengerState.EXITING_THE_ARRIVAL_TERMINAL);
@@ -66,16 +98,26 @@ public class ArrivalTerminalExit {
 		repo.setPassengerState(id, PassengerState.NO_STATE);
 	}
 	
+	/**
+     * Sets the departure terminal entrance
+	 * @param dte -> departure terminal entrance to be set
+	*/
 	public synchronized void setDepartureEntrance(DepartureTerminalEntrance dte) {
 		this.dte = dte;
 	}
 	
+	/**
+     * ???
+	*/
 	public synchronized void wakeUpAll() {
 		this.timeToWakeUp = true;
 		System.out.println("bbbbbbbbbbb");
 		notifyAll();
 	}
 	
+	/**
+     * ???
+	*/
 	public synchronized void setTimeToWakeUpToFalse() {
 		this.timeToWakeUp = false;
 	}

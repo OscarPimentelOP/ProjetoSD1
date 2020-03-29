@@ -5,17 +5,39 @@ import Entities.BusDriverState;
 import Entities.Passenger;
 import Entities.PassengerState;
 
+/**
+     * This class implements the Departure Terminal Transfer Quay shared region.
+	 * In this region, the bus driver parks the bus, and the passengers leave the bus to prepare their next leg.
+*/
+
 public class DepartureTerminalTransferQuay {
-	//Variable that will unblock the passengers when the bus driver parks the bus
+	
+	
+	/**
+     * Variable that will unblock the passengers when the bus driver parks the bus
+	*/
 	private boolean parked;
 	
-	//Count of passengers that leaved the bus
+	
+	/**
+     * Count of passengers that left the bus
+	*/
 	private int cntPassengersOut;
 	
+	/**
+     * The repository, to store the program status
+	*/
 	private Repo repo;
 	
+	/**
+     * Arrival terminal transfer quay shared region
+	*/
 	private ArrivalTerminalTransferQuay attq;
 	
+	/**
+     * Departure terminal transfer quay's instanciation
+     * @param repo -> repository of information
+    */
 	public DepartureTerminalTransferQuay(Repo repo) {
 		this.repo = repo;
 		this.parked = false;
@@ -23,9 +45,13 @@ public class DepartureTerminalTransferQuay {
 	}
 	
 	//Passengers functions
-	
-	//The passengers will be blocked
-	//When the bus driver parks unblocks the passengers
+
+	/**
+     * The passengers leave the bus when it parks.
+	 * The passengers will be blocked inside the bus,
+	 * and when the bus driver parks, that unblocks the passengers
+	 * and they leave.
+	*/
 	public synchronized void leaveTheBus() {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		while(!this.getParked()) {
@@ -52,7 +78,11 @@ public class DepartureTerminalTransferQuay {
 
 	//Bus driver functions
 	
-	
+	/**
+     * The bus driver parks the bus and lets the passengers get off.
+	 * This changes the bus driver's state to parking at the departure terminal
+	 * and adjusts the number of passengers out of bus.
+	*/
 	public synchronized void parkTheBusAndLetPassOff() {
 		BusDriver b = (BusDriver) Thread.currentThread(); 
 		b.setBusDriverState(BusDriverState.PARKING_AT_THE_DEPARTURE_TERMINAL);
@@ -70,22 +100,38 @@ public class DepartureTerminalTransferQuay {
 		this.setCntPassengersOut();
 	}
 	
+	/**
+     * Increments the number of passengers out of the bus.
+	*/
 	public synchronized void incCntPassengersOut() {
 		this.cntPassengersOut++;
 	}
 	
+	/**
+     * Resets the number of passengers out of the bus.
+	*/
 	public synchronized void setCntPassengersOut() {
 		this.cntPassengersOut=0;
 	}
 	
+	/**
+	 * Returns the number of passengers out of the bus.
+	 * @return the count of passengers outside of the bus
+	*/
 	public synchronized int getCntPassengersOut() {
 		return this.cntPassengersOut;
 	}
 	
+	/**
+     * Sets the arrival terminal transfer quay shared region 
+	*/
 	public synchronized void setArrivalTerminalTransferQuay(ArrivalTerminalTransferQuay attq) {
 		this.attq = attq;
 	}
 	
+	/**
+     * Tells if the bus driver has parked the bus
+	*/
 	public synchronized boolean getParked() {
 		return this.parked;
 	}

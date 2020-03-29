@@ -7,16 +7,33 @@ import Entities.PorterState;
 import Main.SimulatorParam;
 import Entities.Porter;
 
+/**
+     * This class implements the Temporary Storage Area shared region.
+	 * In this region, the porter carries the bags at the storeroom.
+*/
+
 public class TemporaryStorageArea {
 	
-	//Bag Storage in stack format
+
+	/**
+     * Bag storage, emulated with a Stack.
+	*/
 	private MemStack<Bag> bagStorage;
 	
+	/**
+     * The repository, to store the program status
+	*/
 	private Repo repo;
 	
-	//
+	/**
+     * Number of bags at the storeroom
+	*/
 	private int numOfBagsAtStoreroom;
 	
+	/**
+     * Temporary storage area's instanciation
+     * @param repo -> repository of information
+    */
 	public TemporaryStorageArea(Repo repo) {
 		this.repo = repo;
 		this.numOfBagsAtStoreroom = 0;
@@ -31,7 +48,10 @@ public class TemporaryStorageArea {
 	
 	//Porter functions
 	
-	//Add bag to storage
+	/**
+     * The porter adds a bag to the storage.
+     * @param bag -> the bag to be stored
+    */
 	public synchronized void carryItToAppropriateStore(Bag bag) {
 		Porter p = (Porter) Thread.currentThread();
 		p.setPorterState(PorterState.AT_THE_STOREROOM);

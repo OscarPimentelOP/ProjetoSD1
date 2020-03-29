@@ -1,0 +1,98 @@
+ArrivalLounge:
+	Fun��es:
+		ArrivalLounge(Stack<Bag> sBags);
+		(PORTER)
+ 		//Returns 'E' (End of the day) or 'W' (Work) 
+		//Se n�o chegou ao fim do dia bloqueia o porter
+		char takeRest();
+		Bag tryToCollectBag();
+		void noMoreBagsToCollect();
+	
+		(PASSENGER)
+		char/int whatShouldIDo(int flight);	
+	Vari�veis:
+		//Variavel que avisa o porter que pode ir descansar
+		//Ultimo passageiro do ultimo voo que se acusa no goHome ou no prepareNextLeg
+		boolean endOfOperations;
+		//Contagem do numero de passageiros para o ultimo avisar que � o ultimo
+		int cntPassengers;
+		
+
+BaggageCollectionPoint:
+	Fun��es:
+		(PORTER)
+		//Desbloqueia o passanger x cujo o id aperece na bag
+		void carryItToAppropriateStore(bag);
+
+		(PASSENGER)
+		//Est�o todos bloqueados at� a mala x desbloquear individualmente do passageiro
+		boolean goCollectABag();
+	Vari�veis:
+		//CAM<id, bag>
+		CAM<Integer, Bag> conveyorBelt;
+		//Variavel que avisa o passageiro que pode ir buscar a mala	
+		
+TemporaryStorageArea:
+	Fun��es:
+		(PORTER)
+		void carryItToAppropriateStore(bag);
+	Vari�veis:
+		Stack<Bag> bagStorage;
+
+BaggageReclaimOffice:
+	Fun��es:
+		(PASSENGER)
+		void reportMissingBags(int numMissingBags);
+	Vari�veis:
+		//Somat�rio de todas as bags em falta
+		int totalNumOfMissingBags;
+	
+ArrivalTerminalTransferQuay:
+	Fun��es:
+		(PASSENGER)
+		void takeABus();
+		//Os passageiros est�o bloqueados
+		//O bus diver quando anuncia a chegada desbloqueia os passageiros
+		void enterTheBus();
+		void setEndOfWork();
+
+		(BUS DRIVER)
+		//Returns E (End of the day) or W (work)
+		char void hasDaysWorkEnded();
+		//Vai desbloquear os passageiros que est�o � espera para entrar no autocarro
+		/	/Se n�o chegou ao fim do dia bloqueia o bus driver at� o timequantum terminar ou a capacidade do autocarro for atingida
+		void announcingBusBoarding();
+		void parkTheBus();
+	Vari�veis:
+		//Variavel que avisa os passageiros que podem entrar no autocarro
+		boolean announced;
+		//Variavel que avisa o busdriver que pode ir descansar
+		//Ultimo passageiro do ultimo voo que se acusa no goHome ou no prepareNextLeg
+		boolean endOfOperations;
+		//Contagem do numero de passageiros para o ultimo avisar que � o ultimo
+		int cntPassengers;
+
+DepartureTerminalTransferQuay:
+	Fun��es:
+		//Os passageiros v�o estar bloqueados
+		//Quando o bus driver para o autocarro desbloqueia os passageiros
+		(PASSENGER) 
+		void leaveTheBus();
+
+		(BUS DRIVER)
+		void parkTheBusAndLetThePassengerOff();
+	Vari�veis:
+		//Variavel que vai desbloquear os passageiros quando o bus driver estaciona
+		boolean parked;
+
+ArrivalTerminalExit:
+	Fun��es:
+		(PASSENGER)
+		void goHome(int flight);
+	Vari�veis:	
+
+DepartureTerminalEntrance:
+	Fun��es:
+		(PASSENGER)	
+		void prepareNextLeg(int flight);
+	Vari�veis:

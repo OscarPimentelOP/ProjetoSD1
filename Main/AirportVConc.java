@@ -7,17 +7,38 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 import AuxTools.*;
 
+/**
+     * AirportVConc stands for Airport Concurrent Version
+	 * and it is the main program where the threads start and flow.
+*/
+
 public class AirportVConc {
 	
+
+	/**
+		 * AirportVConc main's thread
+		 @throws FileNotFoundException when the file isn't found
+	*/
 	public static void main(String[] args) throws FileNotFoundException {
 		
 		Random rand = new Random();
 		
-		//Number of bags per passenger and flight
+		
+		/**
+     	* Number of bags per passenger and flight
+    	*/
 		int numBags[][] = new int[SimulatorParam.NUM_PASSANGERS][SimulatorParam.NUM_FLIGHTS];
-		//Trip state per passenger and flight
+
+		
+		/**
+     	* Trip state per passenger and flight
+    	*/
 		char tripState[] []= new char[SimulatorParam.NUM_PASSANGERS][SimulatorParam.NUM_FLIGHTS];
-		//Number of bags that have been lost per passenger and flight
+
+		
+		/**
+     	* Number of bags that have been lost per passenger and flight
+    	*/
 		int numBagsLost[][] =  new int[SimulatorParam.NUM_PASSANGERS][SimulatorParam.NUM_FLIGHTS];
 		
 		for(int i=0;i<SimulatorParam.NUM_PASSANGERS;i++) {
@@ -35,9 +56,9 @@ public class AirportVConc {
 					numBags[i][b] = 1;
 				}
 			}
-			/*
-			Initialize the number of bags that have been lost 
-			per passenger and flight with probabilities
+			/**
+			 * Initialize the number of bags that have been lost 
+				per passenger and flight with probabilities
 			*/
 			for(int b=0;b<SimulatorParam.NUM_FLIGHTS;b++) {
 				int randint = rand.nextInt(101);
@@ -135,7 +156,7 @@ public class AirportVConc {
 			p.start();
 		}
 		
-		//End of the simulation
+		//End of the simulation: waiting for the threads to end
 		try {
 			busdriver.join();
 		}

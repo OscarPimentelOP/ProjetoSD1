@@ -62,7 +62,11 @@ public class CAM<Key, Value> {
         }
         
 
-
+    /**
+     * Retreives the value associated to a given key.
+     * @param key -> the key that you need to check the value.
+     * @return the value associated to the given key.
+    */
     public Value retreive(Key key){
         for(int i=0; i< size; i++){
             if(storage[i] != null){
@@ -74,6 +78,10 @@ public class CAM<Key, Value> {
         return null;
     }
 
+    /**
+     * Removes the value associated to a given key.
+     * @param key -> the key that you need to check the value.
+    */
     public void remove(Key key){
         for(int i = 0; i< size; i++){
             if(storage[i].getKey().equals(key)){
@@ -88,10 +96,17 @@ public class CAM<Key, Value> {
 
     }
 
+    /**
+     * Returns the size.
+     * @return the size
+    */
     public int size() {
         return size;
     }
 
+    /**
+     * Prints the elements inside the CAM
+    */
     public void printElems() {
         for(int i = 0; i< size; i++){
             System.out.println(storage[i].getKey());
@@ -99,7 +114,9 @@ public class CAM<Key, Value> {
     }
 }
 
-
+/**
+     * A single node of the CAM instanciation
+*/
 class Node<Key, Value> {
     private final Key key;
     private Value value;

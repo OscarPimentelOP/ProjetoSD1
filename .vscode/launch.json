@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-testCAM<ProjetoSD1_bc999893>",
+            "request": "launch",
+            "mainClass": "AuxTools.testCAM",
+            "projectName": "ProjetoSD1_bc999893"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-AirportVConc<ProjetoSD1_bc999893>",
+            "request": "launch",
+            "mainClass": "Main.AirportVConc",
+            "projectName": "ProjetoSD1_bc999893"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-RepairShop",
+            "request": "launch",
+            "mainClass": "sd.p1g3.assignment1.mainProgram.RepairShop"
+        }
+    ]
+}

@@ -1,0 +1,33 @@
+-ciclo de vida do bagageiro:
+
+o bagageiro retira do porao do aviao as bagagens lá existentes, olhar para elas e decidir se pertencem a viagantes ou se terminam a sua viagem naquele aeroporto.
+
+Se os passageiros estão em transito, ele coloca-as no armazem. As que tem o aeroporto como destino final, vao para a passadeira da sala de desembarque.
+
+Um passageiro pode transportar no maximo 2 malas no porao. Através da funcao random, obter o numero de malas. <0,5 = 0 malas, >0.5 = 1 mala, etc.
+
+Cada mala é representada pelo seu manifesto: a quem pertence a mala, e se esse passageiro esta em transito ou se aquele aeroporto é o seu destino final.
+
+Vai retirando as malas 1 a 1 e, eventualmente o porao fica vazio. Warning: Pode-se ficar à espera que a mala apareça! O bagageiro quando determina que nao ha bagagens no porao, acorda os passageiros que lá estao. 
+
+Sempre que uma mala é colocada: *ou acordamos todos para verem se a mala é deles
+				*ou acordamos só o dono da mala.
+
+
+waiting for a plane to land: bagageiro espera pelo anuncio que chegou um aviao (está bloqueado pela operaçao takeARest). Se já tiverem chegado 5 voos, chega ao fim do dia, e vai-se embora.
+A funcao takeArest vai ter de devolver se já chegaram 5 voos ou não!
+O ultimo passageiro que chega ao hall de chegadas (o ultimo a desembarcar, na operacao whatShouldIDo desse passageiro) vai acordar o bagageiro. O bagageiro vai executar a operacao TryToCollectABag. Se houver malas, tudo OK. Se nao houver malas, invoca NoMoreBagsToCollect e volta ao inicio.
+
+Tem que saber quando vai buscar a mala se ela está em transito, ou destino final.
+
+
+o ciclo de vida vai ser metido no codigo numa funçao void run()
+
+
+-ciclo do passageiro:
+
+eles boqueiam todos em entering_the_departure_terminal, menos o ultimo
+ 
+
+
+

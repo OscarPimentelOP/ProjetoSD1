@@ -1,0 +1,45 @@
+Variáveis:
+Estados abreviados (Array ou enumerado)
+Estados para cada entidade(array)
+NumeroVoo
+NumeroDeMalasPresentoNoVoo
+NumeroDeMalasNoTapeteRolante
+NumeroDeMalasNaArea
+?
+?
+passengerDestination(TRT(in transit) ou FDT(final destination)
+numberOfBagsAtTheBegining
+numOfBagsCollected
+numOfPassengersAtFinalDestination
+numOfPassengersInTransit
+numOfTotalBags
+numOfBagsLost
+
+Funções:
+writeFile(print e escrever no ficheiro)
+reportStatus(vai escrever o estado numa string)
+setStates(atribui o estado a uma certa entidade e vai fazer writeFile)
+
+//ArrivalLounge
+setFlightNumber
+?setBagsNumber
+setNumberOfBagsAtTheBegining
+//BaggageCollectionPoint
+setBagNumInConvoyBelt(Numero de malas na CAM)
+setNumOfTotalBags
+
+//TemporaryStarageArea
+setBagNumInTransit(Numero de malas em transito)
+
+//Departure
+?setPassangerDestination
+setNumOfPassengersAtFinalDestination
+
+//BaggageCollection
+setNumOfBagsCollected
+
+//Onde o preparenextLeg está a ser usado
+setNumOfPassengersInTransit
+
+//Baggage Reclaim Office
+setNumOfBagsLost

@@ -8,32 +8,65 @@ import Entities.BusDriverState;
 import AuxTools.MemFIFO;
 import AuxTools.MemException;
 
+/**
+     * This class implements the Arrival Terminal Transfer Quay shared region.
+	 * The passengers can take (and enter) a bus if they are in transit
+	 * after the bus driver announces the bus for them.
+*/
+
 public class ArrivalTerminalTransferQuay {
 	
-	//Variable the warns the passengers the they can enter on the bus
+	
+	/**
+     * Warns the passengers the they can enter on the bus
+	*/
 	private boolean announced;
 	
-	//Variable that warns the bus driver that he can go rest
-	//Last passenger of the last flight accuses in goHome function or in prepareNextLeg function
+	/**
+     * Warns the bus driver that he can go rest
+	 * Last passenger of the last flight accuses in goHome function or in prepareNextLeg function
+	*/
 	private boolean endOfOperations;
 	
-	//Count of the number of passengers waiting to enter the bus
+	
+	/**
+     * Count of the number of passengers waiting to enter the bus
+	*/
 	private int cntPassengersInQueue;
 	
-	//Count of the number of passengers that entered in the bus	
+	
+	/**
+     * Count of the number of passengers that entered in the bus	
+	*/
 	protected int cntPassengersInBus;
 	
-	 //Queue with the passengers waiting for the bus
+	 
+	 /**
+     * Queue with the passengers waiting for the bus
+	*/
 	private MemFIFO<Passenger> waitingForBus;
 	
-	 //Queue with the passengers in the bus
+	 
+	 /**
+     * Queue with the passengers in the bus
+	*/
 	protected MemFIFO<Passenger> inTheBus;
 	
+	/**
+     * The repository, to store the program status
+	*/
 	private Repo repo;
 	
-	//Bus driver waiting for passengers
+	
+	/**
+     * Bus driver waiting for passengers
+	*/
 	private boolean busDriveSleep;
 	
+	/**
+     * Arrival Terminal Transfer Quay's instanciation
+     * @param repo -> repository of information
+    */
 	public ArrivalTerminalTransferQuay(Repo repo) {
 		this.repo = repo;
 		this.busDriveSleep = true;
@@ -51,7 +84,10 @@ public class ArrivalTerminalTransferQuay {
 	}
 	
 	//Passenger functions
-	
+	/**
+	 * The passenger takes a bus and it gets 
+	 * into the queue with the passengers waiting for the bus
+    */
 	public synchronized void takeABus() {
 		Passenger m = (Passenger) Thread.currentThread(); 
 		m.setPassengerState(PassengerState.AT_THE_ARRIVAL_TRANSFER_TERMINAL);
@@ -68,8 +104,12 @@ public class ArrivalTerminalTransferQuay {
 		catch(MemException e) {System.out.println(e);}
 	}
 	
-	//The passengers are blocked
-	//When bus diver announces arrival, it unlocks passengers
+	
+	/**
+	 * The passengers are blocked until the bus driver announces the bus.
+	 * A passenger enters the bus, moving from the waiting queue to the bus.
+	 * They can't get in if the bus is full and keep waiting.
+    */
 	public synchronized void enterTheBus() {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		int id = p.getIdentifier();
@@ -98,7 +138,12 @@ public class ArrivalTerminalTransferQuay {
 	
 	//Bus driver functions
 	
-	//Returns E (End of the day) or W (work)
+	
+	/**
+     * The bus driver ends his job or returns to work
+	 * @return 'E' if the day has ended
+	 * @return 'W' if he is going to work again
+	*/
 	public synchronized char hasDaysWorkEnded() {
 		while(!this.endOfOperations && cntPassengersInQueue==0) {
 			try {
@@ -115,8 +160,11 @@ public class ArrivalTerminalTransferQuay {
 	}
 	
 	
-	//Will unlock the passengers that are waiting to enter the bus
-	//If it has not reached the end of the day it blocks the bus driver until the time quantum terminates or the bus capacity is reached
+	
+	/**
+     * The bus driver will unlock the passengers that are waiting to enter the bus.
+	 * If the end of the day isn't reached, it blocks the bus driver until the time quantum terminates or the bus gets full
+	*/
 	public synchronized void announcingBusBoarding() {
 		announced = true;
 		notifyAll();
@@ -142,25 +190,43 @@ public class ArrivalTerminalTransferQuay {
 		this.announced = false;
 	}
 	
+	/**
+     * The bus driver parks the bus at the arrival terminal
+	*/
 	public synchronized void parkTheBus() {
 		BusDriver b = (BusDriver) Thread.currentThread(); 
 		b.setBusDriverState(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL);
 		repo.setBusDriverState(BusDriverState.PARKING_AT_THE_ARRIVAL_TERMINAL);
 	}
 	
+	/**
+     * Sets the end of work for the bus driver
+	*/
 	public synchronized void setEndOfWord() {
 		this.endOfOperations = true;
 		notifyAll();
 	}
 	
+	/**
+     * Increments the number of passengers in the bus when a passenger gets in
+	 * to help managing the capacity
+	*/
 	public synchronized void incCntPassengersInBus() {
 		this.cntPassengersInBus++;
 	}
 	
+	/**
+     * Decrements the number of passengers in the bus when a passenger gets out
+	 * to help managing the capacity
+	*/
 	public synchronized void decCntPassengersInBus() {
 		this.cntPassengersInBus--;
 	}
 	
+	/**
+	 * Returns the number of passengers in the bus
+     * @return the number of passengers inside the bus
+	*/
 	public synchronized int getCntPassengersInBus() {
 		return this.cntPassengersInBus;
 	}

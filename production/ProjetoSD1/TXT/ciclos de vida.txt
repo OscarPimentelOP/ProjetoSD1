@@ -1,0 +1,81 @@
+﻿ciclo de vida do babageiro (borges):
+
+Bag bag;
+Boolean planeHoldEmpty;
+Atributos: estado( metodo get e set)
+	   
+
+while(ArrivalLounge.takeRest() != 'E'){			//Final do dia
+	planeHoldEmpty = false;
+
+	while(!planeHoldEmpty){
+		bag = ArrivalLounge.tryToCollectBag();
+		if(bag == NULL){			//porao vazio
+			planeHoldEmpty=true;
+		}
+		else if(bag.getDestination() == 'T'){ //mala esta em transito
+			temporaryStorageArea.CarryItToAppropriateStore(bag);
+		}
+		else{					//mala tem como destino final aquele aeroporto
+			baggageCollectionPoint.CarryItToAppropriateStore(bag);
+		}
+		arrivalLounge.noMoreBagsToCollect();		
+
+	}
+
+
+}
+
+
+ciclo de vida do passageiro (minha proposta):
+
+Bag bag;
+
+int a;
+int numeroMalasRecolhidas;
+Atributos : estado(precisa de 2 metodos: set e get)
+	    id do passageiro(metodo get)
+	    numeroMalas(array elemento por voo, metodos get com parametro voo)
+	    estado do destino(final ou em transito), array elemento por voo, metodos get com parametro voo
+
+	 
+
+for (voo 1:5){
+		a = arrivalLounge.whatShouldIDo(voo);
+
+		switch(a){
+			case 1: arrivalTerminalExit.goHome(voo);   		    //chegou ao destino, não tem mala para recolher, vai para casa   PARAMETRO DE ENTRADA NO GOHOME?
+			case 2: arrivalTerminalTransferQuay.takeABus();		    //vai para o autocarro	
+				arrivalTerminalTransferQuay.enterTheBus();
+				departureTerminalTransferQuay.leaveTheBus();
+				departureTerminalEntrance.prepareNextLeg(voo);		//SEMELHANTE AO GOHOME
+
+			case 3:  		           //vai buscar a(s) mala(s)
+				numeroMalasRecolhidas = 0;
+				while(numeroMalasRecolhidas != numeroMalas[voo]){
+					if(baggageCollectionPoint.goCollectABag()){
+						numerMalasRecolhidas+=1;
+					}else { baggageReclaimOffice.reportMissingBags(numeroMalas[voo]-numeroMalasRecolhidas);
+						break;
+					}
+				}
+				arrivalTerminalExit.goHome(voo); 			//A MESMA COISA
+
+		}
+
+}
+
+
+
+ciclo de vida do bus driver:
+Atributos : 	estado(precisa de 2 metodos: set e get)
+
+while(arrivalTerminalTransferQuay.hasDaysWorkEnded() != 'E'){					//Fim da operação
+	arrivalTerminalTransferQuay.annoucingBusBoarding()						//Se tiver passageiros para levar
+	goToDepartureTerminal();								//Implementar no proprio tipo de dados
+	departureTerminalTransferQuay.parkTheBusAndLetPassengerOff();
+	goToArrivalTerminal();
+	arrivalTerminalTransferQuay.parkTheBus();
+}
+
+

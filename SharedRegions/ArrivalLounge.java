@@ -9,31 +9,76 @@ import Entities.Porter;
 import Entities.PorterState;
 import Main.SimulatorParam;
 
+/**
+     * This class implements the Arrival Lounge shared region.
+	 * This is where the passengers arrive when the plane lands
+	 * and the porter is waiting for collecting bags.
+*/
+
 public class ArrivalLounge {
-	//Variable the warns the porter than can go rest
-	//Last passenger of the last flight accuses in goHome function or in prepareNextLeg function
+	
+	
+	/**
+     * Variable the warns the porter than he can go rest.
+	 * The last passenger of the last flight accuses in goHome function or in prepareNextLeg function.
+	*/
 	private boolean endOfOperations;
 	
-	//Count of the number of passenger for the last one to warn that it is the last
+	
+	/**
+     * Count of the number of passenger for the last one to warn that he is the last
+	*/
 	private int cntPassengers;
 	
-	//Passenger bags in stack format
+	
+	/**
+     * Passenger bags in stack format
+	*/
 	private MemStack<Bag> sBags[];
 	
+	/**
+     * The repository, to store the program status
+	*/
 	private Repo repo;
 	
+	/**
+     * Number of flight
+	*/
 	private int flight;
 	
+	/**
+     * Number of passengers that have that Airport as their final destination.
+	*/
 	private int passengersFinalDest;
 	
+	/**
+     * Number of passengers that are in transit
+	*/
 	private int passengersTransit;
 	
+	/**
+     * Baggage collection point shared region
+	*/
 	private BaggageCollectionPoint bcp;
 	
+	/**
+     * Trip states for each passenger
+	*/
 	private char[][] passengersTripState;
 	
+	/**
+     * Number of bags per flight
+	*/
 	private int[] numOfBagsPerFlight;
 	
+	/**
+     * Arrival Lounge's instanciation
+     * @param sBags -> bags 
+     * @param numOfBagsPerFlight -> number of bags per flight
+     * @param tripState -> trip states for the passengers
+     * @param bcp -> baggage collection point
+     * @param repo -> repository of information
+    */
 	public ArrivalLounge(MemStack<Bag> sBags[], int[] numOfBagsPerFlight, char[][] tripState, BaggageCollectionPoint bcp ,Repo repo){
 		this.sBags = sBags;
 		this.repo = repo;
@@ -48,8 +93,13 @@ public class ArrivalLounge {
 	}
 	
 	//PORTER FUNCTIONS
-	
-	///Returns 'E' (End of the day) or 'W' (Work) 
+
+
+	/**
+     * The porter is taking a rest, waiting for a plane to land.
+	 * @return 'E' end of the day
+	 * @return 'W' work
+	*/
 	public synchronized char takeARest() {
 		Porter p = (Porter) Thread.currentThread();
 		while(cntPassengers != SimulatorParam.NUM_PASSANGERS && !this.endOfOperations) {
@@ -68,8 +118,10 @@ public class ArrivalLounge {
 	}
 	
 	
-	//Returns a bag if any 
-	//Returns null if there are no bags in the stack
+	/**
+     * The porter tries to collect a bag from the plane's hold.
+	 * @return the bag that the porter has collected
+	*/
 	public synchronized Bag tryToCollectABag() {
 		try  {
 			Bag bag = sBags[this.flight].read();
@@ -83,7 +135,10 @@ public class ArrivalLounge {
 		}
 	}
 	
-	
+	/**
+     * At the plane's hold, the porter realizes that he has no more bags to collect.
+	 * It informs the baggage collection point that there are no more bags to collect.
+	*/
 	public synchronized void noMoreBagsToCollect() {
 		cntPassengers=0;
 		bcp.setMoreBags(false);
@@ -94,7 +149,13 @@ public class ArrivalLounge {
 	
 	//PASSENGER FUNCTIONS
 	
-	//Returns H if passenger goes home, T if is going to take a bus or B if is going to collect a bag
+	
+	/**
+     * The porter is taking a rest, waiting for a plane to land.
+	 * @param flight -> the flight number
+	 * @return 'T' if the passenger is going to take a bus (means he is in transit)
+	 * @return 'B' if the passenger is going to collect a bag
+	*/
 	public synchronized char whatShouldIDo(int flight){
 		//Initialize a new flight
 		if(cntPassengers == 0) {
@@ -142,6 +203,9 @@ public class ArrivalLounge {
 		}
 	}
 	
+	/**
+     * Sets the porter's end of operations
+	*/
 	public synchronized void setEndOfWork() {
 		this.endOfOperations = true;
 		notifyAll();

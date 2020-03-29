@@ -4,19 +4,44 @@ import Entities.Passenger;
 import Entities.PassengerState;
 import Main.SimulatorParam;
 
+/**
+     * This class implements the Departure Terminal Entrance shared region.
+	 * The passengers can go prepare their next leg if they are in transit.
+*/
+
 public class DepartureTerminalEntrance {
 
-	
+	/**
+     * The repository, to store the program status
+	*/
 	private Repo repo;
 	
+	/**
+     * Arrival terminal transfer quay shared region
+	*/
 	private ArrivalTerminalTransferQuay attq;
 	
+	/**
+     * Arrival terminal exit shared region
+	*/
 	private ArrivalTerminalExit ate;
 	
+	/**
+     * Arrival lounge shared region
+	*/
 	private ArrivalLounge al;
 	
+	/**
+     * ???
+	*/
 	private boolean timeToWakeUp;
 	
+	/**
+     * Departure Terminal Exit's instanciation
+     * @param al -> arrival lounge 
+     * @param attq -> arrival terminal transfer quay
+     * @param repo -> repository of information
+    */
 	public DepartureTerminalEntrance(ArrivalLounge al, ArrivalTerminalTransferQuay attq, Repo repo) {
 		this.repo = repo;
 		this.al = al;
@@ -26,6 +51,12 @@ public class DepartureTerminalEntrance {
 	
 	//Passenger functions
 	
+	/**
+     * If the passenger is in transit, it must prepare his next leg.
+	 * This changes the state to entering departure terminal.
+	 * He waits until every other passenger arrives at the end.
+	 * @param flight -> the flight number
+	*/
 	public synchronized void prepareNextLeg(int flight){
 		Passenger m = (Passenger) Thread.currentThread();
 		m.setPassengerState(PassengerState.ENTERING_THE_DEPARTURE_TERMINAL);
@@ -63,16 +94,26 @@ public class DepartureTerminalEntrance {
 		repo.setPassengerState(id, PassengerState.NO_STATE);
 	}
 	
+	/**
+     * Sets the arrival terminal exit shared region
+	 * @param ate -> the arrival terminal to set
+	*/
 	public synchronized void setArrivalExit(ArrivalTerminalExit ate) {
 		this.ate = ate;
 	}
 	
+	/**
+     * ???
+	*/
 	public synchronized void wakeUpAll() {
 		this.timeToWakeUp = true;
 		System.out.println("bbbbbbbbbbb");
 		notifyAll();
 	}
 	
+	/**
+     * ???
+	*/
 	public synchronized void setTimeToWakeUpToFalse() {
 		this.timeToWakeUp = false;
 	}

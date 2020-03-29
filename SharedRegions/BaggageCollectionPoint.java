@@ -7,18 +7,38 @@ import Entities.PorterState;
 import Entities.Passenger;
 import Entities.PassengerState;
 
+/**
+     * This class implements the Baggage Collection Point shared region.
+	 * The passengers can collect their bags from the convoy belt.
+*/
+
 public class BaggageCollectionPoint {
 	
-	//CAM<idPassanger, array of bags>
+	
+	/**
+     * Convoy belt, emulated with a CAM (Map). <Passenger ID, Passenger's bags[]>
+	*/
 	private CAM<Integer, Bag[]> convoyBelt;
 	
-	//
+	/**
+     * Number of bags in the convoy belt
+	*/
 	private int numOfBagsInConveyBelt;
 	
+	/**
+     * The repository, to store the program status
+	*/
 	private Repo repo;
 	
+	/**
+     * Informs if there are bags at the plane's hold
+	*/
 	private boolean moreBagsAtPlaneHold;
 	
+	/**
+     * Baggage Collection Point's instanciation
+     * @param repo -> repository of information
+    */
 	public BaggageCollectionPoint(Repo repo) {
 		this.repo = repo;
 		this.numOfBagsInConveyBelt = 0;
@@ -28,7 +48,10 @@ public class BaggageCollectionPoint {
 	
 	//Porter functions
 	
-	//Unlocks the passenger 'x' that the id appears in the bag
+	/**
+     * The porter unlocks the passenger 'x' that the id appears in the bag
+	 * @param bag the bag to be carried by the porter
+	*/
 	public synchronized void carryItToAppropriateStore(Bag bag) {
 		if(!this.moreBagsAtPlaneHold) {
 			this.moreBagsAtPlaneHold = true;
@@ -58,7 +81,12 @@ public class BaggageCollectionPoint {
 	
 	//Passenger functions
 	
-	//All passengers are blocked until the bag x unlocks individually the respective passenger
+
+	/**
+     * The passenger collects a bag.
+	 * All passengers are blocked until the bag x unlocks individually the respective passenger.
+	 * The bag from passenger X needs to be in the conveyor belt.
+	*/
 	public synchronized boolean goCollectABag() {
 		Passenger p = (Passenger) Thread.currentThread(); 
 		p.setPassengerState(PassengerState.AT_THE_LUGGAGE_COLLECTION_POINT);
@@ -92,31 +120,59 @@ public class BaggageCollectionPoint {
 		}
 	}
 	
+	/**
+     * Sets the more bags variable to tell if there's more bags at the plane's hold
+	 * @param moreBags
+	*/
 	public synchronized void setMoreBags(boolean moreBags) {
 		this.moreBagsAtPlaneHold = moreBags;
 		notifyAll();
 	}
 	
+	/**
+     * Increments the number of bags in the convoy belt
+	*/
 	public synchronized void incNumOfBagsInConveyBelt() {
 		numOfBagsInConveyBelt++;
 	}
 	
+	/**
+     * Decrements the number of bags in the convoy belt
+	*/
 	public synchronized void decNumOfBagsInConveyBelt() {
 		numOfBagsInConveyBelt--;
 	}
 	
+	/**
+     * Returns the number of bags at the convoy belt
+	 * @return number of bags in the convoy belt
+	*/
 	public synchronized int getNumOfBagsInConveyBelt() {
 		return numOfBagsInConveyBelt;
 	}
 	
+	/**
+     * Retreives a passenger id's bag
+	 * @param id -> the id of the passenger
+	 * @return the bags linked to the id
+	*/
 	public synchronized Bag[] getRetrieved(int id) {
 		return this.convoyBelt.retreive(id);
 	}
 	
+	/**
+     * Stores passenger bags on the convoy belt
+	 * @param id -> the id of the passenger
+	 * @param sbags -> the bags from the passenger
+	*/
 	public synchronized void storeBag(int id, Bag[] sBags) {
 		this.convoyBelt.store(id, sBags);
 	}
 	
+	/**
+     * Removes the bag from the convoy belt
+	 * @param id -> the id of the passenger that owns the bag to be removed
+	*/
 	public synchronized void removeBag(int id) {
 		this.convoyBelt.remove(id);
 	}
