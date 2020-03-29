@@ -72,7 +72,7 @@ public class ArrivalLounge {
 	private int[] numOfBagsPerFlight;
 	
 	/**
-     * Arrival Lounge's instanciation
+     * Arrival Lounge's instantiation
      * @param sBags -> bags 
      * @param numOfBagsPerFlight -> number of bags per flight
      * @param tripState -> trip states for the passengers

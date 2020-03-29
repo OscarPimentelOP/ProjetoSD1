@@ -21,17 +21,17 @@ public class Repo{
     private File file;
 	private PrintWriter pw;
 	/**
-     * Porter states abreviations, to be displayed as the Porter's state changes.
+     * Porter states abbreviations, to be displayed as the Porter's state changes.
 	*/
 	private final String[] porterStates = {"WPTL", "APLH", "ALCB", "ASTR"};
 	
 	/**
-     * Passenger states abreviations, to be displayed as the Passenger's state changes.
+     * Passenger states abbreviations, to be displayed as the Passenger's state changes.
 	*/
 	private final String[] passengerStates = {"WSD", "LCP", "BRO", "DTT","EAT", "ATT", "TRT", "EDT", "---"};
 	
 	/**
-     * Bus Driver states abreviations, to be displayed as the Bus Driver's state changes.
+     * Bus Driver states abbreviations, to be displayed as the Bus Driver's state changes.
 	*/
     private final String[] busDriverStates = {"PKAT", "DRFW", "DRBW","PKDT"};
     
@@ -129,7 +129,7 @@ public class Repo{
     private int lostBags;
 
 	/**
-     * Repository's instanciation
+     * Repository's instantiation
      * @param al -> arrival lounge 
      * @throws FileNotFoundException in case the file is not found
     */

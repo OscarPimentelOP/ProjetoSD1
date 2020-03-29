@@ -36,7 +36,7 @@ public class BaggageCollectionPoint {
 	private boolean moreBagsAtPlaneHold;
 	
 	/**
-     * Baggage Collection Point's instanciation
+     * Baggage Collection Point's instantiation
      * @param repo -> repository of information
     */
 	public BaggageCollectionPoint(Repo repo) {
@@ -62,7 +62,7 @@ public class BaggageCollectionPoint {
 		int passengerId = bag.getPassegerId();
 		Bag[] sBags = new Bag[2];
 		Bag[] retrieveTest = new Bag[2];
-		retrieveTest = this.getRetrieved(passengerId);
+		retrieveTest = this.convoyBelt.retreive(passengerId);
 		this.incNumOfBagsInConveyBelt();;
 		//Add to CAM
 		if(retrieveTest == null) {
@@ -150,31 +150,5 @@ public class BaggageCollectionPoint {
 	public synchronized int getNumOfBagsInConveyBelt() {
 		return numOfBagsInConveyBelt;
 	}
-	
-	/**
-     * Retreives a passenger id's bag
-	 * @param id -> the id of the passenger
-	 * @return the bags linked to the id
-	*/
-	public synchronized Bag[] getRetrieved(int id) {
-		return this.convoyBelt.retreive(id);
-	}
-	
-	/**
-     * Stores passenger bags on the convoy belt
-	 * @param id -> the id of the passenger
-	 * @param sbags -> the bags from the passenger
-	*/
-	public synchronized void storeBag(int id, Bag[] sBags) {
-		this.convoyBelt.store(id, sBags);
-	}
-	
-	/**
-     * Removes the bag from the convoy belt
-	 * @param id -> the id of the passenger that owns the bag to be removed
-	*/
-	public synchronized void removeBag(int id) {
-		this.convoyBelt.remove(id);
-	}
-	
+
 }

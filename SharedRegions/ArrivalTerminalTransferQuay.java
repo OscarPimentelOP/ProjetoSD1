@@ -64,7 +64,7 @@ public class ArrivalTerminalTransferQuay {
 	private boolean busDriveSleep;
 	
 	/**
-     * Arrival Terminal Transfer Quay's instanciation
+     * Arrival Terminal Transfer Quay's instantiation
      * @param repo -> repository of information
     */
 	public ArrivalTerminalTransferQuay(Repo repo) {

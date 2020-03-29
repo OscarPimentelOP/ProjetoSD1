@@ -50,7 +50,7 @@ public class Porter extends Thread{
     
 
     /**
-     * Porter instanciation
+     * Porter instantiation
      * @param s -> state
      * @param al -> arrival lounge
      * @param tsa -> temporary storage area

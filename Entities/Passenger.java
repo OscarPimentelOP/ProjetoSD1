@@ -80,7 +80,7 @@ public class Passenger extends Thread{
     
     
     /**
-     * Passenger instanciation
+     * Passenger instantiation
      * @param s -> state
      * @param id -> passenger ID
      * @param nb -> number of bags

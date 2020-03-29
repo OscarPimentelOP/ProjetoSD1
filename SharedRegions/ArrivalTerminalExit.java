@@ -42,7 +42,7 @@ public class ArrivalTerminalExit {
 	
 
 	/**
-     * Arrival Terminal Exit's instanciation
+     * Arrival Terminal Exit's instantiation
      * @param al -> arrival lounge 
      * @param attq -> arrival terminal transfer quay
      * @param repo -> repository of information
@@ -111,7 +111,12 @@ public class ArrivalTerminalExit {
 	*/
 	public synchronized void wakeUpAll() {
 		this.timeToWakeUp = true;
-		System.out.println("bbbbbbbbbbb");
+		try {
+			wait(5); 
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		notifyAll();
 	}
 	

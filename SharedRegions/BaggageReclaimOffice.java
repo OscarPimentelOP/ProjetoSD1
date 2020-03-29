@@ -22,7 +22,7 @@ public class BaggageReclaimOffice {
 	private Repo repo;
 	
 	/**
-     * Baggage ReclaimOffice's instanciation
+     * Baggage ReclaimOffice's instantiation
      * @param repo -> repository of information
     */
 	public BaggageReclaimOffice(Repo repo) {

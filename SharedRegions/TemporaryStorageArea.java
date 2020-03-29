@@ -31,7 +31,7 @@ public class TemporaryStorageArea {
 	private int numOfBagsAtStoreroom;
 	
 	/**
-     * Temporary storage area's instanciation
+     * Temporary storage area's instantiation
      * @param repo -> repository of information
     */
 	public TemporaryStorageArea(Repo repo) {

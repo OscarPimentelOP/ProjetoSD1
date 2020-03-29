@@ -35,7 +35,7 @@ public class DepartureTerminalTransferQuay {
 	private ArrivalTerminalTransferQuay attq;
 	
 	/**
-     * Departure terminal transfer quay's instanciation
+     * Departure terminal transfer quay's instantiation
      * @param repo -> repository of information
     */
 	public DepartureTerminalTransferQuay(Repo repo) {
